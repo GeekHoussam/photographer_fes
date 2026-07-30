@@ -16,6 +16,7 @@ const fieldClass =
 export function ContactForm() {
   const locale = useLocale();
   const fr = locale === "fr";
+  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
   const {
     register,
     handleSubmit,
@@ -38,6 +39,27 @@ export function ContactForm() {
   });
 
   async function submit(values: ContactInput) {
+    if (contactEmail) {
+      const subject = fr
+        ? `Demande photo — ${values.name}`
+        : `Photography enquiry — ${values.name}`;
+      const body = [
+        `${fr ? "Nom" : "Name"}: ${values.name}`,
+        `Email: ${values.email}`,
+        `${fr ? "Téléphone" : "Phone"}: ${values.phone || "—"}`,
+        `${fr ? "Projet" : "Project"}: ${values.projectType}`,
+        `${fr ? "Date" : "Date"}: ${values.preferredDate || "—"}`,
+        `${fr ? "Lieu" : "Location"}: ${values.location}`,
+        `${fr ? "Budget" : "Budget"}: ${values.budget || "—"}`,
+        "",
+        values.message,
+      ].join("\n");
+      window.location.assign(
+        `mailto:${contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
+      );
+      return;
+    }
+
     const response = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -61,9 +83,13 @@ export function ContactForm() {
           {fr ? "Merci pour votre message." : "Thank you for your message."}
         </h2>
         <p className="mt-4 text-white/50">
-          {fr
-            ? "Votre demande a bien été transmise."
-            : "Your enquiry has been sent."}
+          {contactEmail
+            ? fr
+              ? "Votre application e-mail a été ouverte avec votre message."
+              : "Your email application has opened with your message."
+            : fr
+              ? "Votre demande a bien été transmise."
+              : "Your enquiry has been sent."}
         </p>
       </div>
     );

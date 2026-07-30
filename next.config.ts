@@ -3,9 +3,19 @@ import createNextIntlPlugin from "next-intl/plugin";
 import { legacyRedirects } from "./src/config/redirects";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+const isGitHubPages = process.env.GITHUB_PAGES === "true";
+const basePath = isGitHubPages
+  ? (process.env.NEXT_PUBLIC_BASE_PATH ?? "/photographer_fes")
+  : "";
 
 const nextConfig: NextConfig = {
+  output: isGitHubPages ? "export" : undefined,
+  basePath,
+  assetPrefix: basePath,
+  trailingSlash: isGitHubPages,
   images: {
+    loader: isGitHubPages ? "custom" : "default",
+    loaderFile: isGitHubPages ? "./src/lib/image-loader.ts" : undefined,
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
@@ -21,7 +31,7 @@ const nextConfig: NextConfig = {
     root: process.cwd(),
   },
   redirects() {
-    return legacyRedirects;
+    return isGitHubPages ? [] : legacyRedirects;
   },
 };
 

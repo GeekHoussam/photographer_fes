@@ -2,6 +2,9 @@ import type { MetadataRoute } from "next";
 import { locales, siteConfig } from "@/config/site";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { services } from "@/features/services/services";
+
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     "",
