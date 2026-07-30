@@ -1,0 +1,30 @@
+{
+  "Navigation": {
+    "portfolio": "Portfolio",
+    "services": "Services",
+    "about": "À propos",
+    "process": "Approche",
+    "journal": "Journal",
+    "contact": "Contact",
+    "menu": "Ouvrir le menu",
+    "close": "Fermer le menu",
+    "skip": "Aller au contenu"
+  },
+  "Common": {
+    "viewPortfolio": "Voir le portfolio",
+    "requestQuote": "Demander un devis",
+    "discover": "Découvrir",
+    "learnMore": "En savoir plus",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "close": "Fermer",
+    "placeholder": "Contenu de démonstration à remplacer"
+  },
+  "Footer": {
+    "tagline": "Photographie et films, avec une attention particulière aux personnes, aux lieux et à la lumière.",
+    "location": "Basé à Fès, disponible au Maroc.",
+    "rights": "Tous droits réservés.",
+    "privacy": "Confidentialité",
+    "legal": "Mentions légales"
+  }
+}

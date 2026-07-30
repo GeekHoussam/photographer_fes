@@ -1,0 +1,30 @@
+{
+  "Navigation": {
+    "portfolio": "Portfolio",
+    "services": "Services",
+    "about": "About",
+    "process": "Process",
+    "journal": "Journal",
+    "contact": "Contact",
+    "menu": "Open menu",
+    "close": "Close menu",
+    "skip": "Skip to content"
+  },
+  "Common": {
+    "viewPortfolio": "View portfolio",
+    "requestQuote": "Request a quote",
+    "discover": "Discover",
+    "learnMore": "Learn more",
+    "previous": "Previous",
+    "next": "Next",
+    "close": "Close",
+    "placeholder": "Demonstration content to replace"
+  },
+  "Footer": {
+    "tagline": "Photography and films, with close attention to people, places, and light.",
+    "location": "Based in Fès, available across Morocco.",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy",
+    "legal": "Legal notice"
+  }
+}

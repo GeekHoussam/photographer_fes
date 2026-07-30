@@ -1,0 +1,39 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# testing
+/coverage
+/playwright-report
+/test-results
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# local high-resolution photo masters
+/_photo-masters/
+
+# local environment
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
+# sanity
+/.sanity
+
+# editors and operating systems
+.DS_Store
+Thumbs.db
+debug.log
+.idea
+.vscode
