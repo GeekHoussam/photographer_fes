@@ -35,7 +35,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
   }));
 
   return (
-    <section className="reference-home-hero bg-ink text-paper relative min-h-[100svh] overflow-hidden pt-[var(--header-height)]">
+    <section className="theme-lock-dark reference-home-hero bg-ink text-paper relative min-h-[100svh] overflow-hidden pt-[var(--header-height)]">
       <div className="absolute inset-0">
         <Image
           src="/images/portfolio/personal/m3.png"

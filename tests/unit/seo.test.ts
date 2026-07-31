@@ -4,8 +4,9 @@ import { breadcrumbJsonLd, personJsonLd } from "@/lib/seo/structured-data";
 describe("structured data", () => {
   it("creates a Person without fabricated contact details", () => {
     const data = personJsonLd("fr");
-    expect(data.name).toBe("Mohammed Laâchach");
-    expect(data).not.toHaveProperty("telephone");
+    const person = data["@graph"].find((entry) => entry["@type"] === "Person");
+    expect(person?.name).toBe("Mohammed Laâchach");
+    expect(person).not.toHaveProperty("telephone");
   });
   it("numbers breadcrumbs from one", () =>
     expect(

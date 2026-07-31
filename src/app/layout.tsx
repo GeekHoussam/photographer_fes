@@ -26,7 +26,33 @@ export const metadata: Metadata = {
   },
   description:
     "Portfolio de Mohammed Laâchach, photographe et vidéaste à Fès : mariages, événements, hôtellerie, intérieurs et gastronomie.",
+  openGraph: {
+    type: "website",
+    siteName: "Mohammed Laâchach",
+    title: "Mohammed Laâchach — Photographe & Vidéaste à Fès",
+    description:
+      "Photographie et vidéo de mariage, événement, hôtellerie et gastronomie à Fès et au Maroc.",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/og.png"],
+  },
+  robots: { index: true, follow: true },
 };
+
+const themeScript = `(() => {
+  try {
+    const saved = localStorage.getItem("photographer-theme");
+    const theme = saved === "light" || saved === "dark"
+      ? saved
+      : (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  } catch (_) {
+    document.documentElement.dataset.theme = "dark";
+  }
+})();`;
 
 export default function RootLayout({
   children,
@@ -37,6 +63,10 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
+      <head>
+        <meta name="theme-color" content="#101112" />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

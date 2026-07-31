@@ -3,6 +3,26 @@ import { Container } from "@/components/common/container";
 import { PageHero } from "@/components/sections/page-hero";
 import { Link } from "@/i18n/navigation";
 import { isLocale } from "@/config/site";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return createPageMetadata({
+    locale,
+    path: "/journal",
+    title: locale === "fr" ? "Journal photographique" : "Photography journal",
+    description:
+      locale === "fr"
+        ? "Notes sur la photographie, les lieux et la lumière à Fès, accompagnées de séries documentaires et de récits de production."
+        : "Notes on photography, places, and light in Fès, with documentary series and behind-the-scenes production stories.",
+  });
+}
 
 export default async function JournalPage({
   params,

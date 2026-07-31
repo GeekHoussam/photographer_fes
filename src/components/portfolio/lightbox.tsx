@@ -92,7 +92,7 @@ export function Lightbox({
             role="dialog"
             aria-modal="true"
             aria-label={fr ? "Galerie plein écran" : "Full-screen gallery"}
-            className="fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-[#070809]/96 p-3 text-white backdrop-blur-xl sm:p-8"
+            className="theme-lock-dark fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-[#070809]/96 p-3 text-white backdrop-blur-xl sm:p-8"
             onKeyDown={(event) => {
               if (event.key === "ArrowLeft") previous();
               if (event.key === "ArrowRight") next();

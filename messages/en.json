@@ -10,6 +10,29 @@
     "close": "Close menu",
     "skip": "Skip to content"
   },
+  "Theme": {
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
+  },
+  "Contact": {
+    "eyebrow": "Contact",
+    "title": "Tell me about your project.",
+    "description": "Share the date, location, and what you need. I will reply with the next steps for your photography or film enquiry.",
+    "close": "Close contact dialog",
+    "whatsappHint": "Start a WhatsApp conversation",
+    "emailHint": "Open your email application",
+    "notConfigured": "Contact detail awaiting confirmation"
+  },
+  "Portfolio": {
+    "mediaLabel": "Choose a portfolio format",
+    "categoryLabel": "Filter photo projects",
+    "photos": "Photos",
+    "videos": "Videos",
+    "all": "All",
+    "count": "{count, plural, =0 {No projects shown} =1 {One project shown} other {# projects shown}}",
+    "emptyPhotos": "No photo project is published in this category yet.",
+    "emptyVideos": "No video project is published yet."
+  },
   "Common": {
     "viewPortfolio": "View portfolio",
     "requestQuote": "Request a quote",

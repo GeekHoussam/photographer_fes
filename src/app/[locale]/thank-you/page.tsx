@@ -1,5 +1,27 @@
 import { ButtonLink } from "@/components/common/button";
 import { Container } from "@/components/common/container";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { isLocale } from "@/config/site";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return createPageMetadata({
+    locale,
+    path: "/thank-you",
+    title: locale === "fr" ? "Message reçu" : "Message received",
+    description:
+      locale === "fr"
+        ? "Confirmation de réception de votre demande."
+        : "Confirmation that your enquiry has been received.",
+    noIndex: true,
+  });
+}
 
 export default async function ThankYouPage({
   params,

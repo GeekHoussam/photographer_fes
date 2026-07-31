@@ -7,6 +7,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./language-switcher";
+import { ThemeToggle } from "./theme-toggle";
 
 const links = [
   ["portfolio", "/portfolio"],
@@ -54,7 +55,7 @@ export function Header() {
 
   return (
     <header
-      className={`text-paper fixed inset-x-0 top-0 z-[var(--z-header)] transition-all duration-500 ${
+      className={`theme-lock-dark text-paper fixed inset-x-0 top-0 z-[var(--z-header)] transition-all duration-500 ${
         scrolled || open
           ? "bg-ink/88 border-b border-white/10 backdrop-blur-xl"
           : "bg-gradient-to-b from-black/55 to-transparent"
@@ -77,7 +78,7 @@ export function Header() {
               className="h-full w-full object-contain p-1.5"
             />
           </span>
-          <span className="max-w-[11.5rem] text-[0.9rem] leading-[1.08] sm:max-w-none sm:text-[clamp(0.95rem,1.2vw,1.35rem)] sm:whitespace-nowrap">
+          <span className="max-w-[7rem] text-[0.78rem] leading-[1.08] min-[430px]:max-w-[11.5rem] min-[430px]:text-[0.9rem] sm:max-w-none sm:text-[clamp(0.95rem,1.2vw,1.35rem)] sm:whitespace-nowrap">
             {brandName}
           </span>
         </Link>
@@ -106,6 +107,7 @@ export function Header() {
           <div className="hidden sm:block">
             <LanguageSwitcher />
           </div>
+          <ThemeToggle />
           <Link
             href="/contact"
             className="bg-paper text-ink hover:bg-sand hidden min-h-11 items-center gap-2 px-5 text-[0.63rem] font-bold tracking-[0.14em] uppercase transition-colors lg:inline-flex"

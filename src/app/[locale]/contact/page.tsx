@@ -1,7 +1,31 @@
 import { Container } from "@/components/common/container";
 import { ContactForm } from "@/components/forms/contact-form";
+import { ContactRouteOpener } from "@/components/contact/contact-route-opener";
 import { PageHero } from "@/components/sections/page-hero";
 import { isLocale } from "@/config/site";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return createPageMetadata({
+    locale,
+    path: "/contact",
+    title:
+      locale === "fr"
+        ? "Contact et demande de devis"
+        : "Contact and quotation enquiries",
+    description:
+      locale === "fr"
+        ? "Contactez Mohammed Laâchach pour une demande de photographie ou de vidéo à Fès et au Maroc. Indiquez votre date, lieu et projet."
+        : "Contact Mohammed Laâchach about photography or film in Fès and across Morocco. Share your date, location, and project details.",
+  });
+}
 
 export default async function ContactPage({
   params,
@@ -13,6 +37,7 @@ export default async function ContactPage({
   const fr = locale === "fr";
   return (
     <>
+      <ContactRouteOpener />
       <PageHero
         eyebrow="Contact"
         title={
@@ -38,7 +63,7 @@ export default async function ContactPage({
             </p>
           </div>
           <div className="col-span-12 lg:col-span-7 lg:col-start-6">
-            <ContactForm />
+            <ContactForm idPrefix="contact-page" />
           </div>
         </Container>
       </section>

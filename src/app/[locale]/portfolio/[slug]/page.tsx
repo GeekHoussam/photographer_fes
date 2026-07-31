@@ -7,9 +7,28 @@ import { Lightbox } from "@/components/portfolio/lightbox";
 import { isLocale } from "@/config/site";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { Link } from "@/i18n/navigation";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return portfolioProjects.map((project) => ({ slug: project.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) return {};
+  const project = portfolioProjects.find((entry) => entry.slug === slug);
+  if (!project) return {};
+  return createPageMetadata({
+    locale,
+    path: `/portfolio/${slug}`,
+    title: project.title[locale],
+    description: `${project.summary[locale]} ${project.categoryLabel[locale]}, ${project.location}.`,
+  });
 }
 
 export default async function ProjectPage({
@@ -33,7 +52,7 @@ export default async function ProjectPage({
 
   return (
     <article className="bg-ink text-paper">
-      <header className="relative flex min-h-[92svh] items-end overflow-hidden pt-36 pb-12 sm:pb-16">
+      <header className="theme-lock-dark relative flex min-h-[92svh] items-end overflow-hidden pt-36 pb-12 sm:pb-16">
         <Image
           src={project.cover.src}
           alt={project.cover.alt[locale]}

@@ -13,7 +13,7 @@ export function PageHero({
   mediaSrc?: string;
 }) {
   return (
-    <header className="ambient-grid bg-ink text-paper relative flex min-h-[78svh] items-end overflow-hidden pt-36 pb-14 sm:pt-44 sm:pb-20">
+    <header className="theme-lock-dark ambient-grid bg-ink text-paper relative flex min-h-[78svh] items-end overflow-hidden pt-36 pb-14 sm:pt-44 sm:pb-20">
       <Image
         src={mediaSrc}
         alt=""

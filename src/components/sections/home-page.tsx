@@ -95,7 +95,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             {portfolioProjects.map((project, index) => (
               <article
                 key={project.slug}
-                className="group bg-ink relative overflow-hidden border border-white/12 md:sticky"
+                className="theme-lock-dark group bg-ink relative overflow-hidden border border-white/12 md:sticky"
                 style={{
                   top: `calc(var(--header-height) + ${index * 1.15}rem)`,
                 }}

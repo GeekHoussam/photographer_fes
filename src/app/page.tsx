@@ -2,7 +2,7 @@ import { defaultLocale } from "@/config/site";
 
 export default function RootPage() {
   return (
-    <main className="bg-ink text-paper grid min-h-screen place-items-center px-6 text-center">
+    <main className="bg-ink text-paper grid min-h-dvh place-items-center px-6 text-center">
       <div>
         <meta httpEquiv="refresh" content={`0; url=./${defaultLocale}/`} />
         <p className="eyebrow text-sand">Mohammed Laâchach</p>

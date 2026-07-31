@@ -28,6 +28,7 @@ export type ProjectSummary = {
   year: string;
   summary: LocalizedText;
   featured: boolean;
+  mediaType: "photos" | "videos";
   aspect: "portrait" | "landscape" | "square";
   cover: PhotoAsset;
   gallery: PhotoAsset[];

@@ -6,6 +6,29 @@ import { Link } from "@/i18n/navigation";
 import { isLocale } from "@/config/site";
 import { serviceMedia } from "@/features/services/media";
 import { services } from "@/features/services/services";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return createPageMetadata({
+    locale,
+    path: "/services",
+    title:
+      locale === "fr"
+        ? "Services photo et vidéo à Fès"
+        : "Photography and film services in Fès",
+    description:
+      locale === "fr"
+        ? "Photographie de mariage, événement, portrait, produit, hôtellerie et production vidéo à Fès, avec accompagnement du brief à la livraison."
+        : "Wedding, event, portrait, product, and hospitality photography plus video production in Fès, with support from brief to delivery.",
+  });
+}
 
 export default async function ServicesPage({
   params,

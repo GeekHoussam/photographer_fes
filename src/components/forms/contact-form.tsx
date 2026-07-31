@@ -13,7 +13,11 @@ import {
 const fieldClass =
   "mt-2 min-h-14 w-full rounded-xl border border-white/12 bg-white/[0.035] px-4 py-3 text-base text-paper outline-none transition-all placeholder:text-white/25 hover:border-white/25 focus:border-sand focus:bg-white/[0.06]";
 
-export function ContactForm() {
+export function ContactForm({
+  idPrefix = "contact-form",
+}: {
+  idPrefix?: string;
+}) {
   const locale = useLocale();
   const fr = locale === "fr";
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
@@ -96,6 +100,7 @@ export function ContactForm() {
   }
 
   const errorText = fr ? "Vérifiez ce champ." : "Please check this field.";
+  const fieldId = (name: string) => `${idPrefix}-${name}`;
   return (
     <form
       onSubmit={handleSubmit(submit)}
@@ -103,9 +108,9 @@ export function ContactForm() {
       className="grid gap-6 sm:grid-cols-2"
     >
       <div className="hidden" aria-hidden="true">
-        <label htmlFor="website">Website</label>
+        <label htmlFor={fieldId("website")}>Website</label>
         <input
-          id="website"
+          id={fieldId("website")}
           tabIndex={-1}
           autoComplete="off"
           {...register("website")}
@@ -113,38 +118,45 @@ export function ContactForm() {
       </div>
       <Field
         label={fr ? "Nom" : "Name"}
-        id="name"
+        id={fieldId("name")}
         error={errors.name?.message && errorText}
       >
         <input
-          id="name"
+          id={fieldId("name")}
           autoComplete="name"
+          aria-required="true"
           className={fieldClass}
           aria-invalid={Boolean(errors.name)}
-          aria-describedby={errors.name ? "name-error" : undefined}
+          aria-describedby={
+            errors.name ? `${fieldId("name")}-error` : undefined
+          }
           {...register("name")}
         />
       </Field>
       <Field
         label="Email"
-        id="email"
+        id={fieldId("email")}
         error={errors.email?.message && errorText}
       >
         <input
-          id="email"
+          id={fieldId("email")}
           type="email"
           autoComplete="email"
+          aria-required="true"
           className={fieldClass}
           aria-invalid={Boolean(errors.email)}
+          aria-describedby={
+            errors.email ? `${fieldId("email")}-error` : undefined
+          }
           {...register("email")}
         />
       </Field>
       <Field
         label={fr ? "Téléphone ou WhatsApp" : "Phone or WhatsApp"}
-        id="phone"
+        id={fieldId("phone")}
       >
         <input
-          id="phone"
+          id={fieldId("phone")}
           type="tel"
           autoComplete="tel"
           className={fieldClass}
@@ -153,11 +165,16 @@ export function ContactForm() {
       </Field>
       <Field
         label={fr ? "Type de projet" : "Project type"}
-        id="projectType"
+        id={fieldId("projectType")}
         error={errors.projectType?.message && errorText}
       >
         <select
-          id="projectType"
+          id={fieldId("projectType")}
+          aria-required="true"
+          aria-invalid={Boolean(errors.projectType)}
+          aria-describedby={
+            errors.projectType ? `${fieldId("projectType")}-error` : undefined
+          }
           className={fieldClass}
           {...register("projectType")}
         >
@@ -170,10 +187,10 @@ export function ContactForm() {
       </Field>
       <Field
         label={fr ? "Date souhaitée" : "Preferred date"}
-        id="preferredDate"
+        id={fieldId("preferredDate")}
       >
         <input
-          id="preferredDate"
+          id={fieldId("preferredDate")}
           type="date"
           className={fieldClass}
           {...register("preferredDate")}
@@ -181,14 +198,26 @@ export function ContactForm() {
       </Field>
       <Field
         label={fr ? "Lieu" : "Location"}
-        id="location"
+        id={fieldId("location")}
         error={errors.location?.message && errorText}
       >
-        <input id="location" className={fieldClass} {...register("location")} />
-      </Field>
-      <Field label={fr ? "Budget estimé" : "Estimated budget"} id="budget">
         <input
-          id="budget"
+          id={fieldId("location")}
+          aria-required="true"
+          aria-invalid={Boolean(errors.location)}
+          aria-describedby={
+            errors.location ? `${fieldId("location")}-error` : undefined
+          }
+          className={fieldClass}
+          {...register("location")}
+        />
+      </Field>
+      <Field
+        label={fr ? "Budget estimé" : "Estimated budget"}
+        id={fieldId("budget")}
+      >
+        <input
+          id={fieldId("budget")}
           className={fieldClass}
           placeholder={fr ? "Facultatif" : "Optional"}
           {...register("budget")}
@@ -197,7 +226,7 @@ export function ContactForm() {
       <div className="hidden sm:block" aria-hidden="true" />
       <Field
         label={fr ? "Votre message" : "Your message"}
-        id="message"
+        id={fieldId("message")}
         error={
           errors.message?.message &&
           (fr
@@ -207,16 +236,26 @@ export function ContactForm() {
         className="sm:col-span-2"
       >
         <textarea
-          id="message"
+          id={fieldId("message")}
           rows={7}
+          aria-required="true"
           className={fieldClass}
           aria-invalid={Boolean(errors.message)}
+          aria-describedby={
+            errors.message ? `${fieldId("message")}-error` : undefined
+          }
           {...register("message")}
         />
       </Field>
       <label className="flex items-start gap-3 sm:col-span-2">
         <input
           type="checkbox"
+          id={fieldId("consent")}
+          aria-required="true"
+          aria-invalid={Boolean(errors.consent)}
+          aria-describedby={
+            errors.consent ? `${fieldId("consent")}-error` : undefined
+          }
           className="accent-sand mt-1 h-5 w-5"
           {...register("consent")}
         />
@@ -225,7 +264,12 @@ export function ContactForm() {
             ? "J'accepte que mes informations soient utilisées pour répondre à cette demande."
             : "I agree that my information may be used to respond to this enquiry."}
           {errors.consent ? (
-            <span className="block text-red-300">{errorText}</span>
+            <span
+              id={`${fieldId("consent")}-error`}
+              className="block text-red-300"
+            >
+              {errorText}
+            </span>
           ) : null}
         </span>
       </label>

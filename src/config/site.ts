@@ -7,8 +7,8 @@ export const siteConfig = {
   name: "Mohammed Laâchach",
   location: "Fès, Maroc",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  email: null,
-  phone: null,
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? null,
+  phone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? null,
   social: [] as Array<{ label: string; url: string }>,
 } as const;
 

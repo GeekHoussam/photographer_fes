@@ -6,9 +6,32 @@ import { PageHero } from "@/components/sections/page-hero";
 import { isLocale } from "@/config/site";
 import { serviceMedia } from "@/features/services/media";
 import { services } from "@/features/services/services";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) return {};
+  const service = services.find((entry) => entry.slug === slug);
+  if (!service) return {};
+  return createPageMetadata({
+    locale,
+    path: `/services/${slug}`,
+    title: service.title[locale],
+    description: `${service.introduction[locale]} ${
+      locale === "fr"
+        ? "Discutez de votre projet à Fès ou ailleurs au Maroc."
+        : "Discuss your project in Fès or elsewhere in Morocco."
+    }`,
+  });
 }
 
 export default async function ServicePage({
