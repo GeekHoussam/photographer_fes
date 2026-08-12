@@ -44,6 +44,7 @@
   --color-surface-elevated: #202326;
   --color-line: color-mix(in srgb, var(--color-paper) 14%, transparent);
   --color-white: #ffffff;
+  color: var(--color-paper);
   color-scheme: dark;
 }
 
