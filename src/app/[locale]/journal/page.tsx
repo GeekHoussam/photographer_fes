@@ -3,6 +3,26 @@ import { Container } from "@/components/common/container";
 import { PageHero } from "@/components/sections/page-hero";
 import { Link } from "@/i18n/navigation";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const content = getPageContent("journal", locale);
+  return createPageMetadata({
+    locale,
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
+    noIndex: !content.indexable,
+  });
+}
 
 export default async function JournalPage({
   params,
@@ -12,18 +32,13 @@ export default async function JournalPage({
   const { locale } = await params;
   if (!isLocale(locale)) return null;
   const fr = locale === "fr";
+  const content = getPageContent("journal", locale);
   return (
     <>
       <PageHero
-        eyebrow="Journal"
-        title={
-          fr ? "Histoires, lieux et lumière." : "Stories, places, and light."
-        }
-        introduction={
-          fr
-            ? "Des notes de terrain sur les personnes, les lieux et les gestes qui façonnent une image."
-            : "Field notes on the people, places, and gestures that shape an image."
-        }
+        eyebrow={content.eyebrow}
+        title={content.h1}
+        introduction={content.introduction}
         mediaSrc="/images/portfolio/food/DSC02504.webp"
       />
       <section className="section-space bg-ink text-paper">
@@ -45,18 +60,18 @@ export default async function JournalPage({
                   {fr ? "Carnets en préparation" : "Field notes in progress"}
                 </p>
                 <h2 className="font-display mt-7 text-[clamp(3rem,5vw,5.5rem)] leading-[0.87] tracking-[-0.04em]">
-                  {fr
-                    ? "Le premier récit arrive bientôt."
-                    : "The first story is coming soon."}
+                  {fr ? "Aucun article publié." : "No published articles."}
                 </h2>
               </div>
               <p className="mt-8 text-sm leading-7 text-white/45">
                 {fr
-                  ? "En attendant, découvrez les séries photographiques déjà publiées."
-                  : "In the meantime, explore the photographic series already published."}
+                  ? "Le portfolio contient déjà quatre séries photographiques documentées."
+                  : "The portfolio already contains four documented photographic series."}
               </p>
               <Link href="/portfolio" className="text-link-arrow mt-8 w-fit">
-                {fr ? "Voir le portfolio" : "View the portfolio"}
+                {fr
+                  ? "Voir les séries photographiques"
+                  : "View the photography series"}
               </Link>
             </div>
           </div>

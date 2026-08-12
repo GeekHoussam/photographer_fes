@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import type { Locale } from "@/config/site";
 import { Container } from "@/components/common/container";
@@ -8,71 +7,41 @@ import {
   signaturePortrait,
 } from "@/features/portfolio/projects";
 import { Link } from "@/i18n/navigation";
+import { getPageContent } from "@/features/content/pages";
 import { HomeHero } from "./home-hero";
+import { ScrollTransitionFrames } from "./scroll-transition-frames";
 
 export function HomePage({ locale }: { locale: Locale }) {
   const fr = locale === "fr";
+  const processPage = getPageContent("process", locale);
   const selectedWork = [
     {
       image: portfolioProjects[3]!.gallery[5]!,
-      className: "col-span-12 md:col-span-7",
+      project: portfolioProjects[3]!,
     },
     {
       image: portfolioProjects[1]!.gallery[3]!,
-      className: "col-span-8 col-start-5 md:col-span-4 md:col-start-9 md:mt-32",
+      project: portfolioProjects[1]!,
     },
     {
       image: portfolioProjects[2]!.gallery[1]!,
-      className: "col-span-12 md:col-span-8 md:col-start-3",
+      project: portfolioProjects[2]!,
     },
     {
       image: portfolioProjects[0]!.gallery[1]!,
-      className: "col-span-7 md:col-span-4",
+      project: portfolioProjects[0]!,
     },
     {
       image: portfolioProjects[3]!.gallery[8]!,
-      className: "col-span-5 md:col-span-6 md:col-start-7 md:mt-24",
+      project: portfolioProjects[3]!,
     },
     {
       image: portfolioProjects[2]!.gallery[7]!,
-      className: "col-span-12 md:col-span-9 md:col-start-2",
+      project: portfolioProjects[2]!,
     },
   ];
 
-  const process = fr
-    ? [
-        [
-          "Écouter",
-          "Comprendre le lieu, les personnes et l'usage final des images.",
-        ],
-        [
-          "Composer",
-          "Choisir une direction visuelle claire avant la prise de vue.",
-        ],
-        [
-          "Photographier",
-          "Guider avec discrétion et rester attentif à ce qui arrive.",
-        ],
-        [
-          "Finaliser",
-          "Sélectionner et affiner chaque image dans une série cohérente.",
-        ],
-      ]
-    : [
-        [
-          "Listen",
-          "Understand the place, the people, and how the images will be used.",
-        ],
-        [
-          "Compose",
-          "Choose a clear visual direction before production begins.",
-        ],
-        ["Photograph", "Guide quietly and stay attentive to what unfolds."],
-        [
-          "Finish",
-          "Select and refine every image as part of one coherent series.",
-        ],
-      ];
+  const process = processPage.steps ?? [];
 
   return (
     <>
@@ -82,12 +51,12 @@ export function HomePage({ locale }: { locale: Locale }) {
         <Container>
           <div className="mb-14 max-w-4xl sm:mb-20">
             <p className="eyebrow text-sand">
-              {fr ? "Séries choisies" : "Selected stories"}
+              {fr ? "Séries publiées" : "Published series"}
             </p>
             <h2 className="display-section mt-6">
               {fr
-                ? "Quatre regards, une même présence."
-                : "Four views, one clear presence."}
+                ? "Mariage, événement, intérieurs et gastronomie."
+                : "Wedding, event, interiors, and food."}
             </h2>
           </div>
 
@@ -95,7 +64,7 @@ export function HomePage({ locale }: { locale: Locale }) {
             {portfolioProjects.map((project, index) => (
               <article
                 key={project.slug}
-                className="group bg-ink relative overflow-hidden border border-white/12 md:sticky"
+                className="theme-lock-dark group bg-ink relative overflow-hidden border border-white/12 md:sticky"
                 style={{
                   top: `calc(var(--header-height) + ${index * 1.15}rem)`,
                 }}
@@ -153,7 +122,9 @@ export function HomePage({ locale }: { locale: Locale }) {
                 {fr ? "Derrière l'objectif" : "Behind the lens"}
               </p>
               <h2 className="font-display mt-6 text-[clamp(3.4rem,6vw,6.5rem)] leading-[0.87] tracking-[-0.045em]">
-                {fr ? "Voir avant de déclencher." : "See before the shutter."}
+                {fr
+                  ? "Un photographe et vidéaste basé à Fès."
+                  : "A photographer and filmmaker based in Fès."}
               </h2>
               <p className="text-ink/65 mt-7 max-w-lg text-base leading-8">
                 {fr
@@ -175,63 +146,52 @@ export function HomePage({ locale }: { locale: Locale }) {
         </Container>
       </section>
 
-      <section className="section-space bg-surface text-paper">
+      <section className="section-space bg-surface text-paper overflow-clip">
         <Container>
           <div className="max-w-4xl">
             <h2 className="display-section">
-              {fr ? "Une sélection en mouvement." : "A selection in motion."}
+              {fr
+                ? "Six photographies, quatre types de projets."
+                : "Six photographs, four kinds of work."}
             </h2>
             <p className="mt-7 max-w-xl text-base leading-8 text-white/55">
               {fr
-                ? "Portraits, espaces, détails et gestes alternent pour donner à chaque sujet sa juste échelle."
-                : "Portraits, spaces, details, and gestures alternate to give every subject its right scale."}
+                ? "Cette sélection relie portraits de mariage, reportage d’événement, intérieurs marocains et travail en cuisine."
+                : "This selection connects wedding portraits, event coverage, Moroccan interiors, and kitchen craft."}
             </p>
           </div>
-
-          <div className="mt-16 grid grid-cols-12 items-start gap-3 sm:mt-24 sm:gap-6">
-            {selectedWork.map(({ image, className }) => (
-              <div
-                key={image.src}
-                className={`media-frame rounded-none border border-white/12 ${className}`}
-                style={{ aspectRatio: `${image.width} / ${image.height}` }}
-              >
-                <Image
-                  src={image.src}
-                  alt={image.alt[locale]}
-                  fill
-                  sizes="(min-width: 768px) 65vw, 100vw"
-                  className="object-cover"
-                />
-              </div>
-            ))}
-          </div>
         </Container>
+
+        <ScrollTransitionFrames
+          locale={locale}
+          frames={selectedWork.map(({ image, project }) => ({
+            image,
+            category: project.categoryLabel[locale],
+            title: project.title[locale],
+          }))}
+        />
       </section>
 
       <section className="section-space bg-ink text-paper">
         <Container>
           <div className="max-w-4xl">
             <p className="eyebrow text-sand">{fr ? "Méthode" : "Method"}</p>
-            <h2 className="display-section mt-6">
-              {fr
-                ? "Une direction claire, du début à la livraison."
-                : "Clear direction from start to delivery."}
-            </h2>
+            <h2 className="display-section mt-6">{processPage.h2}</h2>
           </div>
           <ol className="mt-16 border-t border-white/15 sm:mt-24">
-            {process.map(([step, description], index) => (
+            {process.map((step, index) => (
               <li
-                key={step}
+                key={step.title}
                 className="group grid gap-4 border-b border-white/15 py-6 sm:grid-cols-[4rem_1fr_1fr] sm:items-baseline sm:gap-8 sm:py-8"
               >
                 <span className="text-sand text-xs font-bold tracking-[0.14em]">
                   {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-display text-4xl leading-none transition-transform duration-500 group-hover:translate-x-2 sm:text-5xl">
-                  {step}
+                  {step.title}
                 </h3>
                 <p className="max-w-md text-sm leading-7 text-white/55">
-                  {description}
+                  {step.text}
                 </p>
               </li>
             ))}
@@ -246,10 +206,12 @@ export function HomePage({ locale }: { locale: Locale }) {
         >
           <Container className="grid grid-cols-12 gap-y-9">
             <h2 className="font-display col-span-12 text-[clamp(4rem,9vw,10rem)] leading-[0.8] tracking-[-0.055em] lg:col-span-10">
-              {fr ? "Parlons de votre histoire." : "Let's tell your story."}
+              {fr
+                ? "Présentez votre projet photo ou vidéo."
+                : "Tell me about your photography or film project."}
             </h2>
             <span className="col-span-12 inline-flex items-center gap-3 text-xs font-bold tracking-[0.14em] uppercase lg:col-span-2 lg:justify-end lg:self-end">
-              {fr ? "Nous écrire" : "Write to us"}
+              {fr ? "Demander un devis" : "Request a quotation"}
               <ArrowUpRight
                 aria-hidden="true"
                 className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"

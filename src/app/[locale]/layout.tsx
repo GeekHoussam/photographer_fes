@@ -3,13 +3,30 @@ import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { ContactDialogProvider } from "@/components/contact/contact-dialog";
 import { HydrationMarker } from "@/components/layout/hydration-marker";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { routing } from "@/i18n/routing";
+import { RootDocument } from "@/app/root-document";
+import { siteConfig } from "@/config/site";
+import type { Metadata } from "next";
+import "@/styles/globals.css";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.publicBaseUrl),
+  title: {
+    default: `${siteConfig.name} — Photographe et vidéaste à Fès`,
+    template: `%s — ${siteConfig.name}`,
+  },
+  icons: {
+    icon: `${siteConfig.basePath}/images/Transparent%20square%20camera%20mark.png`,
+    apple: `${siteConfig.basePath}/images/Transparent%20square%20camera%20mark.png`,
+  },
+};
 
 export default async function LocaleLayout({
   children,
@@ -23,18 +40,22 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
 
   return (
-    <NextIntlClientProvider>
-      <HydrationMarker />
-      <SmoothScroll />
-      <a
-        href="#main-content"
-        className="bg-paper text-ink fixed top-4 left-4 z-[100] -translate-y-24 px-4 py-3 text-sm transition-transform focus:translate-y-0"
-      >
-        {locale === "fr" ? "Aller au contenu" : "Skip to content"}
-      </a>
-      <Header />
-      <main id="main-content">{children}</main>
-      <Footer />
-    </NextIntlClientProvider>
+    <RootDocument lang={locale}>
+      <NextIntlClientProvider>
+        <ContactDialogProvider>
+          <HydrationMarker />
+          <SmoothScroll />
+          <a
+            href="#main-content"
+            className="bg-paper text-ink fixed top-4 left-4 z-[100] -translate-y-24 px-4 py-3 text-sm transition-transform focus:translate-y-0"
+          >
+            {locale === "fr" ? "Aller au contenu" : "Skip to content"}
+          </a>
+          <Header />
+          <main id="main-content">{children}</main>
+          <Footer />
+        </ContactDialogProvider>
+      </NextIntlClientProvider>
+    </RootDocument>
   );
 }

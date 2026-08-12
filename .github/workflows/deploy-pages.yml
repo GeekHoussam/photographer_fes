@@ -36,7 +36,8 @@ jobs:
       - name: Build static site
         run: pnpm exec next build --webpack
         env:
-          NEXT_PUBLIC_SITE_URL: https://GeekHoussam.github.io/photographer_fes
+          GITHUB_PAGES: "true"
+          NEXT_PUBLIC_SITE_URL: https://geekhoussam.github.io/photographer_fes
           NEXT_PUBLIC_BASE_PATH: /photographer_fes
           NEXT_PUBLIC_CONTACT_EMAIL: mokhtarihoussampro@gmail.com
       - name: Upload Pages artifact

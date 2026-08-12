@@ -7,6 +7,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./language-switcher";
+import { ThemeToggle } from "./theme-toggle";
 
 const links = [
   ["portfolio", "/portfolio"],
@@ -54,7 +55,7 @@ export function Header() {
 
   return (
     <header
-      className={`text-paper fixed inset-x-0 top-0 z-[var(--z-header)] transition-all duration-500 ${
+      className={`theme-lock-dark text-paper fixed inset-x-0 top-0 z-[var(--z-header)] transition-all duration-500 ${
         scrolled || open
           ? "bg-ink/88 border-b border-white/10 backdrop-blur-xl"
           : "bg-gradient-to-b from-black/55 to-transparent"
@@ -77,14 +78,16 @@ export function Header() {
               className="h-full w-full object-contain p-1.5"
             />
           </span>
-          <span className="max-w-[11.5rem] text-[0.9rem] leading-[1.08] sm:max-w-none sm:text-[clamp(0.95rem,1.2vw,1.35rem)] sm:whitespace-nowrap">
+          <span className="max-w-[7rem] text-[0.78rem] leading-[1.08] min-[430px]:max-w-[11.5rem] min-[430px]:text-[0.9rem] sm:max-w-none sm:text-[clamp(0.95rem,1.2vw,1.35rem)] sm:whitespace-nowrap">
             {brandName}
           </span>
         </Link>
 
         <nav
           className="hidden items-center gap-1 border-y border-white/12 bg-black/20 px-2 backdrop-blur-md lg:flex"
-          aria-label="Primary navigation"
+          aria-label={
+            locale === "fr" ? "Navigation principale" : "Primary navigation"
+          }
         >
           {links.map(([key, href]) => (
             <Link
@@ -106,6 +109,7 @@ export function Header() {
           <div className="hidden sm:block">
             <LanguageSwitcher />
           </div>
+          <ThemeToggle />
           <Link
             href="/contact"
             className="bg-paper text-ink hover:bg-sand hidden min-h-11 items-center gap-2 px-5 text-[0.63rem] font-bold tracking-[0.14em] uppercase transition-colors lg:inline-flex"
@@ -148,7 +152,9 @@ export function Header() {
           <nav
             id="mobile-navigation"
             className="bg-ink absolute inset-x-0 top-full z-[var(--z-overlay)] flex h-[calc(100svh-var(--header-height))] flex-col overflow-y-auto px-[var(--page-gutter)] pt-10 pb-8 lg:hidden"
-            aria-label="Mobile navigation"
+            aria-label={
+              locale === "fr" ? "Navigation mobile" : "Mobile navigation"
+            }
           >
             <p className="eyebrow text-sand mb-8">Menu</p>
             <div className="flex flex-1 flex-col">
@@ -176,7 +182,9 @@ export function Header() {
             </div>
             <div className="mt-8 flex items-end justify-between border-t border-white/10 pt-6">
               <div>
-                <p className="eyebrow text-sand">Fès · Morocco</p>
+                <p className="eyebrow text-sand">
+                  {locale === "fr" ? "Fès · Maroc" : "Fès · Morocco"}
+                </p>
                 <p className="mt-3 max-w-xs text-sm text-white/50">
                   {footer("location")}
                 </p>

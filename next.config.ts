@@ -8,6 +8,10 @@ const basePath = isGitHubPages
   ? (process.env.NEXT_PUBLIC_BASE_PATH ?? "/photographer_fes")
   : "";
 
+if (isGitHubPages && !process.env.NEXT_PUBLIC_BASE_PATH) {
+  process.env.NEXT_PUBLIC_BASE_PATH = basePath;
+}
+
 const nextConfig: NextConfig = {
   output: isGitHubPages ? "export" : undefined,
   basePath,
@@ -30,9 +34,13 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
   },
-  redirects() {
-    return isGitHubPages ? [] : legacyRedirects;
-  },
+  ...(isGitHubPages
+    ? {}
+    : {
+        redirects() {
+          return legacyRedirects;
+        },
+      }),
 };
 
 export default withNextIntl(nextConfig);

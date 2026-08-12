@@ -1,14 +1,38 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ButtonLink } from "@/components/common/button";
 import { Container } from "@/components/common/container";
 import { ResponsiveMedia } from "@/components/common/responsive-media";
+import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { isLocale } from "@/config/site";
+import { portfolioProjects } from "@/features/portfolio/projects";
 import { serviceMedia } from "@/features/services/media";
 import { services } from "@/features/services/services";
+import { Link } from "@/i18n/navigation";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { servicePageJsonLd } from "@/lib/seo/structured-data";
 
 export function generateStaticParams() {
   return services.map((service) => ({ slug: service.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) return {};
+  const service = services.find((entry) => entry.slug === slug);
+  if (!service) return {};
+  return createPageMetadata({
+    locale,
+    path: `/services/${slug}`,
+    title: service.title[locale],
+    description: service.introduction[locale],
+    image: serviceMedia(slug).hero,
+  });
 }
 
 export default async function ServicePage({
@@ -22,55 +46,67 @@ export default async function ServicePage({
   if (!service) notFound();
   const fr = locale === "fr";
   const media = serviceMedia(service.slug);
-  const items = fr
-    ? [
-        "Direction visuelle adaptée au projet",
-        "Prise de vue préparée avec précision",
-        "Sélection et finition cohérentes",
-      ]
-    : [
-        "Visual direction tailored to the project",
-        "A carefully prepared production",
-        "Coherent selection and finishing",
-      ];
+  const relatedProject = service.relatedProjectSlug
+    ? portfolioProjects.find(
+        (project) => project.slug === service.relatedProjectSlug,
+      )
+    : undefined;
 
   return (
     <>
+      <JsonLd data={servicePageJsonLd(locale, service)} />
       <PageHero
         eyebrow={fr ? "Service" : "Service"}
         title={service.title[locale]}
         introduction={service.introduction[locale]}
         mediaSrc={media.hero}
       />
+
       <section className="section-space bg-ink text-paper">
-        <Container className="grid grid-cols-12 gap-y-12 lg:gap-x-12">
-          <div className="col-span-12 lg:col-span-5">
-            <p className="eyebrow text-sand">
-              {fr ? "Description" : "Description"}
-            </p>
-            <h2 className="font-display mt-7 text-[clamp(3.25rem,6vw,6.5rem)] leading-[0.85] tracking-[-0.045em]">
-              {fr
-                ? "Une méthode claire, adaptée à chaque sujet."
-                : "A clear method, tailored to every subject."}
-            </h2>
-          </div>
-          <div className="col-span-12 lg:col-span-6 lg:col-start-7 lg:pt-20">
-            <p className="text-base leading-8 text-white/52">
-              {fr
-                ? "Chaque collaboration commence par le contexte : l'usage des images, le lieu, le rythme et la manière dont elles seront vues. La préparation reste légère mais précise, afin que la prise de vue puisse conserver sa spontanéité."
-                : "Every collaboration begins with context: how the images will be used, the place, the pace, and how they will be seen. Preparation stays light but precise so the shoot can retain its spontaneity."}
-            </p>
-            <ul className="mt-12 border-t border-white/12">
-              {items.map((item, index) => (
-                <li
-                  key={item}
-                  className="grid grid-cols-[3rem_1fr] border-b border-white/12 py-5"
-                >
-                  <span className="eyebrow text-sand">0{index + 1}</span>
-                  <span className="text-sm text-white/70">{item}</span>
-                </li>
-              ))}
-            </ul>
+        <Container>
+          <nav
+            aria-label={fr ? "Fil d’Ariane" : "Breadcrumb"}
+            className="mb-14 flex flex-wrap gap-2 text-xs tracking-[0.12em] text-white/45 uppercase"
+          >
+            <Link href="/">{fr ? "Accueil" : "Home"}</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/services">Services</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{service.title[locale]}</span>
+          </nav>
+
+          <div className="grid grid-cols-12 gap-y-12 lg:gap-x-12">
+            <div className="col-span-12 lg:col-span-5">
+              <p className="eyebrow text-sand">
+                {fr ? "Ce service" : "About this service"}
+              </p>
+              <h2 className="font-display mt-7 text-[clamp(3.25rem,6vw,6.5rem)] leading-[0.85] tracking-[-0.045em]">
+                {service.overviewTitle[locale]}
+              </h2>
+            </div>
+            <div className="col-span-12 lg:col-span-6 lg:col-start-7 lg:pt-20">
+              <p className="text-base leading-8 text-white/52">
+                {service.overview[locale]}
+              </p>
+              <h3 className="eyebrow text-sand mt-12">
+                {fr
+                  ? "À préciser dans votre demande"
+                  : "Include in your enquiry"}
+              </h3>
+              <ul className="mt-5 border-t border-white/12">
+                {service.planningPoints.map((item, index) => (
+                  <li
+                    key={item[locale]}
+                    className="grid grid-cols-[3rem_1fr] border-b border-white/12 py-5"
+                  >
+                    <span className="eyebrow text-sand">0{index + 1}</span>
+                    <span className="text-sm text-white/70">
+                      {item[locale]}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </Container>
       </section>
@@ -80,39 +116,56 @@ export default async function ServicePage({
           <div className="grid grid-cols-12 gap-5 sm:gap-8">
             <ResponsiveMedia
               src={media.hero}
-              alt={service.title[locale]}
+              alt={media.heroAlt[locale]}
               sizes="(min-width: 768px) 58vw, 100vw"
               className="col-span-12 aspect-[4/3] md:col-span-7"
             />
             <ResponsiveMedia
               src={media.secondary}
-              alt={`${service.title[locale]} — ${fr ? "image sélectionnée" : "selected image"}`}
+              alt={media.secondaryAlt[locale]}
               sizes="(min-width: 768px) 42vw, 80vw"
               className="col-span-10 col-start-3 aspect-[4/5] md:col-span-5 md:col-start-8 md:mt-28"
             />
           </div>
+          {relatedProject ? (
+            <p className="mt-9 text-sm leading-7">
+              <Link
+                href={`/portfolio/${relatedProject.slug}`}
+                className="text-link-arrow"
+              >
+                {fr
+                  ? `Voir la série liée : ${relatedProject.title.fr}`
+                  : `View the related series: ${relatedProject.title.en}`}
+              </Link>
+            </p>
+          ) : null}
         </Container>
       </section>
 
       <section className="section-space bg-surface text-paper border-t border-white/10">
         <Container>
           <div className="grid grid-cols-12 gap-y-10">
-            <h2 className="display-section col-span-12 lg:col-span-5">FAQ</h2>
+            <h2 className="display-section col-span-12 lg:col-span-5">
+              {fr ? "Questions fréquentes" : "Frequently asked questions"}
+            </h2>
             <div className="col-span-12 lg:col-span-6 lg:col-start-7">
-              <details className="border-y border-white/12 py-6">
-                <summary className="cursor-pointer text-base font-medium">
-                  {fr
-                    ? "Comment préparer le projet ?"
-                    : "How should the project be prepared?"}
-                </summary>
-                <p className="mt-5 max-w-2xl leading-8 text-white/48">
-                  {fr
-                    ? "Un premier échange permet de préciser l'intention, les contraintes du lieu, les usages attendus et le calendrier. Une proposition adaptée peut ensuite être préparée."
-                    : "An initial conversation clarifies the intention, location constraints, intended uses, and timeline. A tailored proposal can then be prepared."}
-                </p>
-              </details>
+              {service.faqs.map((faq) => (
+                <details
+                  key={faq.question[locale]}
+                  className="border-t border-white/12 py-6 last:border-b"
+                >
+                  <summary className="cursor-pointer text-base font-medium">
+                    {faq.question[locale]}
+                  </summary>
+                  <p className="mt-5 max-w-2xl leading-8 text-white/48">
+                    {faq.answer[locale]}
+                  </p>
+                </details>
+              ))}
               <ButtonLink href="/contact" className="mt-10">
-                {fr ? "Demander un devis" : "Request a quote"}
+                {fr
+                  ? "Présenter ce projet et demander un devis"
+                  : "Describe this project and request a quotation"}
               </ButtonLink>
             </div>
           </div>

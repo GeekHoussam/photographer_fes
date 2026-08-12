@@ -5,26 +5,26 @@ import { Container } from "@/components/common/container";
 import { LensHero } from "@/components/three/lens-hero";
 import { Link } from "@/i18n/navigation";
 import { portfolioProjects } from "@/features/portfolio/projects";
+import { getPageContent } from "@/features/content/pages";
 import { HeroOrbitGallery } from "./hero-orbit-gallery";
 
 export function HomeHero({ locale }: { locale: Locale }) {
   const fr = locale === "fr";
+  const page = getPageContent("home", locale);
   const copy = fr
     ? {
-        eyebrow: "Photographe & vidéaste à Fès",
-        title: "La lumière révèle l'histoire.",
-        intro:
-          "Mariages, lieux, gastronomie et événements photographiés avec précision et présence.",
-        portfolio: "Voir le portfolio",
-        quote: "Nous écrire",
+        eyebrow: page.eyebrow,
+        title: page.h1,
+        intro: page.introduction,
+        portfolio: "Voir les séries photographiques",
+        quote: "Demander un devis",
       }
     : {
-        eyebrow: "Photographer & filmmaker in Fès",
-        title: "Light reveals the story.",
-        intro:
-          "Weddings, spaces, food, and events photographed with precision and presence.",
-        portfolio: "View portfolio",
-        quote: "Write to us",
+        eyebrow: page.eyebrow,
+        title: page.h1,
+        intro: page.introduction,
+        portfolio: "View the photography series",
+        quote: "Request a quotation",
       };
 
   const orbitItems = portfolioProjects.map((project) => ({
@@ -35,7 +35,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
   }));
 
   return (
-    <section className="reference-home-hero bg-ink text-paper relative min-h-[100svh] overflow-hidden pt-[var(--header-height)]">
+    <section className="theme-lock-dark reference-home-hero bg-ink text-paper relative min-h-[100svh] overflow-hidden pt-[var(--header-height)]">
       <div className="absolute inset-0">
         <Image
           src="/images/portfolio/personal/m3.png"

@@ -1,37 +1,35 @@
 import type { MetadataRoute } from "next";
-import { locales, siteConfig } from "@/config/site";
+import { locales, localizedUrl } from "@/config/site";
+import { staticPageContent } from "@/features/content/pages";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { services } from "@/features/services/services";
 
 export const dynamic = "force-static";
 
+function alternates(path: string) {
+  return {
+    languages: {
+      fr: localizedUrl("fr", path),
+      en: localizedUrl("en", path),
+      "x-default": localizedUrl("fr", path),
+    },
+  };
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticRoutes = [
-    "",
-    "/portfolio",
-    "/services",
-    "/about",
-    "/process",
-    "/journal",
-    "/contact",
-    "/privacy",
-    "/legal",
-  ];
+  const staticRoutes = Object.values(staticPageContent)
+    .filter((page) => page.indexable)
+    .map((page) => page.path);
   const routes = [
     ...staticRoutes,
-    ...portfolioProjects.map((p) => `/portfolio/${p.slug}`),
-    ...services.map((s) => `/services/${s.slug}`),
+    ...portfolioProjects.map((project) => `/portfolio/${project.slug}`),
+    ...services.map((service) => `/services/${service.slug}`),
   ];
+
   return locales.flatMap((locale) =>
     routes.map((route) => ({
-      url: `${siteConfig.url}/${locale}${route}`,
-      lastModified: new Date(),
-      alternates: {
-        languages: {
-          fr: `${siteConfig.url}/fr${route}`,
-          en: `${siteConfig.url}/en${route}`,
-        },
-      },
+      url: localizedUrl(locale, route),
+      alternates: alternates(route),
     })),
   );
 }

@@ -1,94 +1,47 @@
 import { ButtonLink } from "@/components/common/button";
 import { Container } from "@/components/common/container";
 import { ResponsiveMedia } from "@/components/common/responsive-media";
+import { getPageContent } from "@/features/content/pages";
+import type { Locale } from "@/config/site";
 import { PageHero } from "./page-hero";
 
 export function EditorialPage({
   locale,
   kind,
 }: {
-  locale: "fr" | "en";
+  locale: Locale;
   kind: "about" | "process" | "privacy" | "legal";
 }) {
   const fr = locale === "fr";
-  const content = {
-    about: {
-      eyebrow: fr ? "À propos" : "About",
-      title: fr
-        ? "Mohammed, derrière l'objectif."
-        : "Mohammed, behind the lens.",
-      intro: fr
-        ? "Un regard construit entre présence documentaire, direction attentive et lumière naturelle."
-        : "A point of view shaped by documentary presence, considered direction, and natural light.",
-      heading: fr
-        ? "Une approche humaine et éditoriale."
-        : "A human, editorial approach.",
-      body: fr
-        ? "Basé à Fès, Mohammed photographie les personnes, les lieux et les savoir-faire avec une approche calme et précise. Il cherche moins à imposer une image qu'à créer les conditions où une présence juste peut apparaître."
-        : "Based in Fès, Mohammed photographs people, places, and craft with a calm, precise approach. Rather than imposing an image, he creates the conditions in which a genuine presence can emerge.",
-    },
-    process: {
-      eyebrow: fr ? "Approche" : "Process",
-      title: fr
-        ? "De l'idée aux images finales."
-        : "From the idea to the final images.",
-      intro: fr
-        ? "Un cadre clair, adaptable à chaque mariage, lieu, marque ou production."
-        : "A clear framework, adaptable to every wedding, place, brand, or production.",
-      heading: fr
-        ? "Préparer avec soin, photographier avec présence."
-        : "Prepare with care, photograph with presence.",
-      body: fr
-        ? "Le travail commence par un échange sur l'intention, les usages et le rythme. Une direction visuelle concise prépare la prise de vue, puis l'édition construit une série cohérente avant la livraison."
-        : "The work begins with a conversation about intent, usage, and pace. A concise visual direction prepares the shoot, then the edit builds a coherent series before delivery.",
-    },
-    privacy: {
-      eyebrow: fr ? "Confidentialité" : "Privacy",
-      title: fr ? "Politique de confidentialité." : "Privacy policy.",
-      intro: fr
-        ? "Brouillon structurel à faire valider juridiquement avant publication."
-        : "Structural draft requiring legal review before publishing.",
-      heading: fr ? "Données du formulaire." : "Form data.",
-      body: fr
-        ? "Les informations envoyées via le formulaire sont utilisées uniquement pour répondre à la demande. Le responsable de traitement, les durées de conservation et les droits applicables doivent être confirmés."
-        : "Information sent through the form is used only to respond to the enquiry. The data controller, retention periods, and applicable rights must be confirmed.",
-    },
-    legal: {
-      eyebrow: fr ? "Informations légales" : "Legal information",
-      title: fr ? "Mentions légales." : "Legal notice.",
-      intro: fr
-        ? "Aucune information d'enregistrement n'est inventée. Contenu à compléter avant lancement."
-        : "No registration information is invented. Content must be completed before launch.",
-      heading: fr ? "Éditeur et hébergement." : "Publisher and hosting.",
-      body: fr
-        ? "Le nom légal, l'adresse, les identifiants d'activité, le directeur de publication et les mentions d'hébergement seront ajoutés après validation."
-        : "The legal name, address, business identifiers, publication director, and hosting disclosures will be added after approval.",
-    },
-  }[kind];
+  const content = getPageContent(kind, locale);
   const visual = kind === "about" || kind === "process";
+  const image =
+    kind === "about"
+      ? "/images/portfolio/personal/m2.webp"
+      : "/images/portfolio/interiors/DSC01919.webp";
+  const imageAlt =
+    kind === "about"
+      ? fr
+        ? "Mohammed Laâchach tenant une caméra de cinéma sur un plateau"
+        : "Mohammed Laâchach holding a cinema camera on set"
+      : fr
+        ? "Salon traditionnel de Fès aux boiseries sculptées"
+        : "Traditional Fès interior with carved woodwork";
 
   return (
     <>
       <PageHero
         eyebrow={content.eyebrow}
-        title={content.title}
-        introduction={content.intro}
-        mediaSrc={
-          visual
-            ? "/images/portfolio/interiors/DSC01919.webp"
-            : "/images/portfolio/interiors/DSC02171.webp"
-        }
+        title={content.h1}
+        introduction={content.introduction}
+        mediaSrc={image}
       />
       <section className="section-space bg-ink text-paper">
         <Container className="grid grid-cols-12 gap-y-14 lg:gap-x-12">
           {visual ? (
             <ResponsiveMedia
-              src="/images/portfolio/interiors/DSC01919.webp"
-              alt={
-                fr
-                  ? "Salon traditionnel de Fès aux boiseries sculptées"
-                  : "Traditional Fès interior with carved woodwork"
-              }
+              src={image}
+              alt={imageAlt}
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="col-span-12 aspect-[4/5] lg:col-span-6"
             />
@@ -102,14 +55,39 @@ export function EditorialPage({
           >
             <p className="eyebrow text-sand">{content.eyebrow}</p>
             <h2 className="font-display mt-7 text-[clamp(3.25rem,6vw,6.5rem)] leading-[0.86] tracking-[-0.04em]">
-              {content.heading}
+              {content.h2}
             </h2>
             <p className="mt-9 max-w-2xl text-base leading-8 text-white/52">
               {content.body}
             </p>
+
+            {kind === "process" && content.steps ? (
+              <ol className="mt-12 border-t border-white/12">
+                {content.steps.map((step, index) => (
+                  <li
+                    id={`step-${index + 1}`}
+                    key={step.title}
+                    className="grid gap-3 border-b border-white/12 py-6 sm:grid-cols-[3rem_1fr]"
+                  >
+                    <span className="eyebrow text-sand">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3 className="font-display text-3xl leading-none">
+                        {step.title}
+                      </h3>
+                      <p className="mt-4 text-sm leading-7 text-white/52">
+                        {step.text}
+                      </p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            ) : null}
+
             {visual ? (
               <ButtonLink href="/contact" variant="secondary" className="mt-9">
-                {fr ? "Parler de votre projet" : "Discuss your project"}
+                {fr ? "Présenter votre projet" : "Tell me about your project"}
               </ButtonLink>
             ) : null}
           </div>

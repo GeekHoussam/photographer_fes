@@ -22,6 +22,31 @@
   --z-overlay: 80;
 }
 
+:root[data-theme="light"] {
+  --color-ink: #f4f3ef;
+  --color-paper: #161718;
+  --color-paper-deep: #303235;
+  --color-sand: #626970;
+  --color-muted: #5f656b;
+  --color-surface: #e8e8e4;
+  --color-surface-elevated: #dcddd9;
+  --color-line: color-mix(in srgb, var(--color-paper) 16%, transparent);
+  --color-white: #161718;
+}
+
+.theme-lock-dark {
+  --color-ink: #101112;
+  --color-paper: #f1f2ee;
+  --color-paper-deep: #d9dcda;
+  --color-sand: #b7bcc2;
+  --color-muted: #8e9398;
+  --color-surface: #181a1c;
+  --color-surface-elevated: #202326;
+  --color-line: color-mix(in srgb, var(--color-paper) 14%, transparent);
+  --color-white: #ffffff;
+  color-scheme: dark;
+}
+
 @theme inline {
   --color-ink: var(--color-ink);
   --color-paper: var(--color-paper);
@@ -54,6 +79,15 @@ body {
   line-height: 1.6;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
+  transition:
+    background-color 240ms ease,
+    color 240ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body {
+    transition: none;
+  }
 }
 
 body::before {
@@ -1069,6 +1103,304 @@ a {
   grid-column: 7 / span 5;
   margin-top: 8rem;
   aspect-ratio: 4 / 5;
+}
+
+.scroll-sequence {
+  --sequence-gutter: clamp(1rem, 3vw, 3rem);
+  position: relative;
+  height: calc(100svh + (var(--sequence-count) - 1) * 62svh);
+  min-height: 54rem;
+  margin-top: clamp(3.5rem, 8vw, 7rem);
+  color: #f1f2ee;
+  background: #101112;
+}
+
+.scroll-sequence-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  min-height: 42rem;
+  overflow: hidden;
+  border-block: 1px solid rgba(255, 255, 255, 0.12);
+  background: #101112;
+  isolation: isolate;
+}
+
+.scroll-sequence-list {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scroll-sequence-frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #101112;
+  transform-origin: 50% 50%;
+  will-change: transform, clip-path;
+}
+
+.scroll-sequence-frame:not(:first-child) {
+  clip-path: inset(100% 0 0 0);
+}
+
+.scroll-sequence-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.52;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: clamp(4rem, 8vw, 8rem) clamp(4rem, 8vw, 8rem);
+}
+
+.scroll-sequence-frame::before,
+.scroll-sequence-frame::after {
+  position: absolute;
+  z-index: 3;
+  width: clamp(1.5rem, 3vw, 3rem);
+  height: clamp(1.5rem, 3vw, 3rem);
+  border-color: rgba(241, 242, 238, 0.58);
+  content: "";
+  pointer-events: none;
+}
+
+.scroll-sequence-frame::before {
+  top: var(--sequence-gutter);
+  left: var(--sequence-gutter);
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+
+.scroll-sequence-frame::after {
+  right: var(--sequence-gutter);
+  bottom: var(--sequence-gutter);
+  border-right: 1px solid;
+  border-bottom: 1px solid;
+}
+
+.scroll-sequence-photo {
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: #202326;
+  box-shadow: 0 2.5rem 7rem rgba(0, 0, 0, 0.42);
+}
+
+.scroll-sequence-photo::after {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(10, 11, 12, 0.12), transparent 42%),
+    linear-gradient(0deg, rgba(10, 11, 12, 0.42), transparent 38%);
+  content: "";
+  pointer-events: none;
+}
+
+.scroll-sequence-frame[data-layout="1"] .scroll-sequence-photo {
+  inset: 8% 15% 9% 5%;
+}
+
+.scroll-sequence-frame[data-layout="2"] .scroll-sequence-photo {
+  inset: 12% 7% 8% 36%;
+}
+
+.scroll-sequence-frame[data-layout="3"] .scroll-sequence-photo {
+  inset: 7% 8% 13%;
+}
+
+.scroll-sequence-frame[data-layout="4"] .scroll-sequence-photo {
+  inset: 10% 42% 7% 7%;
+}
+
+.scroll-sequence-frame[data-layout="5"] .scroll-sequence-photo {
+  inset: 15% 8% 7% 29%;
+}
+
+.scroll-sequence-frame[data-layout="6"] .scroll-sequence-photo {
+  inset: 7% 13% 11%;
+}
+
+.scroll-sequence-frame img {
+  filter: saturate(0.88) contrast(1.03);
+  transform: scale(1.015);
+}
+
+.scroll-sequence-caption {
+  position: absolute;
+  right: var(--sequence-gutter);
+  bottom: var(--sequence-gutter);
+  z-index: 4;
+  display: grid;
+  width: min(26rem, 42vw);
+  gap: 0.5rem;
+  border-top: 1px solid rgba(241, 242, 238, 0.52);
+  padding-top: 0.8rem;
+  text-align: right;
+}
+
+.scroll-sequence-caption span,
+.scroll-sequence-mark,
+.scroll-sequence-rail {
+  font-size: clamp(0.55rem, 0.7vw, 0.68rem);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.scroll-sequence-caption span {
+  color: rgba(241, 242, 238, 0.58);
+}
+
+.scroll-sequence-caption strong {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 5.5vw, 6.2rem);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+}
+
+.scroll-sequence-mark {
+  position: absolute;
+  top: var(--sequence-gutter);
+  right: var(--sequence-gutter);
+  z-index: 4;
+  margin: 0;
+  color: rgba(241, 242, 238, 0.6);
+}
+
+.scroll-sequence-frame::marker {
+  content: "";
+}
+
+.scroll-sequence-grid[data-index]::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  color: rgba(241, 242, 238, 0.045);
+  content: attr(data-index);
+  font-family: var(--font-display);
+  font-size: min(46vw, 42rem);
+  letter-spacing: -0.08em;
+  line-height: 0.7;
+  transform: translate(-50%, -50%);
+}
+
+.scroll-sequence-rail {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--sequence-gutter) + 0.2rem);
+  z-index: 12;
+  display: flex;
+  height: min(56vh, 32rem);
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(241, 242, 238, 0.58);
+  writing-mode: vertical-rl;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.scroll-sequence-rail i {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 100%;
+  overflow: hidden;
+  background: rgba(241, 242, 238, 0.18);
+}
+
+.scroll-sequence-progress-fill {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: #f1f2ee;
+  transform: scaleY(1);
+  transform-origin: top;
+}
+
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .scroll-sequence {
+    height: auto;
+    min-height: 0;
+    padding: 0 var(--sequence-gutter);
+  }
+
+  .scroll-sequence-stage {
+    position: relative;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    border-block: 0;
+  }
+
+  .scroll-sequence-list {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .scroll-sequence-frame,
+  .scroll-sequence-frame:not(:first-child) {
+    position: relative;
+    min-height: 72svh;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    clip-path: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+
+  .scroll-sequence-frame[data-layout] .scroll-sequence-photo {
+    inset: 3.25rem 1rem 6.75rem;
+  }
+
+  .scroll-sequence-caption {
+    right: 1rem;
+    bottom: 1.2rem;
+    left: 1rem;
+    width: auto;
+    text-align: left;
+  }
+
+  .scroll-sequence-caption strong {
+    font-size: clamp(2.5rem, 12vw, 4.25rem);
+  }
+
+  .scroll-sequence-frame::before {
+    top: 0.7rem;
+    left: 0.7rem;
+  }
+
+  .scroll-sequence-frame::after {
+    right: 0.7rem;
+    bottom: 0.7rem;
+  }
+
+  .scroll-sequence-mark {
+    top: 1rem;
+    right: 1rem;
+  }
+
+  .scroll-sequence-rail {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  .scroll-sequence-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scroll-sequence-frame,
+  .scroll-sequence-frame:not(:first-child) {
+    min-height: 68svh;
+  }
 }
 
 .process-row {

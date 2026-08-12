@@ -4,12 +4,34 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ButtonLink } from "@/components/common/button";
 import { Container } from "@/components/common/container";
 import { Lightbox } from "@/components/portfolio/lightbox";
+import { JsonLd } from "@/components/seo/json-ld";
 import { isLocale } from "@/config/site";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { Link } from "@/i18n/navigation";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { projectPageJsonLd } from "@/lib/seo/structured-data";
+import type { Metadata } from "next";
 
 export function generateStaticParams() {
   return portfolioProjects.map((project) => ({ slug: project.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; slug: string }>;
+}): Promise<Metadata> {
+  const { locale, slug } = await params;
+  if (!isLocale(locale)) return {};
+  const project = portfolioProjects.find((entry) => entry.slug === slug);
+  if (!project) return {};
+  return createPageMetadata({
+    locale,
+    path: `/portfolio/${slug}`,
+    title: project.title[locale],
+    description: project.summary[locale],
+    image: project.cover.src,
+  });
 }
 
 export default async function ProjectPage({
@@ -30,10 +52,21 @@ export default async function ProjectPage({
     ];
   const next = portfolioProjects[(projectIndex + 1) % portfolioProjects.length];
   const fr = locale === "fr";
+  const relatedServiceByCategory = {
+    weddings: "wedding-photography",
+    events: "event-photography",
+    hospitality: "hospitality-photography",
+    food: "food-photography",
+  } as const;
+  const relatedService =
+    relatedServiceByCategory[
+      project.category as keyof typeof relatedServiceByCategory
+    ];
 
   return (
     <article className="bg-ink text-paper">
-      <header className="relative flex min-h-[92svh] items-end overflow-hidden pt-36 pb-12 sm:pb-16">
+      <JsonLd data={projectPageJsonLd(locale, project)} />
+      <header className="theme-lock-dark relative flex min-h-[92svh] items-end overflow-hidden pt-36 pb-12 sm:pb-16">
         <Image
           src={project.cover.src}
           alt={project.cover.alt[locale]}
@@ -51,7 +84,7 @@ export default async function ProjectPage({
               {project.title[locale]}
             </h1>
           </div>
-          <dl className="col-span-12 grid grid-cols-2 gap-7 border-t border-white/15 pt-6 text-sm sm:grid-cols-3 lg:col-span-6 lg:col-start-7">
+          <dl className="col-span-12 grid grid-cols-2 gap-7 border-t border-white/15 pt-6 text-sm lg:col-span-6 lg:col-start-7">
             <div>
               <dt className="eyebrow text-white/38">
                 {fr ? "Lieu" : "Location"}
@@ -59,13 +92,11 @@ export default async function ProjectPage({
               <dd className="mt-2 text-white/75">{project.location}</dd>
             </div>
             <div>
-              <dt className="eyebrow text-white/38">{fr ? "Date" : "Date"}</dt>
-              <dd className="mt-2 text-white/75">{project.year}</dd>
-            </div>
-            <div>
-              <dt className="eyebrow text-white/38">Client</dt>
+              <dt className="eyebrow text-white/38">
+                {fr ? "Série publiée" : "Published series"}
+              </dt>
               <dd className="mt-2 text-white/75">
-                {fr ? "Non renseigné" : "Not provided"}
+                {project.gallery.length} {fr ? "photographies" : "photographs"}
               </dd>
             </div>
           </dl>
@@ -74,18 +105,36 @@ export default async function ProjectPage({
 
       <section className="section-space">
         <Container className="grid grid-cols-12 gap-y-10">
+          <nav
+            aria-label={fr ? "Fil d’Ariane" : "Breadcrumb"}
+            className="col-span-12 flex flex-wrap gap-2 text-xs tracking-[0.12em] text-white/45 uppercase"
+          >
+            <Link href="/">{fr ? "Accueil" : "Home"}</Link>
+            <span aria-hidden="true">/</span>
+            <Link href="/portfolio">Portfolio</Link>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">{project.title[locale]}</span>
+          </nav>
           <p className="eyebrow text-sand col-span-12 lg:col-span-3">
-            {fr ? "Le projet" : "The project"}
+            {fr ? "La série" : "The series"}
           </p>
           <div className="col-span-12 lg:col-span-7 lg:col-start-5">
             <p className="font-display text-[clamp(2.75rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.035em]">
               {project.summary[locale]}
             </p>
             <p className="mt-9 max-w-2xl leading-8 text-white/48">
-              {fr
-                ? "Une sélection resserrée qui privilégie le rythme, la lumière et les gestes essentiels. Chaque image conserve sa place dans une séquence plutôt que dans un simple inventaire."
-                : "A concise edit built around rhythm, light, and essential gestures. Each image earns its place in a sequence rather than a simple inventory."}
+              {project.description[locale]}
             </p>
+            {relatedService ? (
+              <Link
+                href={`/services/${relatedService}`}
+                className="text-link-arrow mt-8 inline-flex"
+              >
+                {fr
+                  ? `Découvrir le service ${project.categoryLabel.fr.toLowerCase()}`
+                  : `Explore the ${project.categoryLabel.en.toLowerCase()} service`}
+              </Link>
+            ) : null}
           </div>
         </Container>
       </section>
@@ -129,10 +178,12 @@ export default async function ProjectPage({
       <section className="bg-sand text-ink relative overflow-hidden py-24">
         <Container className="relative flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
           <h2 className="font-display text-[clamp(3.75rem,7vw,7rem)] leading-[0.82] tracking-[-0.045em]">
-            {fr ? "Un projet à raconter ?" : "A project to tell?"}
+            {fr
+              ? "Un projet photo ou vidéo ?"
+              : "A photography or film project?"}
           </h2>
-          <ButtonLink href="/contact" className="bg-ink text-paper">
-            {fr ? "Parler du projet" : "Discuss the project"}
+          <ButtonLink href="/contact" variant="inverse">
+            {fr ? "Présenter votre demande" : "Describe your enquiry"}
           </ButtonLink>
         </Container>
       </section>

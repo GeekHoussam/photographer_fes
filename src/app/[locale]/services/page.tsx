@@ -2,10 +2,31 @@ import { ArrowUpRight } from "lucide-react";
 import { ResponsiveMedia } from "@/components/common/responsive-media";
 import { Container } from "@/components/common/container";
 import { PageHero } from "@/components/sections/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Link } from "@/i18n/navigation";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
 import { serviceMedia } from "@/features/services/media";
 import { services } from "@/features/services/services";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { servicesPageJsonLd } from "@/lib/seo/structured-data";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const content = getPageContent("services", locale);
+  return createPageMetadata({
+    locale,
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
+  });
+}
 
 export default async function ServicesPage({
   params,
@@ -14,22 +35,15 @@ export default async function ServicesPage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
-  const fr = locale === "fr";
+  const content = getPageContent("services", locale);
 
   return (
     <>
+      <JsonLd data={servicesPageJsonLd(locale)} />
       <PageHero
-        eyebrow={fr ? "Expertise" : "Expertise"}
-        title={
-          fr
-            ? "Photo et film au service de votre histoire."
-            : "Photography and film in service of your story."
-        }
-        introduction={
-          fr
-            ? "Une approche adaptable, attentive au contexte et cohérente du brief à la livraison."
-            : "An adaptable approach, attentive to context and coherent from brief to delivery."
-        }
+        eyebrow={content.eyebrow}
+        title={content.h1}
+        introduction={content.introduction}
         mediaSrc="/images/portfolio/interiors/DSC02171.webp"
       />
       <section className="section-space bg-ink text-paper">
@@ -55,7 +69,7 @@ export default async function ServicesPage({
                 <div className="relative hidden lg:block">
                   <ResponsiveMedia
                     src={serviceMedia(service.slug).hero}
-                    alt={service.title[locale]}
+                    alt={serviceMedia(service.slug).heroAlt[locale]}
                     sizes="18rem"
                     className="aspect-[16/10] translate-x-4 opacity-55 transition-all duration-700 group-hover:translate-x-0 group-hover:opacity-100"
                   />

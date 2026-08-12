@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { setRequestLocale } from "next-intl/server";
+import { JsonLd } from "@/components/seo/json-ld";
 import { HomePage } from "@/components/sections/home-page";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
+import { createPageMetadata } from "@/lib/seo/metadata";
+import { homePageJsonLd } from "@/lib/seo/structured-data";
 
 export async function generateMetadata({
   params,
@@ -9,19 +13,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const fr = locale === "fr";
-  return {
-    title: fr
-      ? "Photographe & vidéaste à Fès"
-      : "Photographer & filmmaker in Fès",
-    description: fr
-      ? "Portfolio de Mohammed Laâchach : photographie et vidéo de mariage, événement, hôtellerie et gastronomie à Fès et au Maroc."
-      : "Mohammed Laâchach's portfolio: wedding, event, hospitality, and food photography and film in Fès and across Morocco.",
-    alternates: {
-      canonical: `/${locale}`,
-      languages: { fr: "/fr", en: "/en" },
-    },
-  };
+  if (!isLocale(locale)) return {};
+  const content = getPageContent("home", locale);
+  return createPageMetadata({
+    locale,
+    title: content.metaTitle,
+    description: content.metaDescription,
+  });
 }
 
 export default async function Page({
@@ -32,5 +30,10 @@ export default async function Page({
   const { locale } = await params;
   if (!isLocale(locale)) return null;
   setRequestLocale(locale);
-  return <HomePage locale={locale} />;
+  return (
+    <>
+      <JsonLd data={homePageJsonLd(locale)} />
+      <HomePage locale={locale} />
+    </>
+  );
 }
