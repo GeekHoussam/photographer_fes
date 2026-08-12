@@ -1,6 +1,4 @@
-import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "@/styles/globals.css";
 
 const display = localFont({
   src: "../../node_modules/@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2",
@@ -16,31 +14,6 @@ const sans = localFont({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
-  ),
-  title: {
-    default: "Mohammed Laâchach — Photographe & Vidéaste à Fès",
-    template: "%s — Mohammed Laâchach",
-  },
-  description:
-    "Portfolio de Mohammed Laâchach, photographe et vidéaste à Fès : mariages, événements, hôtellerie, intérieurs et gastronomie.",
-  openGraph: {
-    type: "website",
-    siteName: "Mohammed Laâchach",
-    title: "Mohammed Laâchach — Photographe & Vidéaste à Fès",
-    description:
-      "Photographie et vidéo de mariage, événement, hôtellerie et gastronomie à Fès et au Maroc.",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    images: ["/og.png"],
-  },
-  robots: { index: true, follow: true },
-};
-
 const themeScript = `(() => {
   try {
     const saved = localStorage.getItem("photographer-theme");
@@ -54,11 +27,16 @@ const themeScript = `(() => {
   }
 })();`;
 
-export default function RootLayout({
+export function RootDocument({
+  lang,
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+}: Readonly<{
+  lang: "fr" | "en";
+  children: React.ReactNode;
+}>) {
   return (
     <html
+      lang={lang}
       className={`${display.variable} ${sans.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning

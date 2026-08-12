@@ -1,6 +1,9 @@
 import { EditorialPage } from "@/components/sections/editorial-page";
+import { JsonLd } from "@/components/seo/json-ld";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { processPageJsonLd } from "@/lib/seo/structured-data";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -10,17 +13,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  const content = getPageContent("process", locale);
   return createPageMetadata({
     locale,
-    path: "/process",
-    title:
-      locale === "fr"
-        ? "Approche photo et vidéo"
-        : "Photography and film process",
-    description:
-      locale === "fr"
-        ? "Une méthode claire pour préparer, photographier, filmer et livrer une série cohérente, adaptée à chaque projet à Fès et au Maroc."
-        : "A clear process to prepare, photograph, film, and deliver a coherent series tailored to each project in Fès and across Morocco.",
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
   });
 }
 export default async function Page({
@@ -30,6 +28,9 @@ export default async function Page({
 }) {
   const { locale } = await params;
   return isLocale(locale) ? (
-    <EditorialPage locale={locale} kind="process" />
+    <>
+      <JsonLd data={processPageJsonLd(locale)} />
+      <EditorialPage locale={locale} kind="process" />
+    </>
   ) : null;
 }

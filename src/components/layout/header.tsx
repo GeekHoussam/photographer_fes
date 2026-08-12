@@ -85,7 +85,9 @@ export function Header() {
 
         <nav
           className="hidden items-center gap-1 border-y border-white/12 bg-black/20 px-2 backdrop-blur-md lg:flex"
-          aria-label="Primary navigation"
+          aria-label={
+            locale === "fr" ? "Navigation principale" : "Primary navigation"
+          }
         >
           {links.map(([key, href]) => (
             <Link
@@ -150,7 +152,9 @@ export function Header() {
           <nav
             id="mobile-navigation"
             className="bg-ink absolute inset-x-0 top-full z-[var(--z-overlay)] flex h-[calc(100svh-var(--header-height))] flex-col overflow-y-auto px-[var(--page-gutter)] pt-10 pb-8 lg:hidden"
-            aria-label="Mobile navigation"
+            aria-label={
+              locale === "fr" ? "Navigation mobile" : "Mobile navigation"
+            }
           >
             <p className="eyebrow text-sand mb-8">Menu</p>
             <div className="flex flex-1 flex-col">
@@ -178,7 +182,9 @@ export function Header() {
             </div>
             <div className="mt-8 flex items-end justify-between border-t border-white/10 pt-6">
               <div>
-                <p className="eyebrow text-sand">Fès · Morocco</p>
+                <p className="eyebrow text-sand">
+                  {locale === "fr" ? "Fès · Maroc" : "Fès · Morocco"}
+                </p>
                 <p className="mt-3 max-w-xs text-sm text-white/50">
                   {footer("location")}
                 </p>

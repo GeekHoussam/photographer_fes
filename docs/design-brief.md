@@ -39,17 +39,17 @@ The existing React Three Fiber aperture remains a decorative desktop enhancement
 1. Asymmetric full-viewport hero with one primary frame and two supporting crops.
 2. Sticky portfolio chapters for Weddings, Events, Hospitality, and Food.
 3. Overlapping photographer introduction using `Personnels/m2.png`.
-4. Magazine-style selected-work mosaic.
+4. Scroll-driven selected-work contact sheet, preserving the same six-image sequence.
 5. Ruled four-step process list.
 6. Full-width contact band.
 
 ## Motion language
 
 - Interface feedback: 180–260 ms.
-- Image and chapter transitions: 600–900 ms.
+- Image and chapter transitions: scroll-scrubbed contact-sheet wipes, with 600–900 ms interface responses elsewhere.
 - Hero lens movement: pointer and scroll input only.
 - Hot-path properties: transform and opacity.
-- Reduced motion: static final compositions, no smooth scroll, no 3D canvas.
+- Reduced motion: static image sequence, no smooth scroll, no 3D canvas.
 
 ## CTA inventory
 

@@ -1,5 +1,6 @@
 import { EditorialPage } from "@/components/sections/editorial-page";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 
@@ -10,14 +11,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  const content = getPageContent("privacy", locale);
   return createPageMetadata({
     locale,
-    path: "/privacy",
-    title: locale === "fr" ? "Politique de confidentialité" : "Privacy policy",
-    description:
-      locale === "fr"
-        ? "Informations sur l'utilisation des données envoyées dans le formulaire de contact du portfolio de Mohammed Laâchach."
-        : "Information about how data submitted through Mohammed Laâchach's portfolio contact form is used.",
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
+    noIndex: !content.indexable,
   });
 }
 export default async function Page({

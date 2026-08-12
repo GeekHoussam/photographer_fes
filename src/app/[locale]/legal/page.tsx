@@ -1,5 +1,6 @@
 import { EditorialPage } from "@/components/sections/editorial-page";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import type { Metadata } from "next";
 
@@ -10,14 +11,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  const content = getPageContent("legal", locale);
   return createPageMetadata({
     locale,
-    path: "/legal",
-    title: locale === "fr" ? "Mentions légales" : "Legal notice",
-    description:
-      locale === "fr"
-        ? "Mentions légales et informations relatives à l'édition du portfolio professionnel de Mohammed Laâchach."
-        : "Legal notice and publishing information for Mohammed Laâchach's professional photography portfolio.",
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
+    noIndex: !content.indexable,
   });
 }
 export default async function Page({

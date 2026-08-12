@@ -2,8 +2,11 @@ import { Suspense } from "react";
 import { Container } from "@/components/common/container";
 import { PortfolioFilters } from "@/components/portfolio/portfolio-filters";
 import { PageHero } from "@/components/sections/page-hero";
+import { JsonLd } from "@/components/seo/json-ld";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { portfolioPageJsonLd } from "@/lib/seo/structured-data";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -13,17 +16,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  const content = getPageContent("portfolio", locale);
   return createPageMetadata({
     locale,
-    path: "/portfolio",
-    title:
-      locale === "fr"
-        ? "Portfolio photo et vidéo"
-        : "Photo and video portfolio",
-    description:
-      locale === "fr"
-        ? "Découvrez les photographies et vidéos de Mohammed Laâchach : mariages, événements, intérieurs et gastronomie à Fès et au Maroc."
-        : "Explore Mohammed Laâchach's photography and film portfolio: weddings, events, interiors, and food stories in Fès and across Morocco.",
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
   });
 }
 
@@ -35,20 +33,14 @@ export default async function PortfolioPage({
   const { locale } = await params;
   if (!isLocale(locale)) return null;
   const fr = locale === "fr";
+  const content = getPageContent("portfolio", locale);
   return (
     <>
+      <JsonLd data={portfolioPageJsonLd(locale)} />
       <PageHero
-        eyebrow={fr ? "Portfolio" : "Portfolio"}
-        title={
-          fr
-            ? "Personnes, lieux et savoir-faire."
-            : "People, places, and craft."
-        }
-        introduction={
-          fr
-            ? "Quatre séries éditées pour leur rythme, leur lumière et la justesse des moments."
-            : "Four series edited for rhythm, light, and the honesty of each moment."
-        }
+        eyebrow={content.eyebrow}
+        title={content.h1}
+        introduction={content.introduction}
       />
       <section className="section-space bg-ink text-paper">
         <Container>

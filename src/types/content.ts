@@ -2,6 +2,11 @@ import type { Locale } from "@/config/site";
 
 export type LocalizedText = Record<Locale, string>;
 
+export type LocalizedFaq = {
+  question: LocalizedText;
+  answer: LocalizedText;
+};
+
 export type PhotoAsset = {
   src: string;
   width: number;
@@ -25,8 +30,8 @@ export type ProjectSummary = {
   category: PortfolioCategory;
   categoryLabel: LocalizedText;
   location: string;
-  year: string;
   summary: LocalizedText;
+  description: LocalizedText;
   featured: boolean;
   mediaType: "photos" | "videos";
   aspect: "portrait" | "landscape" | "square";
@@ -38,4 +43,9 @@ export type ServiceSummary = {
   slug: string;
   title: LocalizedText;
   introduction: LocalizedText;
+  overviewTitle: LocalizedText;
+  overview: LocalizedText;
+  planningPoints: LocalizedText[];
+  faqs: LocalizedFaq[];
+  relatedProjectSlug?: string;
 };

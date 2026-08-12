@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Container } from "@/components/common/container";
 import { Link } from "@/i18n/navigation";
 
@@ -12,9 +12,10 @@ const footerLinks = [
 ] as const;
 
 export async function Footer() {
-  const [t, navigation] = await Promise.all([
+  const [t, navigation, locale] = await Promise.all([
     getTranslations("Footer"),
     getTranslations("Navigation"),
+    getLocale(),
   ]);
 
   return (
@@ -23,7 +24,9 @@ export async function Footer() {
       <Container>
         <div className="grid gap-16 lg:grid-cols-[1.4fr_0.6fr]">
           <div>
-            <p className="eyebrow text-sand">Fès · Morocco</p>
+            <p className="eyebrow text-sand">
+              {locale === "fr" ? "Fès · Maroc" : "Fès · Morocco"}
+            </p>
             <p className="display-section mt-7 max-w-5xl">
               Mohammed
               <br />
@@ -33,7 +36,14 @@ export async function Footer() {
               {t("tagline")}
             </p>
           </div>
-          <nav aria-label="Footer navigation" className="lg:pt-20">
+          <nav
+            aria-label={
+              locale === "fr"
+                ? "Navigation de pied de page"
+                : "Footer navigation"
+            }
+            className="lg:pt-20"
+          >
             {footerLinks.map(([label, href]) => (
               <Link
                 key={href}

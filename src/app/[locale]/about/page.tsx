@@ -1,6 +1,9 @@
 import { EditorialPage } from "@/components/sections/editorial-page";
+import { JsonLd } from "@/components/seo/json-ld";
 import { isLocale } from "@/config/site";
+import { getPageContent } from "@/features/content/pages";
 import { createPageMetadata } from "@/lib/seo/metadata";
+import { aboutPageJsonLd } from "@/lib/seo/structured-data";
 import type { Metadata } from "next";
 
 export async function generateMetadata({
@@ -10,15 +13,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isLocale(locale)) return {};
+  const content = getPageContent("about", locale);
   return createPageMetadata({
     locale,
-    path: "/about",
-    title:
-      locale === "fr" ? "À propos du photographe" : "About the photographer",
-    description:
-      locale === "fr"
-        ? "Découvrez l'approche calme, précise et éditoriale de Mohammed Laâchach, photographe et vidéaste basé à Fès."
-        : "Discover the calm, precise, editorial approach of Mohammed Laâchach, a photographer and filmmaker based in Fès.",
+    path: content.path,
+    title: content.metaTitle,
+    description: content.metaDescription,
   });
 }
 export default async function Page({
@@ -28,6 +28,9 @@ export default async function Page({
 }) {
   const { locale } = await params;
   return isLocale(locale) ? (
-    <EditorialPage locale={locale} kind="about" />
+    <>
+      <JsonLd data={aboutPageJsonLd(locale)} />
+      <EditorialPage locale={locale} kind="about" />
+    </>
   ) : null;
 }

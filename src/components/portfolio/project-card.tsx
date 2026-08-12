@@ -38,9 +38,9 @@ export function ProjectCard({
               {String(index + 1).padStart(2, "0")} ·{" "}
               {project.categoryLabel[locale]}
             </p>
-            <h3 className="font-display group-hover:text-sand mt-3 text-[clamp(2rem,3.5vw,3.75rem)] leading-[0.94] tracking-[-0.03em] transition-colors">
+            <h2 className="font-display group-hover:text-sand mt-3 text-[clamp(2rem,3.5vw,3.75rem)] leading-[0.94] tracking-[-0.03em] transition-colors">
               {project.title[locale]}
-            </h3>
+            </h2>
           </div>
           <span className="pt-1 text-right text-[0.68rem] tracking-[0.1em] text-current/40 uppercase">
             {project.location}

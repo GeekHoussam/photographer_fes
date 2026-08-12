@@ -100,6 +100,29 @@ export function ContactForm({
   }
 
   const errorText = fr ? "Vérifiez ce champ." : "Please check this field.";
+  const projectTypeLabels: Record<(typeof projectTypes)[number], string> = fr
+    ? {
+        wedding: "Mariage",
+        event: "Événement",
+        corporate: "Corporate",
+        product: "Produit",
+        food: "Gastronomie",
+        hospitality: "Hôtellerie ou intérieur",
+        portrait: "Portrait",
+        video: "Vidéo",
+        other: "Autre projet",
+      }
+    : {
+        wedding: "Wedding",
+        event: "Event",
+        corporate: "Corporate",
+        product: "Product",
+        food: "Food",
+        hospitality: "Hospitality or interior",
+        portrait: "Portrait",
+        video: "Film",
+        other: "Other project",
+      };
   const fieldId = (name: string) => `${idPrefix}-${name}`;
   return (
     <form
@@ -180,7 +203,7 @@ export function ContactForm({
         >
           {projectTypes.map((value) => (
             <option key={value} value={value}>
-              {value}
+              {projectTypeLabels[value]}
             </option>
           ))}
         </select>
