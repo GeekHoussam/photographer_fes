@@ -19,9 +19,12 @@
     "title": "Tell me about your project.",
     "description": "Share the date, location, and what you need. I will reply with the next steps for your photography or film enquiry.",
     "close": "Close contact dialog",
-    "whatsappHint": "Start a WhatsApp conversation",
-    "emailHint": "Open your email application",
-    "notConfigured": "Contact detail awaiting confirmation"
+    "locationLabel": "Fès · Morocco",
+    "projectDetails": "Project details",
+    "requiredFields": "* Required",
+    "generalEmailLabel": "Photography and general enquiries",
+    "filmEmailLabel": "Film projects",
+    "openFullPage": "Open the Contact page"
   },
   "Portfolio": {
     "mediaLabel": "Choose a portfolio format",
@@ -30,6 +33,9 @@
     "videos": "Videos",
     "all": "All",
     "count": "{count, plural, =0 {No projects shown} =1 {One project shown} other {# projects shown}}",
+    "openSeries": "Open series",
+    "previewHint": "Move across the image to preview {count, plural, =1 {one photograph} other {# photographs}}",
+    "imageCount": "{count, plural, =1 {One image} other {# images}}",
     "emptyPhotos": "No photo project is published in this category yet.",
     "emptyVideos": "No video project is published yet."
   },

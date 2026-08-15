@@ -61,13 +61,15 @@ export function HomeHero({ locale }: { locale: Locale }) {
       <LensHero />
       <HeroOrbitGallery items={orbitItems} locale={locale} />
 
-      <Container className="relative z-[3] grid min-h-[calc(100svh-var(--header-height))] grid-cols-12 content-end gap-y-8 pt-20 pb-8 sm:pb-12 lg:items-end">
-        <div className="col-span-12 lg:col-span-9">
+      <Container className="reference-home-hero-content relative z-[3] grid min-h-[calc(100svh-var(--header-height))] grid-cols-12 content-end gap-y-8 pt-20 pb-8 sm:pb-12 lg:items-end">
+        <div className="reference-home-hero-copy col-span-12 lg:col-span-5 xl:col-span-6">
           <p className="eyebrow text-sand mb-7">{copy.eyebrow}</p>
-          <h1 className="balance display-hero max-w-[9ch]">{copy.title}</h1>
+          <h1 className="balance display-hero reference-home-hero-title max-w-[8ch]">
+            {copy.title}
+          </h1>
         </div>
 
-        <div className="col-span-12 grid max-w-xl gap-7 border-t border-white/20 pt-6 lg:col-span-5 lg:col-start-7">
+        <div className="reference-home-hero-intro col-span-12 grid max-w-xl gap-7 border-t border-white/20 pt-6 lg:col-span-5 lg:col-start-7 xl:col-start-8">
           <p className="text-base leading-7 text-white/72">{copy.intro}</p>
           <div className="flex flex-wrap gap-3">
             <Link

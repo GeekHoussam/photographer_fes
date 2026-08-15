@@ -147,7 +147,6 @@ export function ScrollTransitionFrames({
           <i>
             <b className="scroll-sequence-progress-fill" />
           </i>
-          <span>{String(frames.length).padStart(2, "0")}</span>
         </div>
 
         <ol className="scroll-sequence-list">
@@ -156,13 +155,8 @@ export function ScrollTransitionFrames({
               key={`${frame.image.src}-${index}`}
               className="scroll-sequence-frame"
               data-layout={String((index % 6) + 1)}
-              data-index={String(index + 1).padStart(2, "0")}
             >
-              <div
-                className="scroll-sequence-grid"
-                data-index={String(index + 1).padStart(2, "0")}
-                aria-hidden="true"
-              />
+              <div className="scroll-sequence-grid" aria-hidden="true" />
               <figure className="scroll-sequence-photo">
                 <Image
                   src={frame.image.src}
@@ -174,9 +168,7 @@ export function ScrollTransitionFrames({
               </figure>
 
               <div className="scroll-sequence-caption">
-                <span>
-                  {String(index + 1).padStart(2, "0")} / {frame.category}
-                </span>
+                <span>{frame.category}</span>
                 <strong>{frame.title}</strong>
               </div>
 

@@ -19,9 +19,12 @@
     "title": "Racontez-moi votre projet.",
     "description": "Indiquez la date, le lieu et vos besoins. Je vous répondrai avec les prochaines étapes pour votre demande photo ou vidéo.",
     "close": "Fermer la fenêtre de contact",
-    "whatsappHint": "Démarrer une conversation WhatsApp",
-    "emailHint": "Ouvrir votre application e-mail",
-    "notConfigured": "Coordonnée en attente de confirmation"
+    "locationLabel": "Fès · Maroc",
+    "projectDetails": "Détails du projet",
+    "requiredFields": "* Obligatoire",
+    "generalEmailLabel": "Photographie et demandes générales",
+    "filmEmailLabel": "Projets de film",
+    "openFullPage": "Ouvrir la page Contact"
   },
   "Portfolio": {
     "mediaLabel": "Choisir un format de portfolio",
@@ -30,6 +33,9 @@
     "videos": "Vidéos",
     "all": "Tous",
     "count": "{count, plural, =0 {Aucun projet affiché} =1 {Un projet affiché} other {# projets affichés}}",
+    "openSeries": "Ouvrir la série",
+    "previewHint": "Déplacez le pointeur sur l’image pour prévisualiser {count, plural, =1 {une photographie} other {# photographies}}",
+    "imageCount": "{count, plural, =1 {Une image} other {# images}}",
     "emptyPhotos": "Aucun projet photo n'est encore publié dans cette catégorie.",
     "emptyVideos": "Aucun projet vidéo n'est encore publié."
   },

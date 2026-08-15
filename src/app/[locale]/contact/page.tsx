@@ -1,6 +1,6 @@
 import { Container } from "@/components/common/container";
+import { ContactMethods } from "@/components/contact/contact-methods";
 import { ContactForm } from "@/components/forms/contact-form";
-import { ContactRouteOpener } from "@/components/contact/contact-route-opener";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PageHero } from "@/components/sections/page-hero";
 import { isLocale } from "@/config/site";
@@ -37,7 +37,6 @@ export default async function ContactPage({
   return (
     <>
       <JsonLd data={contactPageJsonLd(locale)} />
-      <ContactRouteOpener />
       <PageHero
         eyebrow={content.eyebrow}
         title={content.h1}
@@ -55,6 +54,7 @@ export default async function ContactPage({
                 ? "Précisez aussi les personnes, espaces ou produits concernés, ainsi que les supports qui utiliseront les images."
                 : "Also identify the people, spaces, or products involved and the channels where the images will be used."}
             </p>
+            <ContactMethods className="mt-9" />
           </div>
           <div className="col-span-12 lg:col-span-7 lg:col-start-6">
             <ContactForm idPrefix="contact-page" />

@@ -70,9 +70,6 @@ export function Lightbox({
               sizes="(min-width: 1024px) 62vw, 100vw"
               className="object-cover"
             />
-            <span className="gallery-index" aria-hidden="true">
-              {String(imageIndex + 1).padStart(2, "0")}
-            </span>
             <span className="gallery-expand" aria-hidden="true">
               <Expand className="h-4 w-4" />
             </span>
@@ -109,11 +106,7 @@ export function Lightbox({
               }
             }}
           >
-            <div className="flex items-center justify-between border-b border-white/12 pb-3">
-              <p className="eyebrow text-white/50">
-                {String(index + 1).padStart(2, "0")} /{" "}
-                {String(images.length).padStart(2, "0")}
-              </p>
+            <div className="flex items-center justify-end border-b border-white/12 pb-3">
               <button
                 type="button"
                 onClick={() => setOpen(false)}

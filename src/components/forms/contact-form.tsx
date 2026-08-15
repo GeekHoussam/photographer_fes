@@ -11,12 +11,14 @@ import {
 } from "@/features/contact/schema";
 
 const fieldClass =
-  "mt-2 min-h-14 w-full rounded-xl border border-white/12 bg-white/[0.035] px-4 py-3 text-base text-paper outline-none transition-all placeholder:text-white/25 hover:border-white/25 focus:border-sand focus:bg-white/[0.06]";
+  "contact-form-control mt-2 min-h-14 w-full rounded-xl border border-white/12 bg-white/[0.035] px-4 py-3 text-base text-paper outline-none transition-all placeholder:text-white/25 hover:border-white/25 focus:border-sand focus:bg-white/[0.06]";
 
 export function ContactForm({
   idPrefix = "contact-form",
+  variant = "default",
 }: {
   idPrefix?: string;
+  variant?: "default" | "dialog";
 }) {
   const locale = useLocale();
   const fr = locale === "fr";
@@ -128,7 +130,7 @@ export function ContactForm({
     <form
       onSubmit={handleSubmit(submit)}
       noValidate
-      className="grid gap-6 sm:grid-cols-2"
+      className={`contact-form grid gap-6 sm:grid-cols-2 ${variant === "dialog" ? "contact-form--dialog" : ""}`}
     >
       <div className="hidden" aria-hidden="true">
         <label htmlFor={fieldId("website")}>Website</label>
@@ -246,7 +248,9 @@ export function ContactForm({
           {...register("budget")}
         />
       </Field>
-      <div className="hidden sm:block" aria-hidden="true" />
+      {variant === "default" ? (
+        <div className="hidden sm:block" aria-hidden="true" />
+      ) : null}
       <Field
         label={fr ? "Votre message" : "Your message"}
         id={fieldId("message")}
@@ -260,7 +264,7 @@ export function ContactForm({
       >
         <textarea
           id={fieldId("message")}
-          rows={7}
+          rows={variant === "dialog" ? 4 : 7}
           aria-required="true"
           className={fieldClass}
           aria-invalid={Boolean(errors.message)}
@@ -270,7 +274,7 @@ export function ContactForm({
           {...register("message")}
         />
       </Field>
-      <label className="flex items-start gap-3 sm:col-span-2">
+      <label className="contact-form-consent flex items-start gap-3 sm:col-span-2">
         <input
           type="checkbox"
           id={fieldId("consent")}
@@ -297,12 +301,19 @@ export function ContactForm({
         </span>
       </label>
       {errors.root ? (
-        <p role="alert" className="text-red-300 sm:col-span-2">
+        <p
+          role="alert"
+          className="contact-form-root-error text-red-300 sm:col-span-2"
+        >
           {errors.root.message}
         </p>
       ) : null}
-      <div className="sm:col-span-2">
-        <Button type="submit" disabled={isSubmitting}>
+      <div className="contact-form-actions sm:col-span-2">
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className={variant === "dialog" ? "w-full sm:w-auto" : ""}
+        >
           {isSubmitting
             ? fr
               ? "Envoi…"

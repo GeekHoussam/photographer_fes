@@ -32,7 +32,7 @@ export function PortfolioFilters() {
     const params = new URLSearchParams(searchParams.toString());
     if (category) params.set("category", category);
     else params.delete("category");
-    router.replace(`${pathname}${params.size ? `?${params}` : ""}`, {
+    router.push(`${pathname}${params.size ? `?${params}` : ""}`, {
       scroll: false,
     });
   }
@@ -41,7 +41,7 @@ export function PortfolioFilters() {
     const params = new URLSearchParams(searchParams.toString());
     params.set("media", nextMedia);
     params.delete("category");
-    router.replace(`${pathname}?${params}`, { scroll: false });
+    router.push(`${pathname}?${params}`, { scroll: false });
   }
 
   return (
@@ -91,35 +91,51 @@ export function PortfolioFilters() {
       <p className="sr-only" aria-live="polite">
         {t("count", { count: projects.length })}
       </p>
-      <div className="mt-16 grid grid-cols-12 items-start gap-x-5 gap-y-20 sm:gap-x-8">
-        {projects.map((project, index) => (
-          <ProjectCard
-            key={project.slug}
-            project={project}
-            locale={locale}
-            index={index}
-            className={
-              [
-                "col-span-12 md:col-span-7",
-                "col-span-10 col-start-3 md:col-span-4 md:col-start-9 md:mt-28",
-                "col-span-12 md:col-span-8 md:col-start-3",
-                "col-span-10 md:col-span-4",
-                "col-span-12 md:col-span-7 md:col-start-6 md:mt-24",
-              ][index % 5]
-            }
-          />
-        ))}
-      </div>
-      {projects.length === 0 ? (
-        <div className="mt-16 border-y border-white/12 py-20 text-center">
-          <p className="font-display text-4xl">
-            {mediaType === "videos" ? t("videos") : t("photos")}
-          </p>
-          <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-white/45">
-            {mediaType === "videos" ? t("emptyVideos") : t("emptyPhotos")}
-          </p>
+      <div
+        key={`${mediaType}-${active ?? "all"}`}
+        className="portfolio-filter-results"
+      >
+        <div className="mt-16 grid grid-cols-12 items-start gap-x-5 gap-y-20 sm:gap-x-8">
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={project.slug}
+              project={project}
+              locale={locale}
+              openLabel={t("openSeries")}
+              previewLabel={t("previewHint", {
+                count: Math.min(project.gallery.length, 4),
+              })}
+              imageCountLabel={t("imageCount", {
+                count: project.gallery.length,
+              })}
+              className={
+                [
+                  "col-span-12 md:col-span-7",
+                  "col-span-10 col-start-3 md:col-span-4 md:col-start-9 md:mt-28",
+                  "col-span-12 md:col-span-8 md:col-start-3",
+                  "col-span-10 md:col-span-4",
+                  "col-span-12 md:col-span-7 md:col-start-6 md:mt-24",
+                ][index % 5]
+              }
+            />
+          ))}
         </div>
-      ) : null}
+        {projects.length === 0 ? (
+          <div className="portfolio-empty-state mt-16 border-y border-white/12 py-20 text-center">
+            <div className="portfolio-empty-pulse" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+            <p className="font-display mt-7 text-4xl">
+              {mediaType === "videos" ? t("videos") : t("photos")}
+            </p>
+            <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-white/45">
+              {mediaType === "videos" ? t("emptyVideos") : t("emptyPhotos")}
+            </p>
+          </div>
+        ) : null}
+      </div>
     </>
   );
 }

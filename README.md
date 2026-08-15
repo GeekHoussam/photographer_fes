@@ -23,7 +23,7 @@ Open `http://localhost:3000/fr` or `http://localhost:3000/en`.
 
 Copy `.env.example` and replace every documented placeholder. Variables prefixed with `NEXT_PUBLIC_` are safe for the browser. `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, and contact mailbox settings are server-only and must never be exposed in client components.
 
-Set `NEXT_PUBLIC_CONTACT_EMAIL` and `NEXT_PUBLIC_WHATSAPP_NUMBER` to enable the Email and WhatsApp actions in the contact popup. The WhatsApp value must include the country code and digits only. If either value is empty, the popup labels that option as awaiting confirmation instead of displaying invented contact information.
+Public WhatsApp and email actions are centralized in `src/config/site.ts`. `NEXT_PUBLIC_CONTACT_EMAIL` remains the static-hosting fallback used by the contact form.
 
 The contact route uses a development-only in-memory limiter. Configure the documented distributed rate-limiting variables and adapter before multi-instance production traffic.
 

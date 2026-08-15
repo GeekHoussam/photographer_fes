@@ -41,16 +41,16 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
     indexable: true,
     fr: {
       eyebrow: "Mohammed Laâchach",
-      metaTitle: "Photographe et vidéaste à Fès",
+      metaTitle: "Photographe Fès — Mohammed Laâchach",
       metaDescription:
         "Mohammed Laâchach réalise des photographies de mariage, d’événement, d’hôtellerie et de gastronomie à Fès et au Maroc, ainsi que des projets vidéo.",
-      h1: "Photographe et vidéaste à Fès.",
+      h1: "Photographe et cinéaste à Fès.",
       introduction:
         "Photographie de mariage, d’événement, d’intérieurs et de gastronomie à Fès et au Maroc, avec une approche précise et attentive aux personnes comme aux lieux.",
     },
     en: {
       eyebrow: "Mohammed Laâchach",
-      metaTitle: "Photographer and filmmaker in Fès",
+      metaTitle: "Photographer in Fès — Mohammed Laâchach",
       metaDescription:
         "Mohammed Laâchach creates wedding, event, hospitality, and food photography in Fès and across Morocco, alongside film projects.",
       h1: "Photographer and filmmaker in Fès.",
@@ -107,10 +107,10 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
     indexable: true,
     fr: {
       eyebrow: "À propos",
-      metaTitle: "À propos du photographe et vidéaste",
+      metaTitle: "À propos du photographe et cinéaste",
       metaDescription:
-        "Découvrez Mohammed Laâchach, photographe et vidéaste basé à Fès, et son approche documentaire des personnes, des lieux et des savoir-faire.",
-      h1: "Mohammed Laâchach, photographe et vidéaste.",
+        "Découvrez Mohammed Laâchach, photographe et cinéaste basé à Fès, et son approche documentaire des personnes, des lieux et des savoir-faire.",
+      h1: "Mohammed Laâchach, photographe et cinéaste.",
       introduction:
         "Basé à Fès, Mohammed Laâchach photographie les personnes, les lieux et les savoir-faire avec une présence discrète et une direction précise.",
       h2: "Une approche documentaire et attentive.",

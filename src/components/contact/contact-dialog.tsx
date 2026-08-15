@@ -1,7 +1,7 @@
 "use client";
 
 import FocusTrap from "focus-trap-react";
-import { Mail, MessageCircle, X } from "lucide-react";
+import { Aperture, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
   createContext,
@@ -13,6 +13,7 @@ import {
   useState,
 } from "react";
 import { ContactForm } from "@/components/forms/contact-form";
+import { ContactMethods } from "@/components/contact/contact-methods";
 
 type ContactDialogContextValue = {
   openContact: (trigger?: HTMLElement | null) => void;
@@ -41,17 +42,6 @@ export function ContactDialogProvider({
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLElement | null>(null);
   const backgroundRef = useRef<HTMLDivElement | null>(null);
-  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim();
-  const whatsappDigits = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER?.replace(
-    /\D/g,
-    "",
-  );
-  const emailAvailable = Boolean(
-    contactEmail && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail),
-  );
-  const whatsappAvailable = Boolean(
-    whatsappDigits && whatsappDigits.length >= 8,
-  );
 
   const openContact = useCallback((trigger?: HTMLElement | null) => {
     const active = document.activeElement;
@@ -79,8 +69,13 @@ export function ContactDialogProvider({
       }
 
       const target = event.target;
-      if (!(target instanceof Element)) return;
-      const anchor = target.closest<HTMLAnchorElement>("a[href]");
+      const targetElement =
+        target instanceof Element
+          ? target
+          : target instanceof Node
+            ? target.parentElement
+            : null;
+      const anchor = targetElement?.closest<HTMLAnchorElement>("a[href]");
       if (
         !anchor ||
         anchor.target === "_blank" ||
@@ -96,12 +91,12 @@ export function ContactDialogProvider({
           normalizedPath.endsWith("/en/contact"))
       ) {
         event.preventDefault();
-        const mobileMenuTrigger = anchor.closest("#mobile-navigation")
+        const stableTrigger = anchor.closest("#mobile-navigation")
           ? document.querySelector<HTMLElement>(
               '[aria-controls="mobile-navigation"]',
             )
-          : null;
-        openContact(mobileMenuTrigger ?? anchor);
+          : anchor;
+        openContact(stableTrigger);
       }
     }
 
@@ -116,6 +111,9 @@ export function ContactDialogProvider({
     const background = backgroundRef.current;
     const wasInert = background?.inert ?? false;
     document.body.style.overflow = "hidden";
+    const scrollLockFrame = window.requestAnimationFrame(() => {
+      document.body.style.overflow = "hidden";
+    });
     if (background) background.inert = true;
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key !== "Escape") return;
@@ -125,6 +123,7 @@ export function ContactDialogProvider({
     };
     window.addEventListener("keydown", handleEscape, true);
     return () => {
+      window.cancelAnimationFrame(scrollLockFrame);
       window.removeEventListener("keydown", handleEscape, true);
       document.body.style.overflow = previousOverflow;
       if (background) background.inert = wasInert;
@@ -134,6 +133,20 @@ export function ContactDialogProvider({
   }, [closeContact, open]);
 
   const value = useMemo(() => ({ openContact }), [openContact]);
+
+  const moveSignal = useCallback((event: React.PointerEvent<HTMLElement>) => {
+    if (event.pointerType === "touch") return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+    const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+    event.currentTarget.style.setProperty("--contact-pointer-x", `${x * 18}px`);
+    event.currentTarget.style.setProperty("--contact-pointer-y", `${y * 14}px`);
+  }, []);
+
+  const resetSignal = useCallback((event: React.PointerEvent<HTMLElement>) => {
+    event.currentTarget.style.setProperty("--contact-pointer-x", "0px");
+    event.currentTarget.style.setProperty("--contact-pointer-y", "0px");
+  }, []);
 
   return (
     <ContactDialogContext.Provider value={value}>
@@ -148,8 +161,8 @@ export function ContactDialogProvider({
           }}
         >
           <div
-            className="fixed inset-0 z-[calc(var(--z-overlay)+10)] flex items-end justify-center bg-black/70 p-0 backdrop-blur-md sm:items-center sm:p-6"
-            onMouseDown={(event) => {
+            className="contact-dialog-backdrop fixed inset-0 z-[calc(var(--z-overlay)+10)] flex items-end justify-center bg-black/76 p-0 backdrop-blur-xl sm:items-center sm:p-6"
+            onPointerDown={(event) => {
               if (event.target === event.currentTarget) closeContact();
             }}
           >
@@ -158,99 +171,77 @@ export function ContactDialogProvider({
               aria-modal="true"
               aria-labelledby="contact-dialog-title"
               aria-describedby="contact-dialog-description"
-              className="bg-ink text-paper max-h-[94svh] w-full overflow-y-auto border border-white/15 shadow-2xl sm:max-w-5xl"
-              onMouseDown={(event) => event.stopPropagation()}
+              className="contact-dialog-panel theme-lock-dark bg-ink text-paper relative isolate w-full overflow-hidden border border-white/15 shadow-2xl sm:max-w-[76rem]"
+              onPointerDown={(event) => event.stopPropagation()}
+              onPointerMove={moveSignal}
+              onPointerLeave={resetSignal}
             >
-              <div className="bg-ink/88 sticky top-0 z-10 flex items-center justify-between border-b border-white/12 px-5 py-4 backdrop-blur-xl sm:px-8">
-                <p className="eyebrow text-sand">{t("eyebrow")}</p>
+              <div className="contact-dialog-chrome relative z-20 flex items-center justify-between border-b border-white/12 px-5 py-3.5 sm:px-7">
+                <div className="flex items-center gap-4">
+                  <span
+                    className="contact-dialog-status-dot"
+                    aria-hidden="true"
+                  />
+                  <p className="eyebrow text-sand">{t("eyebrow")}</p>
+                  <span
+                    className="hidden h-px w-16 bg-white/14 sm:block"
+                    aria-hidden="true"
+                  />
+                  <p className="hidden text-[0.58rem] font-bold tracking-[0.16em] text-white/34 uppercase md:block">
+                    {t("locationLabel")}
+                  </p>
+                </div>
                 <button
                   type="button"
                   onClick={closeContact}
                   aria-label={t("close")}
-                  className="hover:border-sand hover:text-sand inline-flex h-11 w-11 items-center justify-center border border-white/20 transition-colors"
+                  className="contact-dialog-close hover:border-sand hover:text-sand inline-flex h-10 w-10 items-center justify-center border border-white/20 transition-colors"
                 >
                   <X aria-hidden="true" className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="grid gap-10 p-5 sm:p-8 lg:grid-cols-[0.72fr_1.28fr] lg:gap-12 lg:p-12">
-                <div>
-                  <h2
-                    id="contact-dialog-title"
-                    className="font-display text-[clamp(3.25rem,6vw,5.5rem)] leading-[0.88] tracking-[-0.04em]"
-                  >
-                    {t("title")}
-                  </h2>
-                  <p
-                    id="contact-dialog-description"
-                    className="mt-6 max-w-md text-base leading-8 text-white/55"
-                  >
-                    {t("description")}
-                  </p>
-
-                  <div className="mt-9 grid gap-3">
-                    {whatsappAvailable ? (
-                      <a
-                        href={`https://wa.me/${whatsappDigits}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:border-sand hover:text-sand flex min-h-14 items-center gap-4 border border-white/15 px-4 text-sm font-semibold transition-colors"
-                      >
-                        <MessageCircle aria-hidden="true" className="h-5 w-5" />
-                        <span>
-                          <span className="block">WhatsApp</span>
-                          <span className="mt-0.5 block text-xs font-normal text-white/45">
-                            {t("whatsappHint")}
-                          </span>
-                        </span>
-                      </a>
-                    ) : (
-                      <div
-                        className="flex min-h-14 items-center gap-4 border border-white/10 px-4 text-sm text-white/45"
-                        aria-disabled="true"
-                      >
-                        <MessageCircle aria-hidden="true" className="h-5 w-5" />
-                        <span>
-                          <span className="block font-semibold">WhatsApp</span>
-                          <span className="mt-0.5 block text-xs">
-                            {t("notConfigured")}
-                          </span>
-                        </span>
-                      </div>
-                    )}
-
-                    {emailAvailable ? (
-                      <a
-                        href={`mailto:${contactEmail}`}
-                        className="hover:border-sand hover:text-sand flex min-h-14 items-center gap-4 border border-white/15 px-4 text-sm font-semibold transition-colors"
-                      >
-                        <Mail aria-hidden="true" className="h-5 w-5" />
-                        <span>
-                          <span className="block">Email</span>
-                          <span className="mt-0.5 block text-xs font-normal text-white/45">
-                            {t("emailHint")}
-                          </span>
-                        </span>
-                      </a>
-                    ) : (
-                      <div
-                        className="flex min-h-14 items-center gap-4 border border-white/10 px-4 text-sm text-white/45"
-                        aria-disabled="true"
-                      >
-                        <Mail aria-hidden="true" className="h-5 w-5" />
-                        <span>
-                          <span className="block font-semibold">Email</span>
-                          <span className="mt-0.5 block text-xs">
-                            {t("notConfigured")}
-                          </span>
-                        </span>
-                      </div>
-                    )}
+              <div className="contact-dialog-layout relative z-10">
+                <div className="contact-dialog-intro relative overflow-hidden p-5 sm:p-8 lg:p-9">
+                  <div className="relative z-10">
+                    <h2
+                      id="contact-dialog-title"
+                      className="font-display max-w-[8ch] text-[clamp(3.25rem,5.5vw,5.25rem)] leading-[0.82] tracking-[-0.045em]"
+                    >
+                      {t("title")}
+                    </h2>
+                    <p
+                      id="contact-dialog-description"
+                      className="mt-5 max-w-sm text-[0.92rem] leading-7 text-white/55"
+                    >
+                      {t("description")}
+                    </p>
                   </div>
+
+                  <div className="contact-dialog-signal" aria-hidden="true">
+                    <span className="contact-dialog-signal-axis contact-dialog-signal-axis-x" />
+                    <span className="contact-dialog-signal-axis contact-dialog-signal-axis-y" />
+                    <span className="contact-dialog-signal-ring contact-dialog-signal-ring-outer" />
+                    <span className="contact-dialog-signal-ring contact-dialog-signal-ring-inner" />
+                    <span className="contact-dialog-signal-orbiter" />
+                    <span className="contact-dialog-signal-core">
+                      <Aperture className="h-7 w-7" strokeWidth={1.2} />
+                    </span>
+                  </div>
+
+                  <ContactMethods showFullPageLink className="mt-5" />
                 </div>
 
-                <div className="border-t border-white/12 pt-9 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-12">
-                  <ContactForm idPrefix="contact-dialog" />
+                <div className="contact-dialog-form-shell border-t border-white/12 p-5 sm:p-8 lg:border-t-0 lg:border-l lg:p-9">
+                  <div className="mb-6 flex items-center justify-between gap-5 border-b border-white/10 pb-4">
+                    <p className="text-[0.62rem] font-bold tracking-[0.16em] text-white/55 uppercase">
+                      {t("projectDetails")}
+                    </p>
+                    <p className="text-[0.58rem] tracking-[0.12em] text-white/30 uppercase">
+                      {t("requiredFields")}
+                    </p>
+                  </div>
+                  <ContactForm idPrefix="contact-dialog" variant="dialog" />
                 </div>
               </div>
             </section>
