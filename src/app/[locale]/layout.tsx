@@ -8,7 +8,7 @@ import { HydrationMarker } from "@/components/layout/hydration-marker";
 import { SmoothScroll } from "@/components/layout/smooth-scroll";
 import { routing } from "@/i18n/routing";
 import { RootDocument } from "@/app/root-document";
-import { siteConfig } from "@/config/site";
+import { brandTitles, isLocale, siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 
@@ -16,17 +16,25 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.publicBaseUrl),
-  title: {
-    default: `${siteConfig.name} — Photographe et vidéaste à Fès`,
-    template: `%s — ${siteConfig.name}`,
-  },
-  icons: {
-    icon: `${siteConfig.basePath}/images/Transparent%20square%20camera%20mark.png`,
-    apple: `${siteConfig.basePath}/images/Transparent%20square%20camera%20mark.png`,
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return {
+    metadataBase: new URL(siteConfig.publicBaseUrl),
+    title: {
+      default: brandTitles[locale],
+      template: `%s — ${siteConfig.name}`,
+    },
+    icons: {
+      icon: `${siteConfig.basePath}/images/Transparent%20square%20camera%20mark.png`,
+      apple: `${siteConfig.basePath}/images/Transparent%20square%20camera%20mark.png`,
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,

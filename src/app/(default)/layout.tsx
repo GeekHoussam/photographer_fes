@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { RootDocument } from "@/app/root-document";
-import { localizedUrl, siteConfig } from "@/config/site";
+import { brandTitles, localizedUrl, siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.publicBaseUrl),
-  title: `Photographe et vidéaste à Fès — ${siteConfig.name}`,
+  title: brandTitles.fr,
   description:
     "Accédez à la version française du portfolio de Mohammed Laâchach.",
   alternates: { canonical: localizedUrl("fr") },

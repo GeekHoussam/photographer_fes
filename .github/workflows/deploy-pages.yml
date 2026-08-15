@@ -39,7 +39,7 @@ jobs:
           GITHUB_PAGES: "true"
           NEXT_PUBLIC_SITE_URL: https://geekhoussam.github.io/photographer_fes
           NEXT_PUBLIC_BASE_PATH: /photographer_fes
-          NEXT_PUBLIC_CONTACT_EMAIL: mokhtarihoussampro@gmail.com
+          NEXT_PUBLIC_CONTACT_EMAIL: contact@photographefes.com
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:

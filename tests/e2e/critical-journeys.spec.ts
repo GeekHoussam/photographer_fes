@@ -16,13 +16,17 @@ test("homepage and main navigation render", async ({ page }) => {
   const mobile = (page.viewportSize()?.width ?? 1280) < 1024;
   if (mobile) {
     await page.getByRole("button", { name: "Ouvrir le menu" }).click();
+    await page.getByRole("button", { name: "Portfolio" }).click();
+    await page
+      .getByRole("navigation", { name: "Navigation mobile" })
+      .getByRole("link", { name: "Photos", exact: true })
+      .click();
+  } else {
+    await page
+      .getByRole("navigation", { name: "Navigation principale" })
+      .getByRole("link", { name: "Portfolio", exact: true })
+      .click();
   }
-  await page
-    .getByRole("navigation", {
-      name: mobile ? "Navigation mobile" : "Navigation principale",
-    })
-    .getByRole("link", { name: "Portfolio", exact: true })
-    .click();
   await expect(page).toHaveURL(/\/fr\/portfolio/);
 });
 
@@ -73,6 +77,35 @@ test("portfolio filters synchronize with the URL", async ({ page }) => {
   await expect(page).toHaveURL(/category=weddings/);
 });
 
+test("portfolio cards scrub through real project previews and open the series", async ({
+  page,
+}) => {
+  await page.goto("/en/portfolio?media=photos");
+  await waitForHydration(page);
+
+  const preview = page.locator("[data-portfolio-preview]").first();
+  await expect(preview).toHaveAttribute("data-active-preview", "0");
+  await preview.scrollIntoViewIfNeeded();
+
+  if ((page.viewportSize()?.width ?? 1280) < 1024) {
+    await preview.click();
+    await expect(page).toHaveURL(/\/en\/portfolio\/weddings-in-fes/);
+    return;
+  }
+
+  const bounds = await preview.boundingBox();
+  expect(bounds).not.toBeNull();
+  await page.mouse.move(
+    bounds!.x + bounds!.width * 0.86,
+    bounds!.y + bounds!.height * 0.5,
+  );
+  await expect(preview).toHaveAttribute("data-active-preview", "2");
+  await expect(page.getByText("Open series").first()).toBeVisible();
+
+  await preview.click();
+  await expect(page).toHaveURL(/\/en\/portfolio\/weddings-in-fes/);
+});
+
 test("portfolio format filters show a translated video empty state", async ({
   page,
 }) => {
@@ -82,6 +115,64 @@ test("portfolio format filters show a translated video empty state", async ({
   await expect(page).toHaveURL(/media=videos/);
   await expect(
     page.getByText("Aucun projet vidéo n'est encore publié."),
+  ).toBeVisible();
+});
+
+test("portfolio submenu works with hover, keyboard, and touch", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  await waitForHydration(page);
+  const mobile = (page.viewportSize()?.width ?? 1280) < 1024;
+
+  if (mobile) {
+    await page.getByRole("button", { name: "Open menu" }).click();
+    const trigger = page.getByRole("button", { name: "Portfolio" });
+    await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await page.getByRole("link", { name: "Videos", exact: true }).click();
+  } else {
+    const trigger = page
+      .getByRole("navigation", { name: "Primary navigation" })
+      .getByRole("link", { name: "Portfolio", exact: true });
+    await trigger.hover();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await expect(
+      page.getByRole("link", { name: "Videos", exact: true }),
+    ).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Shift+Tab");
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await page.getByRole("heading", { level: 1 }).click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await page
+      .getByRole("navigation", { name: "Primary navigation" })
+      .getByRole("link", { name: "Services", exact: true })
+      .focus();
+    await trigger.focus();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await page.getByRole("link", { name: "Videos", exact: true }).click();
+  }
+
+  await expect(page).toHaveURL(/\/en\/portfolio\?media=videos/);
+  await expect(
+    page.getByText("No video project is published yet."),
+  ).toBeVisible();
+});
+
+test("portfolio filters preserve browser history", async ({ page }) => {
+  await page.goto("/en/portfolio?media=photos");
+  await waitForHydration(page);
+  await page.getByRole("button", { name: "Videos" }).click();
+  await expect(page).toHaveURL(/media=videos/);
+  await page.getByRole("button", { name: "Photos" }).click();
+  await expect(page).toHaveURL(/media=photos/);
+  await page.goBack();
+  await expect(page).toHaveURL(/media=videos/);
+  await expect(
+    page.getByText("No video project is published yet."),
   ).toBeVisible();
 });
 
@@ -117,13 +208,148 @@ test("global contact opens as a modal and restores trigger focus", async ({
     name: /Tell me about your project/,
   });
   await expect(dialog).toBeVisible();
+  await expect
+    .poll(() =>
+      dialog.evaluate((node) => node.contains(document.activeElement)),
+    )
+    .toBe(true);
+  await expect
+    .poll(() => page.evaluate(() => document.body.style.overflow))
+    .toBe("hidden");
+  await expect(
+    dialog.getByRole("link", { name: /\+212 627-151618/ }),
+  ).toHaveAttribute("href", "https://wa.me/212627151618");
+  await expect(
+    dialog.getByRole("link", { name: /Photography and general enquiries/ }),
+  ).toHaveAttribute("href", "mailto:contact@photographefes.com");
+  await expect(
+    dialog.getByRole("link", { name: /Film projects/ }),
+  ).toHaveAttribute("href", "mailto:mohammed.filmmaker@gmail.com");
+  await expect(
+    dialog.getByRole("link", { name: "Open the Contact page" }),
+  ).toHaveAttribute("target", "_blank");
+  for (let index = 0; index < 20; index += 1) {
+    await page.keyboard.press("Tab");
+    expect(
+      await dialog.evaluate((node) => node.contains(document.activeElement)),
+    ).toBe(true);
+  }
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
-  if (mobile) {
-    await expect(page.getByRole("button", { name: "Open menu" })).toBeFocused();
-  } else {
-    await expect(trigger).toBeFocused();
+  await expect(
+    mobile ? page.getByRole("button", { name: "Open menu" }) : trigger,
+  ).toBeFocused();
+});
+
+test("shared Contact control opens the popup across localized pages", async ({
+  page,
+}) => {
+  const routes = [
+    { path: "/en/portfolio", menu: "Open menu" },
+    { path: "/fr/services", menu: "Ouvrir le menu" },
+    { path: "/en/about", menu: "Open menu" },
+    { path: "/fr/contact", menu: "Ouvrir le menu" },
+  ];
+
+  for (const route of routes) {
+    await page.goto(route.path);
+    await waitForHydration(page);
+    const mobile = (page.viewportSize()?.width ?? 1280) < 1024;
+    if (mobile) {
+      await page.getByRole("button", { name: route.menu }).click();
+    }
+
+    const contactLink = page
+      .getByRole(mobile ? "navigation" : "banner", {
+        name: mobile ? /navigation mobile|mobile navigation/i : undefined,
+      })
+      .getByRole("link", { name: "Contact", exact: true });
+
+    if (!mobile && route.path === "/en/about") {
+      await contactLink.evaluate((anchor) => {
+        const textNode = Array.from(anchor.childNodes).find(
+          (node) =>
+            node.nodeType === Node.TEXT_NODE && node.textContent?.trim(),
+        );
+        textNode?.dispatchEvent(
+          new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            button: 0,
+          }),
+        );
+      });
+    } else {
+      await contactLink.click();
+    }
+
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await dialog.getByRole("button", { name: /close|fermer/i }).click();
+    await expect(dialog).toBeHidden();
   }
+});
+
+test("page-level quotation links open the shared popup without navigating", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  await waitForHydration(page);
+  const initialUrl = page.url();
+  await page
+    .getByRole("main")
+    .getByRole("link", { name: "Request a quotation", exact: true })
+    .first()
+    .click();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  expect(page.url()).toBe(initialUrl);
+});
+
+test("direct Contact fallback renders without JavaScript", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  const response = await page.goto("/en/contact");
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Request a photography or film quotation.",
+  );
+  await expect(
+    page.getByRole("link", { name: /Photography and general enquiries/ }),
+  ).toHaveAttribute("href", "mailto:contact@photographefes.com");
+  await context.close();
+});
+
+test("contact backdrop closes the dialog and the direct page stays available", async ({
+  page,
+}) => {
+  await page.goto("/fr");
+  await waitForHydration(page);
+  const mobile = (page.viewportSize()?.width ?? 1280) < 1024;
+  if (mobile) {
+    await page.getByRole("button", { name: "Ouvrir le menu" }).click();
+  }
+  await page
+    .getByRole(mobile ? "navigation" : "banner", {
+      name: mobile ? "Navigation mobile" : undefined,
+    })
+    .getByRole("link", { name: "Contact", exact: true })
+    .click();
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await dialog.locator("..").click({ position: { x: 4, y: 4 } });
+  await expect(dialog).toBeHidden();
+
+  await page.goto("/fr/contact");
+  await waitForHydration(page);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Demander un devis photo ou vidéo.",
+  );
+  await expect(
+    page.getByRole("link", { name: /Photographie et demandes générales/ }),
+  ).toHaveAttribute("href", "mailto:contact@photographefes.com");
 });
 
 test("lightbox supports keyboard navigation and escape", async ({ page }) => {
@@ -139,12 +365,36 @@ test("lightbox supports keyboard navigation and escape", async ({ page }) => {
   await expect(page.getByRole("dialog")).toBeHidden();
 });
 
+test("photo cards and galleries do not expose visual sequence indexes", async ({
+  page,
+}) => {
+  await page.goto("/fr");
+  await waitForHydration(page);
+  await expect(page.getByText(/01\s*\/\s*Mariages/i)).toHaveCount(0);
+  await expect(page.getByText(/02\s*\/\s*Événements/i)).toHaveCount(0);
+
+  await page.goto("/fr/portfolio");
+  await waitForHydration(page);
+  await expect(page.getByText(/01\s*[·/]\s*Mariages/i)).toHaveCount(0);
+
+  await page.goto("/fr/portfolio/weddings-in-fes");
+  await waitForHydration(page);
+  await expect(page.locator(".gallery-index")).toHaveCount(0);
+  await page
+    .getByRole("button", { name: /Agrandir/ })
+    .first()
+    .click();
+  await expect(page.getByRole("dialog").getByText(/01\s*\/\s*03/)).toHaveCount(
+    0,
+  );
+});
+
 test("contact validation prevents an incomplete enquiry", async ({ page }) => {
   await page.goto("/en/contact");
   await waitForHydration(page);
-  const dialog = page.getByRole("dialog");
-  await dialog.getByRole("button", { name: "Send enquiry" }).click();
-  await expect(dialog.getByRole("alert").first()).toBeVisible();
+  const main = page.getByRole("main");
+  await main.getByRole("button", { name: "Send enquiry" }).click();
+  await expect(main.getByRole("alert").first()).toBeVisible();
 });
 
 test("contact can complete with a mocked server response", async ({ page }) => {
@@ -157,16 +407,16 @@ test("contact can complete with a mocked server response", async ({ page }) => {
   );
   await page.goto("/en/contact");
   await waitForHydration(page);
-  const dialog = page.getByRole("dialog");
-  await dialog.getByLabel("Name").fill("Example Person");
-  await dialog.getByLabel("Email").fill("person@example.com");
-  await dialog.getByLabel("Location").fill("Fès");
-  await dialog
+  const main = page.getByRole("main");
+  await main.getByLabel("Name").fill("Example Person");
+  await main.getByLabel("Email").fill("person@example.com");
+  await main.getByLabel("Location").fill("Fès");
+  await main
     .getByLabel("Your message")
     .fill("A complete demonstration enquiry for browser testing.");
-  await dialog.getByLabel(/I agree/).check();
-  await dialog.getByRole("button", { name: "Send enquiry" }).click();
-  await expect(dialog.getByRole("status")).toContainText("Thank you");
+  await main.getByLabel(/I agree/).check();
+  await main.getByRole("button", { name: "Send enquiry" }).click();
+  await expect(main.getByRole("status")).toContainText("Thank you");
 });
 
 test("reduced motion renders core content", async ({ browser }) => {
@@ -186,14 +436,20 @@ test("representative French and English pages expose aligned SEO signals", async
     {
       path: "/fr",
       locale: "fr",
-      h1: "Photographe et vidéaste à Fès.",
+      h1: "Photographe et cinéaste à Fès.",
+      schemaTypes: ["Person", "WebSite", "ProfessionalService", "WebPage"],
+    },
+    {
+      path: "/en",
+      locale: "en",
+      h1: "Photographer and filmmaker in Fès.",
       schemaTypes: ["Person", "WebSite", "ProfessionalService", "WebPage"],
     },
     {
       path: "/en/services/wedding-photography",
       locale: "en",
       h1: "Wedding photography",
-      schemaTypes: ["Service", "FAQPage", "BreadcrumbList"],
+      schemaTypes: ["Service", "BreadcrumbList"],
     },
     {
       path: "/fr/portfolio/moroccan-interiors",

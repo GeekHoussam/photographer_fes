@@ -3,6 +3,21 @@ export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "fr";
 
+export const brandTitles: Record<Locale, string> = {
+  fr: "Photographe Fès — Mohammed Laâchach",
+  en: "Photographer in Fès — Mohammed Laâchach",
+};
+
+export const contactDetails = {
+  whatsapp: {
+    display: "+212 627-151618",
+    digits: "212627151618",
+    href: "https://wa.me/212627151618",
+  },
+  generalEmail: "contact@photographefes.com",
+  filmEmail: "mohammed.filmmaker@gmail.com",
+} as const;
+
 function normalizeBasePath(value: string | undefined) {
   if (!value || value === "/") return "";
   return `/${value.replace(/^\/+|\/+$/g, "")}`;
@@ -37,8 +52,9 @@ export const siteConfig = {
   basePath: configuredBasePath,
   publicBaseUrl,
   trailingSlash: process.env.GITHUB_PAGES === "true",
-  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? null,
-  phone: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? null,
+  email: contactDetails.generalEmail,
+  additionalEmails: [contactDetails.filmEmail],
+  phone: contactDetails.whatsapp.display,
   social: [] as Array<{ label: string; url: string }>,
 } as const;
 

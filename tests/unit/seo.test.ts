@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  brandTitles,
+  contactDetails,
   resolvePublicBaseUrl,
   siteConfig,
   withTrailingSlash,
@@ -32,6 +34,21 @@ function entryOfType(data: JsonLdDocument, type: string) {
 }
 
 describe("metadata", () => {
+  it("uses the requested localized brand title on each homepage", () => {
+    for (const locale of ["fr", "en"] as const) {
+      const metadata = createPageMetadata({
+        locale,
+        title: getPageContent("home", locale).metaTitle,
+        description: getPageContent("home", locale).metaDescription,
+      });
+      expect(metadata.title).toEqual({ absolute: brandTitles[locale] });
+      expect(metadata.openGraph).toMatchObject({
+        title: brandTitles[locale],
+        siteName: brandTitles[locale],
+      });
+    }
+  });
+
   it("creates absolute reciprocal locale URLs and an x-default", () => {
     const metadata = createPageMetadata({
       locale: "en",
@@ -91,6 +108,12 @@ describe("structured data", () => {
       inLanguage: "en",
       url: `${siteConfig.publicBaseUrl}/en`,
     });
+    expect(entryOfType(fr, "WebSite")?.name).toBe(brandTitles.fr);
+    expect(entryOfType(en, "WebSite")?.name).toBe(brandTitles.en);
+    expect(entryOfType(fr, "ProfessionalService")).toMatchObject({
+      email: [contactDetails.generalEmail, contactDetails.filmEmail],
+      telephone: "+212627151618",
+    });
   });
 
   it("omits unconfigured or invalid private contact fields", () => {
@@ -103,20 +126,18 @@ describe("structured data", () => {
     ).toEqual({});
   });
 
-  it("builds a Service, visible FAQ, and absolute breadcrumb URLs", () => {
+  it("builds a Service and absolute breadcrumb URLs without ineligible FAQ markup", () => {
     const service = services[0]!;
     const data = servicePageJsonLd("en", service);
     const schema = entryOfType(data, "Service");
-    const faq = entryOfType(data, "FAQPage");
     const breadcrumb = entryOfType(data, "BreadcrumbList");
 
     expect(schema).toMatchObject({
       name: service.title.en,
-      inLanguage: "en",
       url: `${siteConfig.publicBaseUrl}/en/services/wedding-photography`,
       provider: { "@id": entityIds.business },
     });
-    expect((faq?.mainEntity as unknown[]).length).toBe(service.faqs.length);
+    expect(entryOfType(data, "FAQPage")).toBeUndefined();
     expect(
       (breadcrumb?.itemListElement as JsonObject[]).every((item) =>
         URL.canParse(item.item as string),

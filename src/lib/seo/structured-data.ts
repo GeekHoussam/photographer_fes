@@ -1,4 +1,10 @@
-import { absoluteUrl, localizedUrl, siteConfig } from "@/config/site";
+import {
+  absoluteUrl,
+  brandTitles,
+  contactDetails,
+  localizedUrl,
+  siteConfig,
+} from "@/config/site";
 import type { Locale } from "@/config/site";
 import { getPageContent } from "@/features/content/pages";
 import { portfolioProjects } from "@/features/portfolio/projects";
@@ -53,7 +59,10 @@ export function verifiedContactProperties(config: {
 }
 
 function contactProperties() {
-  return verifiedContactProperties(siteConfig);
+  return {
+    ...verifiedContactProperties(siteConfig),
+    email: [contactDetails.generalEmail, contactDetails.filmEmail],
+  };
 }
 
 function personEntity(locale: Locale) {
@@ -65,7 +74,7 @@ function personEntity(locale: Locale) {
     image: absoluteUrl("/images/portfolio/personal/m2.webp"),
     jobTitle:
       locale === "fr"
-        ? "Photographe et vidéaste"
+        ? "Photographe et cinéaste"
         : "Photographer and filmmaker",
     homeLocation: {
       "@type": "Place",
@@ -75,11 +84,11 @@ function personEntity(locale: Locale) {
   };
 }
 
-function websiteEntity() {
+function websiteEntity(locale: Locale) {
   return {
     "@type": "WebSite",
     "@id": entityIds.website,
-    name: siteConfig.name,
+    name: brandTitles[locale],
     url: siteConfig.publicBaseUrl,
     inLanguage: ["fr", "en"],
     publisher: { "@id": entityIds.person },
@@ -90,15 +99,13 @@ function businessEntity(locale: Locale) {
   return {
     "@type": "ProfessionalService",
     "@id": entityIds.business,
-    name: siteConfig.name,
+    name: brandTitles[locale],
     url: localizedUrl(locale),
     description: getPageContent("home", locale).metaDescription,
     areaServed: {
       "@type": "Country",
       name: locale === "fr" ? "Maroc" : "Morocco",
     },
-    serviceType: services.map((service) => service.title[locale]),
-    provider: { "@id": entityIds.person },
     ...contactProperties(),
   };
 }
@@ -148,7 +155,7 @@ export function homePageJsonLd(locale: Locale): JsonLdDocument {
     "@context": "https://schema.org",
     "@graph": [
       personEntity(locale),
-      websiteEntity(),
+      websiteEntity(locale),
       businessEntity(locale),
       {
         ...webPageEntity(
@@ -265,7 +272,6 @@ export function servicePageJsonLd(
         name: service.title[locale],
         description,
         url,
-        inLanguage: locale,
         serviceType: service.title[locale],
         areaServed: {
           "@type": "Country",
@@ -283,19 +289,6 @@ export function servicePageJsonLd(
           { name: service.title[locale], path },
         ]),
         "@id": `${url}#breadcrumb`,
-      },
-      {
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        inLanguage: locale,
-        mainEntity: service.faqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.question[locale],
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: faq.answer[locale],
-          },
-        })),
       },
     ],
   };

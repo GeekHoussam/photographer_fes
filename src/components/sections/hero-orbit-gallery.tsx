@@ -77,9 +77,6 @@ export function HeroOrbitGallery({
         <span>
           {open ? (fr ? "Masquer" : "Hide") : fr ? "Galerie" : "Gallery"}
         </span>
-        <span className="hero-orbit-count">
-          {String(items.length).padStart(2, "0")}
-        </span>
       </button>
 
       <div className="hero-orbit-track">

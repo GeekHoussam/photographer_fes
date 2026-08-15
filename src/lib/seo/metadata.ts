@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { Locale } from "@/config/site";
-import { absoluteUrl, localizedUrl, siteConfig } from "@/config/site";
+import { absoluteUrl, brandTitles, localizedUrl } from "@/config/site";
 
 type PageMetadataInput = {
   locale: Locale;
@@ -20,7 +20,8 @@ export function createPageMetadata({
   noIndex = false,
 }: PageMetadataInput): Metadata {
   const canonical = localizedUrl(locale, path);
-  const absoluteTitle = `${title} — ${siteConfig.name}`;
+  const absoluteTitle =
+    path === "" ? brandTitles[locale] : `${title} — Mohammed Laâchach`;
   const imageUrl = absoluteUrl(image);
 
   return {
@@ -36,7 +37,7 @@ export function createPageMetadata({
     },
     openGraph: {
       type: "website",
-      siteName: siteConfig.name,
+      siteName: brandTitles[locale],
       locale: locale === "fr" ? "fr_FR" : "en_GB",
       alternateLocale: locale === "fr" ? ["en_GB"] : ["fr_FR"],
       title: absoluteTitle,

@@ -46,7 +46,6 @@ export function RotatingCatalogue({
   const copy = fr
     ? {
         region: "Catalogue photographique en rotation",
-        index: "Index visuel",
         hide: "Masquer le catalogue",
         show: "Afficher le catalogue",
         previous: "Image précédente",
@@ -57,7 +56,6 @@ export function RotatingCatalogue({
       }
     : {
         region: "Rotating photography catalogue",
-        index: "Visual index",
         hide: "Hide catalogue",
         show: "Show catalogue",
         previous: "Previous image",
@@ -160,8 +158,6 @@ export function RotatingCatalogue({
 
       <div className="catalogue-toolbar">
         <p>
-          {copy.index}
-          <span aria-hidden="true"> / </span>
           <span className="text-white/45">{copy.automatic}</span>
         </p>
         <button type="button" onClick={() => setHidden(true)}>
@@ -206,9 +202,6 @@ export function RotatingCatalogue({
                 className="catalogue-card-image"
               />
               <span className="catalogue-card-shade" aria-hidden="true" />
-              <span className="catalogue-card-number" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
               <span className="catalogue-card-caption">
                 <span>{item.category}</span>
                 <strong>{item.title}</strong>
@@ -229,10 +222,7 @@ export function RotatingCatalogue({
         </button>
 
         <div className="catalogue-status" aria-live="polite" aria-atomic="true">
-          <span>
-            {String(active + 1).padStart(2, "0")} /{" "}
-            {String(items.length).padStart(2, "0")}
-          </span>
+          <span className="sr-only">{current.title}</span>
           <div className="catalogue-dots" aria-hidden="true">
             {items.map((item, index) => (
               <i key={item.slug} data-active={index === active} />
