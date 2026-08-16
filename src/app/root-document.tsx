@@ -1,16 +1,10 @@
 import localFont from "next/font/local";
+import Script from "next/script";
 
-const display = localFont({
-  src: "../../node_modules/@fontsource-variable/cormorant-garamond/files/cormorant-garamond-latin-wght-normal.woff2",
-  weight: "300 700",
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
-const sans = localFont({
-  src: "../../node_modules/@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2",
-  weight: "200 800",
-  variable: "--font-manrope",
+const siteFont = localFont({
+  src: "../../node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2",
+  weight: "100 900",
+  variable: "--font-jost",
   display: "swap",
 });
 
@@ -37,13 +31,17 @@ export function RootDocument({
   return (
     <html
       lang={lang}
-      className={`${display.variable} ${sans.variable}`}
+      className={siteFont.variable}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
         <meta name="theme-color" content="#101112" />
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
       </head>
       <body>{children}</body>
     </html>

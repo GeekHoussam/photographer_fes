@@ -33,6 +33,11 @@ export function HomeHero({ locale }: { locale: Locale }) {
     src: project.cover.src,
     alt: project.cover.alt[locale],
   }));
+  const titleLines = (
+    fr
+      ? copy.title.replace(" vidéaste ", "\nvidéaste ")
+      : copy.title.replace(" and ", "\nand ").replace(" in Fès", "\nin Fès")
+  ).split("\n");
 
   return (
     <section className="theme-lock-dark reference-home-hero bg-ink text-paper relative min-h-[100svh] overflow-hidden pt-[var(--header-height)]">
@@ -51,25 +56,26 @@ export function HomeHero({ locale }: { locale: Locale }) {
         />
       </div>
       <div
-        className="absolute inset-0 bg-[linear-gradient(90deg,rgba(16,17,18,0.97)_0%,rgba(16,17,18,0.76)_42%,rgba(16,17,18,0.28)_72%,rgba(16,17,18,0.18)_100%)]"
-        aria-hidden="true"
-      />
-      <div
-        className="from-ink absolute inset-0 bg-gradient-to-t via-transparent to-black/45"
+        className="reference-home-hero-overlay pointer-events-none absolute inset-0"
         aria-hidden="true"
       />
       <LensHero />
       <HeroOrbitGallery items={orbitItems} locale={locale} />
 
-      <Container className="reference-home-hero-content relative z-[3] grid min-h-[calc(100svh-var(--header-height))] grid-cols-12 content-end gap-y-8 pt-20 pb-8 sm:pb-12 lg:items-end">
+      <Container className="reference-home-hero-content relative z-[3] grid min-h-[calc(100svh-var(--header-height))] grid-cols-12 content-center gap-y-8 pt-20 pb-8 sm:pb-12 lg:items-end">
         <div className="reference-home-hero-copy col-span-12 lg:col-span-5 xl:col-span-6">
           <p className="eyebrow text-sand mb-7">{copy.eyebrow}</p>
           <h1 className="balance display-hero reference-home-hero-title max-w-[8ch]">
-            {copy.title}
+            {titleLines.map((line, index) => (
+              <span key={line} className="reference-home-hero-title-line">
+                {line}
+                {index < titleLines.length - 1 ? " " : null}
+              </span>
+            ))}
           </h1>
         </div>
 
-        <div className="reference-home-hero-intro col-span-12 grid max-w-xl gap-7 border-t border-white/20 pt-6 lg:col-span-5 lg:col-start-7 xl:col-start-8">
+        <div className="reference-home-hero-intro col-span-12 grid max-w-xl gap-7 border-t border-white/20 pt-6 lg:col-span-5 lg:col-start-7 xl:col-span-4 xl:col-start-9">
           <p className="text-base leading-7 text-white/72">{copy.intro}</p>
           <div className="flex flex-wrap gap-3">
             <Link

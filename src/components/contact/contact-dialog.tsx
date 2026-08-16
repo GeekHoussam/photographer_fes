@@ -96,7 +96,11 @@ export function ContactDialogProvider({
               '[aria-controls="mobile-navigation"]',
             )
           : anchor;
-        openContact(stableTrigger);
+        if (anchor.closest("#mobile-navigation")) {
+          window.requestAnimationFrame(() => openContact(stableTrigger));
+        } else {
+          openContact(stableTrigger);
+        }
       }
     }
 
@@ -154,9 +158,10 @@ export function ContactDialogProvider({
       {open ? (
         <FocusTrap
           focusTrapOptions={{
-            escapeDeactivates: true,
+            escapeDeactivates: false,
             clickOutsideDeactivates: false,
-            onDeactivate: closeContact,
+            fallbackFocus: "#contact-dialog-panel",
+            initialFocus: "#contact-dialog-close",
             returnFocusOnDeactivate: false,
           }}
         >
@@ -167,6 +172,8 @@ export function ContactDialogProvider({
             }}
           >
             <section
+              id="contact-dialog-panel"
+              tabIndex={-1}
               role="dialog"
               aria-modal="true"
               aria-labelledby="contact-dialog-title"
@@ -192,6 +199,7 @@ export function ContactDialogProvider({
                   </p>
                 </div>
                 <button
+                  id="contact-dialog-close"
                   type="button"
                   onClick={closeContact}
                   aria-label={t("close")}

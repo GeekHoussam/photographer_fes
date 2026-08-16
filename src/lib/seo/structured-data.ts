@@ -74,7 +74,7 @@ function personEntity(locale: Locale) {
     image: absoluteUrl("/images/portfolio/personal/m2.webp"),
     jobTitle:
       locale === "fr"
-        ? "Photographe et cinéaste"
+        ? "Photographe et vidéaste"
         : "Photographer and filmmaker",
     homeLocation: {
       "@type": "Place",

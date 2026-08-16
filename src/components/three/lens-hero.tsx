@@ -14,9 +14,13 @@ export function LensHero() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 768px)");
+    const desktop = window.matchMedia("(min-width: 1280px)");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const update = () => setEnabled(desktop.matches && !motion.matches);
+    const update = () => {
+      const shouldEnable = desktop.matches && !motion.matches;
+      setEnabled(shouldEnable);
+      if (!shouldEnable) setReady(false);
+    };
     update();
     desktop.addEventListener("change", update);
     motion.addEventListener("change", update);
@@ -92,7 +96,7 @@ export function LensHero() {
   return (
     <div
       ref={root}
-      className="hero-lens-3d hidden md:block"
+      className="hero-lens-3d hidden xl:block"
       data-ready={ready}
       aria-hidden="true"
     >

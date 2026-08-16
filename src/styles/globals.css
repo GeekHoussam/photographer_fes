@@ -9,8 +9,10 @@
   --color-surface: #181a1c;
   --color-surface-elevated: #202326;
   --color-line: color-mix(in srgb, var(--color-paper) 14%, transparent);
-  --font-display: var(--font-cormorant), Georgia, serif;
-  --font-sans: var(--font-manrope), Arial, sans-serif;
+  --font-site:
+    Futura, "Futura PT", var(--font-jost), "Century Gothic", Arial, sans-serif;
+  --font-display: var(--font-site);
+  --font-sans: var(--font-site);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
   --header-height: 5.5rem;
@@ -140,24 +142,31 @@ a {
   font-family: var(--font-display);
   font-size: clamp(4rem, 9.2vw, 10rem);
   font-weight: 400;
-  letter-spacing: -0.055em;
-  line-height: 0.76;
+  font-optical-sizing: auto;
+  letter-spacing: -0.035em;
+  line-height: 1.02;
 }
 
 .display-section {
   font-family: var(--font-display);
   font-size: clamp(3.5rem, 7vw, 7.75rem);
   font-weight: 400;
-  letter-spacing: -0.045em;
-  line-height: 0.84;
+  font-optical-sizing: auto;
+  letter-spacing: -0.035em;
+  line-height: 0.87;
 }
 
 .display-page {
   font-family: var(--font-display);
-  font-size: clamp(4rem, 8.5vw, 9rem);
+  font-size: clamp(3.25rem, 5.75vw, 6.5rem);
   font-weight: 400;
-  letter-spacing: -0.05em;
-  line-height: 0.8;
+  font-optical-sizing: auto;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.font-display {
+  font-optical-sizing: auto;
 }
 
 .section-space {
@@ -185,6 +194,24 @@ a {
   animation: hero-media-drift 18s var(--ease-out) infinite alternate;
 }
 
+.reference-home-hero-overlay {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(16, 17, 18, 0.97) 0%,
+      rgba(16, 17, 18, 0.8) 42%,
+      rgba(16, 17, 18, 0.38) 72%,
+      rgba(16, 17, 18, 0.3) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(16, 17, 18, 0.92) 0%,
+      rgba(16, 17, 18, 0.64) 44%,
+      rgba(16, 17, 18, 0.12) 72%,
+      rgba(0, 0, 0, 0.36) 100%
+    );
+}
+
 @keyframes hero-media-drift {
   from {
     transform: scale(1.015);
@@ -196,10 +223,10 @@ a {
 
 .hero-lens-3d {
   position: absolute;
-  top: 42%;
-  left: 60%;
+  top: calc(50% + 1rem);
+  left: 50%;
   z-index: 1;
-  width: clamp(19rem, 33vw, 34rem);
+  width: clamp(20rem, 30vw, 34rem);
   aspect-ratio: 1;
   pointer-events: none;
   transform: translate(-50%, -50%);
@@ -229,13 +256,14 @@ a {
     ),
     radial-gradient(
       circle,
-      rgba(1, 3, 4, 0.68) 0 8%,
-      rgba(13, 26, 32, 0.32) 9% 29%,
-      rgba(5, 20, 13, 0.16) 30% 55%,
-      rgba(93, 98, 102, 0.5) 56% 59%,
-      rgba(8, 10, 12, 0.18) 60% 76%,
-      rgba(34, 38, 42, 0.72) 77% 84%,
-      rgba(8, 10, 12, 0.9) 85% 100%
+      rgba(1, 3, 4, 0.9) 0 8%,
+      rgba(8, 22, 22, 0.84) 9% 22%,
+      rgba(10, 42, 34, 0.7) 23% 48%,
+      rgba(7, 29, 24, 0.72) 49% 55%,
+      rgba(90, 104, 105, 0.68) 56% 59%,
+      rgba(8, 11, 13, 0.9) 60% 76%,
+      rgba(38, 43, 47, 0.94) 77% 84%,
+      rgba(7, 9, 11, 0.98) 85% 100%
     );
   box-shadow:
     0 0 0 1px rgba(225, 229, 234, 0.44),
@@ -292,14 +320,25 @@ a {
 }
 
 @media (min-width: 1024px) {
+  .reference-home-hero-content {
+    align-content: end;
+    padding-bottom: clamp(3rem, 5.5svh, 4rem);
+  }
+
   .reference-home-hero-title {
-    max-width: 7.1ch;
-    font-size: clamp(4.75rem, 7.3vw, 7.8rem);
-    line-height: 0.78;
+    width: max-content;
+    max-width: 100%;
+    font-size: clamp(3.2rem, 4.8vw, 4.6rem);
+    line-height: 1.08;
+  }
+
+  .reference-home-hero-title-line {
+    display: block;
   }
 
   .reference-home-hero-copy {
     align-self: end;
+    margin-bottom: clamp(12.5rem, 36svh, 18rem);
     padding-right: clamp(1rem, 3vw, 3rem);
   }
 }
@@ -2069,8 +2108,8 @@ a {
   }
 
   .display-hero {
-    font-size: clamp(3.45rem, 16vw, 5.25rem);
-    line-height: 0.84;
+    font-size: clamp(3rem, 15.25vw, 5rem);
+    line-height: 1.02;
   }
 
   .hero-media-image {

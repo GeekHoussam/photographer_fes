@@ -9,7 +9,6 @@ import { brandTitles } from "@/config/site";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
-import { useContactDialog } from "@/components/contact/contact-dialog";
 
 const links = [
   ["portfolio", "/portfolio"],
@@ -25,7 +24,6 @@ export function Header() {
   const portfolioT = useTranslations("Portfolio");
   const footer = useTranslations("Footer");
   const pathname = usePathname();
-  const { openContact } = useContactDialog();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -37,25 +35,6 @@ export function Header() {
   const mobilePortfolioTriggerRef = useRef<HTMLButtonElement>(null);
   const suppressPortfolioFocusRef = useRef(false);
   const brandName = brandTitles[locale === "fr" ? "fr" : "en"];
-
-  function handleContactClick(
-    event: React.MouseEvent<HTMLAnchorElement>,
-    trigger?: HTMLElement | null,
-  ) {
-    if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
-      return;
-    }
-
-    event.preventDefault();
-    openContact(trigger ?? event.currentTarget);
-  }
 
   useEffect(() => {
     const onScroll = () => {
@@ -72,8 +51,17 @@ export function Header() {
     if (!open) return;
     const previousOverflow = document.body.style.overflow;
     const trigger = triggerRef.current;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setPortfolioOpen(false);
+      setOpen(false);
+    };
     document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape, true);
     return () => {
+      window.removeEventListener("keydown", closeOnEscape, true);
       document.body.style.overflow = previousOverflow;
       trigger?.focus();
     };
@@ -265,7 +253,6 @@ export function Header() {
           <ThemeToggle />
           <Link
             href="/contact"
-            onClick={(event) => handleContactClick(event)}
             className="bg-paper text-ink hover:bg-sand hidden min-h-11 items-center gap-2 px-5 text-[0.63rem] font-bold tracking-[0.14em] uppercase transition-colors xl:inline-flex"
           >
             {t("contact")}
@@ -298,8 +285,9 @@ export function Header() {
       {open ? (
         <FocusTrap
           focusTrapOptions={{
-            escapeDeactivates: true,
-            onDeactivate: () => setOpen(false),
+            escapeDeactivates: false,
+            allowOutsideClick: true,
+            clickOutsideDeactivates: false,
             returnFocusOnDeactivate: false,
           }}
         >
@@ -356,11 +344,8 @@ export function Header() {
                       key={key}
                       href={href}
                       className="group font-display flex items-center justify-between border-t border-white/10 py-4 text-[clamp(2.8rem,12vw,5rem)] leading-none tracking-[-0.035em]"
-                      onClick={(event) => {
+                      onClick={() => {
                         setOpen(false);
-                        if (key === "contact") {
-                          handleContactClick(event, triggerRef.current);
-                        }
                       }}
                       aria-current={
                         pathname.startsWith(href) ? "page" : undefined

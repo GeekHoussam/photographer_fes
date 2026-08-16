@@ -13,7 +13,7 @@ export function PageHero({
   mediaSrc?: string;
 }) {
   return (
-    <header className="theme-lock-dark ambient-grid bg-ink text-paper relative flex min-h-[78svh] items-end overflow-hidden pt-36 pb-14 sm:pt-44 sm:pb-20">
+    <header className="theme-lock-dark ambient-grid bg-ink text-paper relative flex min-h-[78svh] items-end overflow-hidden pt-36 pb-14 sm:pt-44 sm:pb-20 lg:items-start">
       <Image
         src={mediaSrc}
         alt=""
@@ -25,8 +25,8 @@ export function PageHero({
       />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(9,9,7,0.97)_0%,rgba(9,9,7,0.72)_55%,rgba(9,9,7,0.25)_100%)]" />
       <div className="from-ink absolute inset-0 bg-gradient-to-t via-transparent to-black/25" />
-      <Container className="relative grid grid-cols-12 gap-y-10">
-        <div className="col-span-12 lg:col-span-10">
+      <Container className="relative grid grid-cols-12 gap-y-10 lg:items-end lg:gap-x-12">
+        <div className="col-span-12 lg:col-span-8">
           <p className="eyebrow text-sand">{eyebrow}</p>
           <h1 className="balance display-page mt-7 max-w-[12ch]">{title}</h1>
         </div>

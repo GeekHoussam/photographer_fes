@@ -66,7 +66,7 @@ export default async function ProjectPage({
   return (
     <article className="bg-ink text-paper">
       <JsonLd data={projectPageJsonLd(locale, project)} />
-      <header className="theme-lock-dark relative flex min-h-[92svh] items-end overflow-hidden pt-36 pb-12 sm:pb-16">
+      <header className="theme-lock-dark relative flex min-h-[92svh] items-center overflow-hidden pt-36 pb-12 sm:pb-16">
         <Image
           src={project.cover.src}
           alt={project.cover.alt[locale]}

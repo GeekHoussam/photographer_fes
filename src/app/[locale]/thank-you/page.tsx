@@ -37,9 +37,7 @@ export default async function ThankYouPage({
         <p className="eyebrow text-sand">
           {fr ? "Message envoyé" : "Message sent"}
         </p>
-        <h1 className="font-display mt-6 max-w-4xl text-7xl leading-[0.9]">
-          {content.h1}
-        </h1>
+        <h1 className="display-page mt-6 max-w-4xl">{content.h1}</h1>
         <p className="mt-7 max-w-xl text-base leading-8 text-white/55">
           {content.introduction}
         </p>
