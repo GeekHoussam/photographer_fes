@@ -37,44 +37,44 @@ function LensAssembly({
 
     group.current.rotation.x = MathUtils.damp(
       group.current.rotation.x,
-      pointer[1] * 0.2 * influence - 0.05,
-      6.2,
+      pointer[1] * 0.1 * influence - 0.035,
+      4.6,
       delta,
     );
     group.current.rotation.y = MathUtils.damp(
       group.current.rotation.y,
-      pointer[0] * 0.24 * influence + 0.1,
-      6.2,
+      pointer[0] * 0.12 * influence + 0.075,
+      4.6,
       delta,
     );
     group.current.rotation.z = MathUtils.damp(
       group.current.rotation.z,
-      scroll * 0.56 +
-        pointer[0] * 0.055 * influence +
-        Math.sin(clock.elapsedTime * 0.38) * 0.015 * influence,
-      5,
+      scroll * 0.24 +
+        pointer[0] * 0.025 * influence +
+        Math.sin(clock.elapsedTime * 0.26) * 0.008 * influence,
+      4.2,
       delta,
     );
     group.current.position.x = MathUtils.damp(
       group.current.position.x,
-      pointer[0] * 0.12 * influence,
-      5.6,
+      pointer[0] * 0.055 * influence,
+      4.4,
       delta,
     );
     group.current.position.y = MathUtils.damp(
       group.current.position.y,
-      pointer[1] * 0.09 * influence,
-      5.6,
+      pointer[1] * 0.04 * influence,
+      4.4,
       delta,
     );
     group.current.position.z = MathUtils.damp(
       group.current.position.z,
-      scroll * 0.18 + pointerDistance * 0.06 * influence,
-      4.8,
+      scroll * 0.08 + pointerDistance * 0.025 * influence,
+      4.1,
       delta,
     );
     const targetScale =
-      0.92 + scroll * 0.25 + pointerDistance * 0.04 * influence;
+      0.96 + scroll * 0.1 + pointerDistance * 0.015 * influence;
     const nextScale = MathUtils.damp(
       group.current.scale.x,
       targetScale,
@@ -86,20 +86,20 @@ function LensAssembly({
     if (glass.current) {
       glass.current.position.x = MathUtils.damp(
         glass.current.position.x,
-        pointer[0] * -0.045 * influence,
-        7.2,
+        pointer[0] * -0.025 * influence,
+        5.4,
         delta,
       );
       glass.current.position.y = MathUtils.damp(
         glass.current.position.y,
-        pointer[1] * -0.035 * influence,
-        7.2,
+        pointer[1] * -0.02 * influence,
+        5.4,
         delta,
       );
       glass.current.rotation.z = MathUtils.damp(
         glass.current.rotation.z,
-        pointer[0] * -0.075 * influence + scroll * 0.12,
-        6,
+        pointer[0] * -0.04 * influence + scroll * 0.055,
+        4.8,
         delta,
       );
     }
@@ -107,16 +107,16 @@ function LensAssembly({
     if (iris.current) {
       iris.current.rotation.z = MathUtils.damp(
         iris.current.rotation.z,
-        -scroll * 1.25 +
-          pointer[0] * 0.12 * influence +
-          clock.elapsedTime * 0.035 * influence,
-        5.8,
+        -scroll * 0.48 +
+          pointer[0] * 0.05 * influence +
+          clock.elapsedTime * 0.012 * influence,
+        4.6,
         delta,
       );
       const irisScale = MathUtils.damp(
         iris.current.scale.x,
-        1 - scroll * 0.16 + pointerDistance * 0.035 * influence,
-        5.2,
+        1 - scroll * 0.065 + pointerDistance * 0.015 * influence,
+        4.4,
         delta,
       );
       iris.current.scale.setScalar(irisScale);
@@ -125,20 +125,20 @@ function LensAssembly({
     if (reflections.current) {
       reflections.current.rotation.z = MathUtils.damp(
         reflections.current.rotation.z,
-        pointer[0] * 0.18 - pointer[1] * 0.1,
-        7.5,
+        (pointer[0] * 0.09 - pointer[1] * 0.05) * influence,
+        5.6,
         delta,
       );
       reflections.current.position.x = MathUtils.damp(
         reflections.current.position.x,
-        pointer[0] * -0.09 * influence,
-        7.5,
+        pointer[0] * -0.045 * influence,
+        5.6,
         delta,
       );
       reflections.current.position.y = MathUtils.damp(
         reflections.current.position.y,
-        pointer[1] * -0.07 * influence,
-        7.5,
+        pointer[1] * -0.035 * influence,
+        5.6,
         delta,
       );
     }
@@ -342,6 +342,7 @@ export default function LensCanvas({
   useEffect(() => {
     const onVisibility = () =>
       setVisible(document.visibilityState === "visible");
+    onVisibility();
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);

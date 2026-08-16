@@ -38,7 +38,7 @@ export function HeroOrbitGallery({
 
   return (
     <div
-      className={`hero-orbit-gallery hidden lg:block ${open ? "is-open" : ""} ${dismissed ? "is-dismissed" : ""}`}
+      className={`hero-orbit-gallery hidden xl:block ${open ? "is-open" : ""} ${dismissed ? "is-dismissed" : ""}`}
       onPointerLeave={(event) => {
         if (event.pointerType === "mouse") {
           setOpen(false);

@@ -122,7 +122,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               </p>
               <h2 className="font-display mt-6 text-[clamp(3.4rem,6vw,6.5rem)] leading-[0.87] tracking-[-0.045em]">
                 {fr
-                  ? "Un photographe et cinéaste basé à Fès."
+                  ? "Un photographe et vidéaste basé à Fès."
                   : "A photographer and filmmaker based in Fès."}
               </h2>
               <p className="text-ink/65 mt-7 max-w-lg text-base leading-8">

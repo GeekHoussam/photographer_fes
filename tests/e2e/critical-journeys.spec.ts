@@ -60,6 +60,144 @@ test("hero orbit gallery opens on desktop and falls back cleanly on mobile", asy
   await expect(trigger).toHaveAccessibleName("Show gallery");
 });
 
+test("homepage hero copy stays inside the viewport without effect collisions", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name === "mobile",
+    "The explicit viewport matrix already includes mobile widths",
+  );
+  test.setTimeout(90_000);
+  const viewports = [
+    { width: 360, height: 640 },
+    { width: 390, height: 720 },
+    { width: 768, height: 800 },
+    { width: 1024, height: 600 },
+    { width: 1280, height: 720 },
+    { width: 1440, height: 800 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
+    await waitForHydration(page);
+
+    const metrics = await page
+      .locator(".reference-home-hero")
+      .evaluate((hero) => {
+        const title = hero.querySelector<HTMLElement>(
+          ".reference-home-hero-title",
+        );
+        if (!title) throw new Error("Hero title is missing");
+
+        const visibleRect = (selector: string) => {
+          const element = hero.querySelector<HTMLElement>(selector);
+          if (!element || getComputedStyle(element).display === "none") {
+            return null;
+          }
+          const bounds = element.getBoundingClientRect();
+          return {
+            top: bounds.top,
+            right: bounds.right,
+            bottom: bounds.bottom,
+            left: bounds.left,
+          };
+        };
+        const overlaps = (
+          first: ReturnType<typeof visibleRect>,
+          second: ReturnType<typeof visibleRect>,
+        ) =>
+          Boolean(
+            first &&
+            second &&
+            first.left < second.right &&
+            first.right > second.left &&
+            first.top < second.bottom &&
+            first.bottom > second.top,
+          );
+
+        const heroRect = hero.getBoundingClientRect();
+        const titleRect = visibleRect(".reference-home-hero-title");
+        const lensRect = visibleRect(".hero-lens-3d");
+        const galleryRect = visibleRect(".hero-orbit-gallery");
+        let ancestor: HTMLElement | null = title;
+        let translucentTextAncestor = false;
+        while (ancestor && ancestor !== hero.parentElement) {
+          if (Number.parseFloat(getComputedStyle(ancestor).opacity) < 1) {
+            translucentTextAncestor = true;
+            break;
+          }
+          ancestor = ancestor.parentElement;
+        }
+
+        return {
+          documentWidth: document.documentElement.scrollWidth,
+          galleryVisible: galleryRect !== null,
+          hero: {
+            top: heroRect.top,
+            right: heroRect.right,
+            bottom: heroRect.bottom,
+            left: heroRect.left,
+          },
+          title: titleRect,
+          titleCollidesWithGallery: overlaps(titleRect, galleryRect),
+          titleCollidesWithLens: overlaps(titleRect, lensRect),
+          translucentTextAncestor,
+        };
+      });
+
+    expect(metrics.documentWidth).toBeLessThanOrEqual(viewport.width);
+    expect(metrics.title).not.toBeNull();
+    expect(metrics.title!.left).toBeGreaterThanOrEqual(metrics.hero.left - 1);
+    expect(metrics.title!.right).toBeLessThanOrEqual(metrics.hero.right + 1);
+    expect(metrics.title!.top).toBeGreaterThanOrEqual(metrics.hero.top - 1);
+    expect(metrics.title!.bottom).toBeLessThanOrEqual(metrics.hero.bottom + 1);
+    expect(metrics.titleCollidesWithGallery).toBe(false);
+    expect(metrics.titleCollidesWithLens).toBe(false);
+    expect(metrics.translucentTextAncestor).toBe(false);
+    expect(metrics.galleryVisible).toBe(viewport.width >= 1280);
+  }
+});
+
+test("shared page titles keep readable spacing across page types", async ({
+  page,
+}) => {
+  const routes = [
+    "/en/portfolio",
+    "/fr/process",
+    "/en/services/video-production",
+    "/fr/portfolio/conference-documentary",
+    "/en/thank-you",
+  ];
+
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: "domcontentloaded" });
+    await waitForHydration(page);
+    const metrics = await page.locator("main h1").evaluate((title) => {
+      const bounds = title.getBoundingClientRect();
+      const style = getComputedStyle(title);
+      return {
+        bottom: bounds.bottom,
+        fontSize: Number.parseFloat(style.fontSize),
+        left: bounds.left,
+        lineHeight: Number.parseFloat(style.lineHeight),
+        right: bounds.right,
+        top: bounds.top,
+        viewportHeight: window.innerHeight,
+        viewportWidth: window.innerWidth,
+        pageWidth: document.documentElement.scrollWidth,
+      };
+    });
+
+    expect(metrics.lineHeight).toBeGreaterThanOrEqual(metrics.fontSize);
+    expect(metrics.left).toBeGreaterThanOrEqual(0);
+    expect(metrics.right).toBeLessThanOrEqual(metrics.viewportWidth + 1);
+    expect(metrics.top).toBeGreaterThanOrEqual(0);
+    expect(metrics.bottom).toBeLessThanOrEqual(metrics.viewportHeight + 1);
+    expect(metrics.pageWidth).toBeLessThanOrEqual(metrics.viewportWidth);
+  }
+});
+
 test("language switching keeps the corresponding path", async ({ page }) => {
   await page.goto("/fr/services");
   await waitForHydration(page);
@@ -106,16 +244,58 @@ test("portfolio cards scrub through real project previews and open the series", 
   await expect(page).toHaveURL(/\/en\/portfolio\/weddings-in-fes/);
 });
 
-test("portfolio format filters show a translated video empty state", async ({
+test("portfolio video filters reproduce the workbook category totals", async ({
   page,
 }) => {
   await page.goto("/fr/portfolio");
   await waitForHydration(page);
   await page.getByRole("button", { name: "Vidéos" }).click();
   await expect(page).toHaveURL(/media=videos/);
+  await expect(page.locator("article[data-video-id]")).toHaveCount(44);
+
+  await page.getByRole("button", { name: "Commercial / Publicité" }).click();
+  await expect(page).toHaveURL(/category=commercial-advertising/);
+  await expect(page.locator("article[data-video-id]")).toHaveCount(8);
   await expect(
-    page.getByText("Aucun projet vidéo n'est encore publié."),
-  ).toBeVisible();
+    page.locator('article[data-video-type="long-form"]'),
+  ).toHaveCount(1);
+  await expect(page.locator('article[data-video-type="short"]')).toHaveCount(7);
+
+  await page.getByRole("button", { name: "Événement corporate" }).click();
+  await expect(page).toHaveURL(/category=corporate-event/);
+  await expect(page.locator("article[data-video-id]")).toHaveCount(11);
+});
+
+test("video players are keyboard accessible and load only on activation", async ({
+  page,
+}) => {
+  await page.goto("/en/portfolio?media=videos&category=commercial-advertising");
+  await waitForHydration(page);
+
+  await expect(page.locator("iframe[data-video-player]")).toHaveCount(0);
+  const playButton = page.getByRole("button", {
+    name: "Play video: FILM PUBLICITAIRE - VROOM - by NOM FILMS",
+  });
+  await playButton.focus();
+  await expect(playButton).toBeFocused();
+  expect(
+    await playButton.evaluate(
+      (button) => Number.parseFloat(getComputedStyle(button).outlineWidth) > 0,
+    ),
+  ).toBe(true);
+  await page.keyboard.press("Enter");
+
+  const player = page.locator("iframe[data-video-player]");
+  await expect(player).toHaveCount(1);
+  await expect(player).toHaveAttribute(
+    "title",
+    "FILM PUBLICITAIRE - VROOM - by NOM FILMS",
+  );
+  await expect(player).toHaveAttribute(
+    "src",
+    /youtube-nocookie\.com\/embed\/AxG6DcoIGfQ\?autoplay=1&rel=0/,
+  );
+  await expect(page.locator("button[data-video-play]")).toHaveCount(7);
 });
 
 test("portfolio submenu works with hover, keyboard, and touch", async ({
@@ -157,9 +337,7 @@ test("portfolio submenu works with hover, keyboard, and touch", async ({
   }
 
   await expect(page).toHaveURL(/\/en\/portfolio\?media=videos/);
-  await expect(
-    page.getByText("No video project is published yet."),
-  ).toBeVisible();
+  await expect(page.locator("article[data-video-id]")).toHaveCount(44);
 });
 
 test("portfolio filters preserve browser history", async ({ page }) => {
@@ -171,9 +349,7 @@ test("portfolio filters preserve browser history", async ({ page }) => {
   await expect(page).toHaveURL(/media=photos/);
   await page.goBack();
   await expect(page).toHaveURL(/media=videos/);
-  await expect(
-    page.getByText("No video project is published yet."),
-  ).toBeVisible();
+  await expect(page.locator("article[data-video-id]")).toHaveCount(44);
 });
 
 test("theme follows the system and persists a manual choice", async ({
@@ -187,6 +363,25 @@ test("theme follows the system and persists a manual choice", async ({
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});
+
+test("theme initializer renders without React script warnings", async ({
+  page,
+}) => {
+  const scriptWarnings: string[] = [];
+  page.on("console", (message) => {
+    if (
+      message.type() === "error" &&
+      message.text().includes("Encountered a script tag while rendering React")
+    ) {
+      scriptWarnings.push(message.text());
+    }
+  });
+
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
+  await waitForHydration(page);
+
+  expect(scriptWarnings).toEqual([]);
 });
 
 test("global contact opens as a modal and restores trigger focus", async ({
@@ -208,11 +403,32 @@ test("global contact opens as a modal and restores trigger focus", async ({
     name: /Tell me about your project/,
   });
   await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveCount(1);
+  expect(
+    await page
+      .getByRole("main")
+      .evaluate((node) => node.closest("[inert]") !== null),
+  ).toBe(true);
+  const layers = await dialog.evaluate((node) => ({
+    backdrop: Number.parseInt(
+      getComputedStyle(node.parentElement as HTMLElement).zIndex,
+      10,
+    ),
+    header: Number.parseInt(
+      getComputedStyle(document.querySelector("header") as HTMLElement).zIndex,
+      10,
+    ),
+  }));
+  expect(layers.backdrop).toBeGreaterThan(layers.header);
   await expect
     .poll(() =>
       dialog.evaluate((node) => node.contains(document.activeElement)),
     )
     .toBe(true);
+  await dialog
+    .getByRole("heading", { name: /Tell me about your project/ })
+    .click();
+  await expect(dialog).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => document.body.style.overflow))
     .toBe("hidden");
@@ -236,6 +452,9 @@ test("global contact opens as a modal and restores trigger focus", async ({
   }
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
+  await expect
+    .poll(() => page.evaluate(() => document.body.style.overflow))
+    .toBe("");
   await expect(
     mobile ? page.getByRole("button", { name: "Open menu" }) : trigger,
   ).toBeFocused();
@@ -290,19 +509,57 @@ test("shared Contact control opens the popup across localized pages", async ({
   }
 });
 
-test("page-level quotation links open the shared popup without navigating", async ({
+test("homepage and footer Contact links share one popup without navigating", async ({
   page,
 }) => {
   await page.goto("/en");
   await waitForHydration(page);
-  const initialUrl = page.url();
-  await page
-    .getByRole("main")
-    .getByRole("link", { name: "Request a quotation", exact: true })
-    .first()
-    .click();
-  await expect(page.getByRole("dialog")).toBeVisible();
-  expect(page.url()).toBe(initialUrl);
+  const triggers = [
+    page
+      .locator(".reference-home-hero")
+      .getByRole("link", { name: "Request a quotation", exact: true }),
+    page
+      .getByRole("main")
+      .getByRole("link", { name: /Tell me about your photography/ }),
+    page
+      .getByRole("contentinfo")
+      .getByRole("link", { name: "Contact", exact: true }),
+  ];
+
+  for (const trigger of triggers) {
+    const initialUrl = page.url();
+    await trigger.scrollIntoViewIfNeeded();
+    await trigger.click();
+    const dialog = page.getByRole("dialog");
+    await expect(dialog).toBeVisible();
+    await expect(dialog).toHaveCount(1);
+    expect(page.url()).toBe(initialUrl);
+    await dialog.getByRole("button", { name: /close/i }).click();
+    await expect(dialog).toBeHidden();
+    await expect(trigger).toBeFocused();
+  }
+});
+
+test("modified Contact clicks keep normal browser behavior", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  await waitForHydration(page);
+  const trigger = page
+    .locator(".reference-home-hero")
+    .getByRole("link", { name: "Request a quotation", exact: true });
+  const notPrevented = await trigger.evaluate((anchor) =>
+    anchor.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        button: 0,
+        ctrlKey: true,
+      }),
+    ),
+  );
+  expect(notPrevented).toBe(true);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
 });
 
 test("direct Contact fallback renders without JavaScript", async ({
@@ -310,14 +567,29 @@ test("direct Contact fallback renders without JavaScript", async ({
 }) => {
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
-  const response = await page.goto("/en/contact");
-  expect(response?.status()).toBe(200);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    "Request a photography or film quotation.",
-  );
-  await expect(
-    page.getByRole("link", { name: /Photography and general enquiries/ }),
-  ).toHaveAttribute("href", "mailto:contact@photographefes.com");
+  const routes = [
+    {
+      path: "/en/contact",
+      title: "Request a photography or film quotation.",
+      emailLabel: /Photography and general enquiries/,
+    },
+    {
+      path: "/fr/contact",
+      title: "Demander un devis photo ou vidéo.",
+      emailLabel: /Photographie et demandes générales/,
+    },
+  ];
+
+  for (const route of routes) {
+    const response = await page.goto(route.path);
+    expect(response?.status()).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+      route.title,
+    );
+    await expect(
+      page.getByRole("link", { name: route.emailLabel }),
+    ).toHaveAttribute("href", "mailto:contact@photographefes.com");
+  }
   await context.close();
 });
 
@@ -436,7 +708,7 @@ test("representative French and English pages expose aligned SEO signals", async
     {
       path: "/fr",
       locale: "fr",
-      h1: "Photographe et cinéaste à Fès.",
+      h1: "Photographe et vidéaste à Fès.",
       schemaTypes: ["Person", "WebSite", "ProfessionalService", "WebPage"],
     },
     {
@@ -536,7 +808,7 @@ test("thin pages are noindex and unknown localized routes return 404", async ({
     "/fr/legal",
     "/en/thank-you",
   ]) {
-    const response = await page.goto(path);
+    const response = await page.goto(path, { waitUntil: "domcontentloaded" });
     expect(response?.status()).toBe(200);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
       "content",
@@ -549,7 +821,7 @@ test("thin pages are noindex and unknown localized routes return 404", async ({
     "/fr/portfolio/not-a-project",
     "/es",
   ]) {
-    const response = await page.goto(path);
+    const response = await page.goto(path, { waitUntil: "domcontentloaded" });
     expect(response?.status()).toBe(404);
   }
 });

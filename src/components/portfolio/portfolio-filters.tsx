@@ -10,7 +10,22 @@ import {
   isPortfolioCategory,
 } from "@/features/portfolio/categories";
 import { portfolioProjects } from "@/features/portfolio/projects";
+import {
+  filterPortfolioVideos,
+  isVideoCategory,
+  videoCategoryLabel,
+  videoCategoryOrder,
+} from "@/features/portfolio/videos";
 import { ProjectCard } from "./project-card";
+import { VideoCard } from "./video-card";
+
+const projectCardClasses = [
+  "col-span-12 md:col-span-7",
+  "col-span-10 col-start-3 md:col-span-4 md:col-start-9 md:mt-28",
+  "col-span-12 md:col-span-8 md:col-start-3",
+  "col-span-10 md:col-span-4",
+  "col-span-12 md:col-span-7 md:col-start-6 md:mt-24",
+];
 
 export function PortfolioFilters() {
   const locale = useLocale() as Locale;
@@ -21,12 +36,19 @@ export function PortfolioFilters() {
   const selected = searchParams.get("category");
   const selectedMedia = searchParams.get("media");
   const mediaType = selectedMedia === "videos" ? "videos" : "photos";
-  const active = isPortfolioCategory(selected) ? selected : null;
+  const activePhotoCategory =
+    mediaType === "photos" && isPortfolioCategory(selected) ? selected : null;
+  const activeVideoCategory =
+    mediaType === "videos" && isVideoCategory(selected) ? selected : null;
+  const activeCategory =
+    mediaType === "photos" ? activePhotoCategory : activeVideoCategory;
   const projects = portfolioProjects.filter(
     (project) =>
-      project.mediaType === mediaType &&
-      (!active || project.category === active),
+      project.mediaType === "photos" &&
+      (!activePhotoCategory || project.category === activePhotoCategory),
   );
+  const videos = filterPortfolioVideos(activeVideoCategory);
+  const resultCount = mediaType === "photos" ? projects.length : videos.length;
 
   function updateFilter(category: string | null) {
     const params = new URLSearchParams(searchParams.toString());
@@ -60,67 +82,101 @@ export function PortfolioFilters() {
             </button>
           ))}
         </div>
-        {mediaType === "photos" ? (
-          <div
-            className="flex flex-wrap gap-2 border-t border-white/10 pt-2 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-2"
-            role="group"
-            aria-label={t("categoryLabel")}
+        <div
+          className="flex flex-wrap gap-2 border-t border-white/10 pt-2 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-2"
+          role="group"
+          aria-label={
+            mediaType === "photos"
+              ? t("categoryLabel")
+              : t("videoCategoryLabel")
+          }
+        >
+          <button
+            type="button"
+            onClick={() => updateFilter(null)}
+            aria-pressed={!activeCategory}
+            className={`min-h-10 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors ${!activeCategory ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
           >
-            <button
-              type="button"
-              onClick={() => updateFilter(null)}
-              aria-pressed={!active}
-              className={`min-h-10 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors ${!active ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
-            >
-              {t("all")}
-            </button>
-            {categoryOrder.map((category) => (
-              <button
-                key={category}
-                type="button"
-                onClick={() => updateFilter(category)}
-                aria-pressed={active === category}
-                className={`min-h-10 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors ${active === category ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
-              >
-                {categoryLabel(category, locale)}
-              </button>
-            ))}
-          </div>
-        ) : null}
+            {t("all")}
+          </button>
+          {mediaType === "photos"
+            ? categoryOrder.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => updateFilter(category)}
+                  aria-pressed={activePhotoCategory === category}
+                  className={`min-h-10 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors ${activePhotoCategory === category ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
+                >
+                  {categoryLabel(category, locale)}
+                </button>
+              ))
+            : videoCategoryOrder.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => updateFilter(category)}
+                  aria-pressed={activeVideoCategory === category}
+                  className={`min-h-10 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors ${activeVideoCategory === category ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
+                >
+                  {videoCategoryLabel(category, locale)}
+                </button>
+              ))}
+        </div>
       </div>
       <p className="sr-only" aria-live="polite">
-        {t("count", { count: projects.length })}
+        {t(mediaType === "videos" ? "videoCount" : "count", {
+          count: resultCount,
+        })}
       </p>
       <div
-        key={`${mediaType}-${active ?? "all"}`}
+        key={`${mediaType}-${activeCategory ?? "all"}`}
         className="portfolio-filter-results"
       >
-        <div className="mt-16 grid grid-cols-12 items-start gap-x-5 gap-y-20 sm:gap-x-8">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={project.slug}
-              project={project}
-              locale={locale}
-              openLabel={t("openSeries")}
-              previewLabel={t("previewHint", {
-                count: Math.min(project.gallery.length, 4),
-              })}
-              imageCountLabel={t("imageCount", {
-                count: project.gallery.length,
-              })}
-              className={
-                [
-                  "col-span-12 md:col-span-7",
-                  "col-span-10 col-start-3 md:col-span-4 md:col-start-9 md:mt-28",
-                  "col-span-12 md:col-span-8 md:col-start-3",
-                  "col-span-10 md:col-span-4",
-                  "col-span-12 md:col-span-7 md:col-start-6 md:mt-24",
-                ][index % 5]
-              }
-            />
-          ))}
-        </div>
-        {projects.length === 0 ? (
+        {mediaType === "photos" ? (
+          <div className="mt-16 grid grid-cols-12 items-start gap-x-5 gap-y-20 sm:gap-x-8">
+            {projects.map((project, index) => (
+              <ProjectCard
+                key={project.slug}
+                project={project}
+                locale={locale}
+                openLabel={t("openSeries")}
+                previewLabel={t("previewHint", {
+                  count: Math.min(project.gallery.length, 4),
+                })}
+                imageCountLabel={t("imageCount", {
+                  count: project.gallery.length,
+                })}
+                className={
+                  projectCardClasses[index % projectCardClasses.length]
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="mt-16 grid grid-cols-12 items-start gap-x-5 gap-y-20 sm:gap-x-8">
+            {videos.map((video, index) => (
+              <VideoCard
+                key={video.videoId}
+                video={video}
+                locale={locale}
+                labels={{
+                  play: t("playVideo"),
+                  watchOnYouTube: t("watchOnYouTube"),
+                  short: t("short"),
+                  longForm: t("longForm"),
+                  thumbnailUnavailable: t("thumbnailUnavailable"),
+                }}
+                className={
+                  video.contentType === "short"
+                    ? "col-span-10 col-start-2 sm:col-span-5 sm:col-start-auto lg:col-span-3"
+                    : projectCardClasses[index % projectCardClasses.length]
+                }
+              />
+            ))}
+          </div>
+        )}
+        {resultCount === 0 ? (
           <div className="portfolio-empty-state mt-16 border-y border-white/12 py-20 text-center">
             <div className="portfolio-empty-pulse" aria-hidden="true">
               <span />
