@@ -208,11 +208,55 @@ test("language switching keeps the corresponding path", async ({ page }) => {
   await expect(page).toHaveURL(/\/en\/services/);
 });
 
-test("portfolio filters synchronize with the URL", async ({ page }) => {
+test("portfolio category disclosure is accessible and preserves selection", async ({
+  page,
+}) => {
   await page.goto("/en/portfolio");
   await waitForHydration(page);
-  await page.getByRole("button", { name: "Weddings" }).click();
+
+  const trigger = page.locator("[data-portfolio-filter-trigger]");
+  const panel = page.locator("#portfolio-category-filters");
+
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(trigger).toHaveAccessibleName("Open category filters");
+  await expect(panel).toBeHidden();
+  await expect(page.getByRole("button", { name: "Weddings" })).toHaveCount(0);
+
+  await trigger.click();
+  await expect(trigger).toHaveAttribute("aria-expanded", "true");
+  await expect(trigger).toHaveAccessibleName("Close category filters");
+  const photoCategories = page.getByRole("group", {
+    name: "Filter photo projects",
+  });
+  await expect(photoCategories).toBeVisible();
+
+  const weddings = photoCategories.getByRole("button", { name: "Weddings" });
+  await weddings.click();
   await expect(page).toHaveURL(/category=weddings/);
+  await expect(trigger).toContainText("Weddings");
+
+  await trigger.click();
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(panel).toBeHidden();
+  await trigger.click();
+  await expect(weddings).toHaveAttribute("aria-pressed", "true");
+
+  await page.getByRole("button", { name: "Videos" }).click();
+  await expect(page).toHaveURL(/media=videos/);
+  expect(new URL(page.url()).searchParams.has("category")).toBe(false);
+  const videoCategories = page.getByRole("group", {
+    name: "Filter videos by category",
+  });
+  await expect(videoCategories).toBeVisible();
+  await expect(
+    videoCategories.getByRole("button", {
+      name: "Commercial / Advertising",
+    }),
+  ).toBeVisible();
+
+  await page.keyboard.press("Escape");
+  await expect(trigger).toHaveAttribute("aria-expanded", "false");
+  await expect(trigger).toBeFocused();
 });
 
 test("portfolio cards scrub through real project previews and open the series", async ({
@@ -252,6 +296,9 @@ test("portfolio video filters reproduce the workbook category totals", async ({
   await page.getByRole("button", { name: "Vidéos" }).click();
   await expect(page).toHaveURL(/media=videos/);
   await expect(page.locator("article[data-video-id]")).toHaveCount(44);
+  await page
+    .getByRole("button", { name: "Ouvrir les filtres de catégorie" })
+    .click();
 
   await page.getByRole("button", { name: "Commercial / Publicité" }).click();
   await expect(page).toHaveURL(/category=commercial-advertising/);
@@ -343,13 +390,141 @@ test("portfolio submenu works with hover, keyboard, and touch", async ({
 test("portfolio filters preserve browser history", async ({ page }) => {
   await page.goto("/en/portfolio?media=photos");
   await waitForHydration(page);
+
+  const filterTrigger = page.locator("[data-portfolio-filter-trigger]");
+  await filterTrigger.click();
+  await page.getByRole("button", { name: "Weddings" }).click();
+  await expect(page).toHaveURL(/media=photos.*category=weddings/);
   await page.getByRole("button", { name: "Videos" }).click();
   await expect(page).toHaveURL(/media=videos/);
-  await page.getByRole("button", { name: "Photos" }).click();
-  await expect(page).toHaveURL(/media=photos/);
+
   await page.goBack();
+  await expect(page).toHaveURL(/media=photos.*category=weddings/);
+  await expect(page.getByRole("button", { name: "Photos" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(filterTrigger).toContainText("Weddings");
+
+  await page.goBack();
+  await expect(page).toHaveURL(/media=photos/);
+  expect(new URL(page.url()).searchParams.has("category")).toBe(false);
+
+  await page.goForward();
+  await expect(page).toHaveURL(/category=weddings/);
+  await page.goForward();
   await expect(page).toHaveURL(/media=videos/);
   await expect(page.locator("article[data-video-id]")).toHaveCount(44);
+});
+
+test("portfolio filter surface fits closed and open viewport widths", async ({
+  page,
+}, testInfo) => {
+  test.skip(
+    testInfo.project.name === "mobile",
+    "The explicit viewport matrix includes mobile and larger widths",
+  );
+  test.setTimeout(90_000);
+
+  const viewports = [
+    { width: 360, height: 800 },
+    { width: 400, height: 800 },
+    { width: 768, height: 900 },
+    { width: 1024, height: 900 },
+    { width: 1440, height: 900 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/en/portfolio?media=videos", {
+      waitUntil: "domcontentloaded",
+    });
+    await waitForHydration(page);
+
+    const surface = page.locator("[data-portfolio-filters]");
+    const trigger = page.locator("[data-portfolio-filter-trigger]");
+    const readLayout = () =>
+      surface.evaluate((filterSurface) => {
+        const result = document.querySelector<HTMLElement>(
+          "article[data-video-id]",
+        );
+        if (!result) throw new Error("The first portfolio result is missing");
+        const surfaceRect = filterSurface.getBoundingClientRect();
+        const resultRect = result.getBoundingClientRect();
+        return {
+          documentWidth: document.documentElement.scrollWidth,
+          surfaceBottom: surfaceRect.bottom,
+          surfaceLeft: surfaceRect.left,
+          surfaceRight: surfaceRect.right,
+          resultTop: resultRect.top,
+        };
+      });
+    const expectLayoutToFit = async () => {
+      const layout = await readLayout();
+      expect(layout.documentWidth).toBeLessThanOrEqual(viewport.width);
+      expect(layout.surfaceLeft).toBeGreaterThanOrEqual(-1);
+      expect(layout.surfaceRight).toBeLessThanOrEqual(viewport.width + 1);
+      expect(layout.surfaceBottom).toBeLessThanOrEqual(layout.resultTop + 1);
+    };
+
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expectLayoutToFit();
+    await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await expectLayoutToFit();
+    await trigger.click();
+    await expect(trigger).toHaveAttribute("aria-expanded", "false");
+    await expectLayoutToFit();
+  }
+});
+
+test("video play control keeps the same dark treatment in both themes", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  await page.goto("/en/portfolio?media=videos&category=commercial-advertising");
+  await waitForHydration(page);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+
+  const control = page.locator("[data-video-play-control]").first();
+  const readColors = () =>
+    control.evaluate((node) => {
+      const style = getComputedStyle(node);
+      const toRgba = (color: string) => {
+        const canvas = document.createElement("canvas");
+        canvas.width = 1;
+        canvas.height = 1;
+        const context = canvas.getContext("2d");
+        if (!context) throw new Error("Canvas color context is unavailable");
+        context.fillStyle = color;
+        context.fillRect(0, 0, 1, 1);
+        return Array.from(context.getImageData(0, 0, 1, 1).data);
+      };
+      const computed = {
+        backgroundColor: style.backgroundColor,
+        borderColor: style.borderColor,
+        color: style.color,
+      };
+      return {
+        computed,
+        rgba: {
+          backgroundColor: toRgba(computed.backgroundColor),
+          borderColor: toRgba(computed.borderColor),
+          color: toRgba(computed.color),
+        },
+      };
+    });
+
+  const lightColors = await readColors();
+  expect(lightColors.rgba.color).toEqual([255, 255, 255, 255]);
+  expect(lightColors.rgba.borderColor.slice(0, 3)).toEqual([255, 255, 255]);
+  expect(lightColors.rgba.borderColor[3]).toBeCloseTo(255 * 0.75, 0);
+  expect(lightColors.rgba.backgroundColor.slice(0, 3)).toEqual([0, 0, 0]);
+  expect(lightColors.rgba.backgroundColor[3]).toBeCloseTo(255 * 0.35, 0);
+
+  await page.getByRole("button", { name: "Switch to dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  expect(await readColors()).toEqual(lightColors);
 });
 
 test("theme follows the system and persists a manual choice", async ({

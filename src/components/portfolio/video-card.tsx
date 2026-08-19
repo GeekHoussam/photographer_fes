@@ -97,8 +97,11 @@ export function VideoCard({
               className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/8 to-black/10"
               aria-hidden="true"
             />
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="flex h-20 w-20 items-center justify-center rounded-full border border-white/75 bg-black/35 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105">
+            <span className="theme-lock-dark absolute inset-0 flex items-center justify-center">
+              <span
+                className="flex h-20 w-20 items-center justify-center rounded-full border border-white/75 bg-black/35 text-white backdrop-blur-md transition-transform duration-300 group-hover:scale-105 group-focus-visible:scale-105"
+                data-video-play-control
+              >
                 <Play
                   className="ml-1 h-7 w-7 fill-current"
                   aria-hidden="true"
