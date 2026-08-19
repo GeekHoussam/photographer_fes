@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
+import { ChevronDown } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/config/site";
 import {
@@ -28,6 +30,8 @@ const projectCardClasses = [
 ];
 
 export function PortfolioFilters() {
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filterTriggerRef = useRef<HTMLButtonElement>(null);
   const locale = useLocale() as Locale;
   const t = useTranslations("Portfolio");
   const router = useRouter();
@@ -49,6 +53,25 @@ export function PortfolioFilters() {
   );
   const videos = filterPortfolioVideos(activeVideoCategory);
   const resultCount = mediaType === "photos" ? projects.length : videos.length;
+  const activeCategoryLabel = activeCategory
+    ? mediaType === "photos"
+      ? categoryLabel(activePhotoCategory!, locale)
+      : videoCategoryLabel(activeVideoCategory!, locale)
+    : t("all");
+
+  useEffect(() => {
+    if (!filtersOpen) return;
+
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setFiltersOpen(false);
+      filterTriggerRef.current?.focus();
+    }
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [filtersOpen]);
 
   function updateFilter(category: string | null) {
     const params = new URLSearchParams(searchParams.toString());
@@ -68,28 +91,62 @@ export function PortfolioFilters() {
 
   return (
     <>
-      <div className="bg-ink/80 sticky top-[calc(var(--header-height)+1rem)] z-20 grid gap-2 rounded-[1.25rem] border border-white/10 p-2 backdrop-blur-xl sm:flex sm:flex-wrap">
-        <div className="flex gap-2" role="group" aria-label={t("mediaLabel")}>
-          {(["photos", "videos"] as const).map((media) => (
-            <button
-              key={media}
-              type="button"
-              onClick={() => updateMedia(media)}
-              aria-pressed={mediaType === media}
-              className={`min-h-10 flex-1 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors sm:flex-none ${mediaType === media ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
-            >
-              {t(media)}
-            </button>
-          ))}
+      <div
+        className="bg-ink/80 sticky top-[calc(var(--header-height)+1rem)] z-20 grid gap-2 rounded-[1.25rem] border border-white/10 p-2 backdrop-blur-xl"
+        data-portfolio-filters
+      >
+        <div className="grid min-w-0 gap-2 sm:flex sm:flex-wrap">
+          <div
+            className="flex min-w-0 gap-2"
+            role="group"
+            aria-label={t("mediaLabel")}
+          >
+            {(["photos", "videos"] as const).map((media) => (
+              <button
+                key={media}
+                type="button"
+                onClick={() => updateMedia(media)}
+                aria-pressed={mediaType === media}
+                className={`min-h-10 flex-1 rounded-full px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors sm:flex-none ${mediaType === media ? "bg-paper text-ink" : "hover:text-paper text-white/48 hover:bg-white/8"}`}
+              >
+                {t(media)}
+              </button>
+            ))}
+          </div>
+          <button
+            ref={filterTriggerRef}
+            type="button"
+            onClick={() => setFiltersOpen((open) => !open)}
+            aria-expanded={filtersOpen}
+            aria-controls="portfolio-category-filters"
+            aria-label={t(filtersOpen ? "closeFilters" : "openFilters")}
+            className="flex min-h-10 min-w-0 items-center justify-center gap-2 rounded-full border border-white/10 px-4 text-[0.64rem] font-bold tracking-[0.13em] uppercase transition-colors hover:border-white/20 hover:bg-white/8 sm:max-w-[28rem]"
+            data-portfolio-filter-trigger
+          >
+            <span className="shrink-0">{t("filters")}</span>
+            <span className="text-white/25" aria-hidden="true">
+              ·
+            </span>
+            <span className="min-w-0 truncate text-white/48">
+              {activeCategoryLabel}
+            </span>
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 transition-transform motion-reduce:transition-none ${filtersOpen ? "rotate-180" : ""}`}
+              aria-hidden="true"
+            />
+          </button>
         </div>
         <div
-          className="flex flex-wrap gap-2 border-t border-white/10 pt-2 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-2"
+          id="portfolio-category-filters"
+          className="flex flex-wrap gap-2 border-t border-white/10 pt-2"
           role="group"
           aria-label={
             mediaType === "photos"
               ? t("categoryLabel")
               : t("videoCategoryLabel")
           }
+          hidden={!filtersOpen}
+          data-portfolio-filter-panel
         >
           <button
             type="button"
