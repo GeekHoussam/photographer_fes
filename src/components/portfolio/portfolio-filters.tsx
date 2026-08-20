@@ -80,6 +80,8 @@ export function PortfolioFilters() {
     router.push(`${pathname}${params.size ? `?${params}` : ""}`, {
       scroll: false,
     });
+    setFiltersOpen(false);
+    filterTriggerRef.current?.focus();
   }
 
   function updateMedia(nextMedia: "photos" | "videos") {
