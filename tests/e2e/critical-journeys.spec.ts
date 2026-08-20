@@ -234,10 +234,10 @@ test("portfolio category disclosure is accessible and preserves selection", asyn
   await weddings.click();
   await expect(page).toHaveURL(/category=weddings/);
   await expect(trigger).toContainText("Weddings");
-
-  await trigger.click();
   await expect(trigger).toHaveAttribute("aria-expanded", "false");
   await expect(panel).toBeHidden();
+  await expect(trigger).toBeFocused();
+
   await trigger.click();
   await expect(weddings).toHaveAttribute("aria-pressed", "true");
 
@@ -302,14 +302,23 @@ test("portfolio video filters reproduce the workbook category totals", async ({
 
   await page.getByRole("button", { name: "Commercial / Publicité" }).click();
   await expect(page).toHaveURL(/category=commercial-advertising/);
+  await expect(
+    page.getByRole("button", { name: "Ouvrir les filtres de catégorie" }),
+  ).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator("article[data-video-id]")).toHaveCount(8);
   await expect(
     page.locator('article[data-video-type="long-form"]'),
   ).toHaveCount(1);
   await expect(page.locator('article[data-video-type="short"]')).toHaveCount(7);
 
+  await page
+    .getByRole("button", { name: "Ouvrir les filtres de catégorie" })
+    .click();
   await page.getByRole("button", { name: "Événement corporate" }).click();
   await expect(page).toHaveURL(/category=corporate-event/);
+  await expect(
+    page.getByRole("button", { name: "Ouvrir les filtres de catégorie" }),
+  ).toHaveAttribute("aria-expanded", "false");
   await expect(page.locator("article[data-video-id]")).toHaveCount(11);
 });
 
