@@ -89,7 +89,7 @@ export default async function ProjectPage({
               <dt className="eyebrow text-white/38">
                 {fr ? "Lieu" : "Location"}
               </dt>
-              <dd className="mt-2 text-white/75">{project.location}</dd>
+              <dd className="mt-2 text-white/75">{project.location[locale]}</dd>
             </div>
             <div>
               <dt className="eyebrow text-white/38">

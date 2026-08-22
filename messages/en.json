@@ -19,7 +19,7 @@
     "title": "Tell me about your project.",
     "description": "Share the date, location, and what you need. I will reply with the next steps for your photography or film enquiry.",
     "close": "Close contact dialog",
-    "locationLabel": "Fès · Morocco",
+    "locationLabel": "Fez · Morocco",
     "projectDetails": "Project details",
     "requiredFields": "* Required",
     "generalEmailLabel": "Photography and general enquiries",
@@ -60,7 +60,7 @@
   },
   "Footer": {
     "tagline": "Wedding, event, interior, and food photography alongside film projects.",
-    "location": "Based in Fès, available across Morocco.",
+    "location": "Based in Fez, available across Morocco.",
     "rights": "All rights reserved.",
     "privacy": "Privacy",
     "legal": "Legal notice"

@@ -94,12 +94,11 @@ export default async function ServicePage({
                   : "Include in your enquiry"}
               </h3>
               <ul className="mt-5 border-t border-white/12">
-                {service.planningPoints.map((item, index) => (
+                {service.planningPoints.map((item) => (
                   <li
                     key={item[locale]}
-                    className="grid grid-cols-[3rem_1fr] border-b border-white/12 py-5"
+                    className="border-b border-white/12 py-5"
                   >
-                    <span className="eyebrow text-sand">0{index + 1}</span>
                     <span className="text-sm text-white/70">
                       {item[locale]}
                     </span>

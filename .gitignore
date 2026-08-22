@@ -17,6 +17,7 @@
 
 # local high-resolution photo masters
 /_photo-masters/
+/blog_photographe_fes\ /
 
 # local environment
 .env*

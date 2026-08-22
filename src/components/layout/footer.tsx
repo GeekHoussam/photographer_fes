@@ -25,7 +25,7 @@ export async function Footer() {
         <div className="grid gap-16 lg:grid-cols-[1.4fr_0.6fr]">
           <div>
             <p className="eyebrow text-sand">
-              {locale === "fr" ? "Fès · Maroc" : "Fès · Morocco"}
+              {locale === "fr" ? "Fès · Maroc" : "Fez · Morocco"}
             </p>
             <p className="display-section mt-7 max-w-5xl">
               Mohammed

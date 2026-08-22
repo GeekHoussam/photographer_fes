@@ -1,5 +1,4 @@
 import localFont from "next/font/local";
-import Script from "next/script";
 
 const siteFont = localFont({
   src: "../../node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2",
@@ -9,6 +8,7 @@ const siteFont = localFont({
 });
 
 const themeScript = `(() => {
+  // Apply the saved or system theme before the first paint.
   try {
     const saved = localStorage.getItem("photographer-theme");
     const theme = saved === "light" || saved === "dark"
@@ -37,9 +37,8 @@ export function RootDocument({
     >
       <head>
         <meta name="theme-color" content="#101112" />
-        <Script
+        <script
           id="theme-initializer"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: themeScript }}
         />
       </head>

@@ -8,6 +8,9 @@ type PageMetadataInput = {
   description: string;
   path?: string;
   image?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  openGraphType?: "website" | "article";
   noIndex?: boolean;
 };
 
@@ -17,6 +20,9 @@ export function createPageMetadata({
   description,
   path = "",
   image = "/og.png",
+  imageWidth = 1200,
+  imageHeight = 630,
+  openGraphType = "website",
   noIndex = false,
 }: PageMetadataInput): Metadata {
   const canonical = localizedUrl(locale, path);
@@ -36,14 +42,14 @@ export function createPageMetadata({
       },
     },
     openGraph: {
-      type: "website",
+      type: openGraphType,
       siteName: brandTitles[locale],
       locale: locale === "fr" ? "fr_FR" : "en_GB",
       alternateLocale: locale === "fr" ? ["en_GB"] : ["fr_FR"],
       title: absoluteTitle,
       description,
       url: canonical,
-      images: [{ url: imageUrl, width: 1200, height: 630 }],
+      images: [{ url: imageUrl, width: imageWidth, height: imageHeight }],
     },
     twitter: {
       card: "summary_large_image",

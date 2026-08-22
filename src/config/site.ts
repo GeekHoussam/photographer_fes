@@ -5,7 +5,7 @@ export const defaultLocale: Locale = "fr";
 
 export const brandTitles: Record<Locale, string> = {
   fr: "Photographe Fès — Mohammed Laâchach",
-  en: "Photographer in Fès — Mohammed Laâchach",
+  en: "Photographer in Fez — Mohammed Laâchach",
 };
 
 export const contactDetails = {

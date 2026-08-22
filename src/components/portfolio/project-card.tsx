@@ -51,7 +51,7 @@ export function ProjectCard({
             </p>
           </div>
           <div className="shrink-0 pt-1 text-right text-[0.68rem] tracking-[0.1em] text-current/40 uppercase">
-            <span className="block">{project.location}</span>
+            <span className="block">{project.location[locale]}</span>
             <span className="mt-2 block text-current/65">
               {imageCountLabel}
             </span>

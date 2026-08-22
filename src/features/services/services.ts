@@ -6,7 +6,7 @@ export const services: ServiceSummary[] = [
     title: { fr: "Photographie de mariage", en: "Wedding photography" },
     introduction: {
       fr: "Un reportage de mariage à Fès ou ailleurs au Maroc, attentif à la cérémonie, aux portraits du couple et aux interactions entre les proches.",
-      en: "Wedding coverage in Fès or elsewhere in Morocco, attentive to the ceremony, couple portraits, and interactions between guests.",
+      en: "Wedding coverage in Fez or elsewhere in Morocco, attentive to the ceremony, couple portraits, and interactions between guests.",
     },
     overviewTitle: {
       fr: "Préparer les temps importants sans figer la journée.",
@@ -44,7 +44,7 @@ export const services: ServiceSummary[] = [
       {
         question: {
           fr: "Le mariage peut-il avoir lieu hors de Fès ?",
-          en: "Can the wedding take place outside Fès?",
+          en: "Can the wedding take place outside Fez?",
         },
         answer: {
           fr: "Oui, les projets peuvent être étudiés ailleurs au Maroc. Précisez chaque lieu dans votre demande afin que le déplacement soit pris en compte dans la proposition.",

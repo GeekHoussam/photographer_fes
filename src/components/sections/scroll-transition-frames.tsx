@@ -173,7 +173,7 @@ export function ScrollTransitionFrames({
               </div>
 
               <p className="scroll-sequence-mark" aria-hidden="true">
-                ML / FÈS
+                {fr ? "ML / FÈS" : "ML / FEZ"}
               </p>
             </li>
           ))}

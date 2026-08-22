@@ -123,7 +123,7 @@ export function HomePage({ locale }: { locale: Locale }) {
               <h2 className="font-display mt-6 text-[clamp(3.4rem,6vw,6.5rem)] leading-[0.87] tracking-[-0.045em]">
                 {fr
                   ? "Un photographe et vidéaste basé à Fès."
-                  : "A photographer and filmmaker based in Fès."}
+                  : "Photographer and filmmaker based in Fez."}
               </h2>
               <p className="text-ink/65 mt-7 max-w-lg text-base leading-8">
                 {fr
@@ -148,7 +148,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <section className="section-space bg-surface text-paper overflow-clip">
         <Container>
           <div className="max-w-4xl">
-            <h2 className="display-section">
+            <h2 className="home-work-heading display-section">
               {fr
                 ? "Six photographies, quatre types de projets."
                 : "Six photographs, four kinds of work."}
@@ -178,14 +178,11 @@ export function HomePage({ locale }: { locale: Locale }) {
             <h2 className="display-section mt-6">{processPage.h2}</h2>
           </div>
           <ol className="mt-16 border-t border-white/15 sm:mt-24">
-            {process.map((step, index) => (
+            {process.map((step) => (
               <li
                 key={step.title}
-                className="group grid gap-4 border-b border-white/15 py-6 sm:grid-cols-[4rem_1fr_1fr] sm:items-baseline sm:gap-8 sm:py-8"
+                className="group grid gap-4 border-b border-white/15 py-6 sm:grid-cols-[1fr_1fr] sm:items-baseline sm:gap-8 sm:py-8"
               >
-                <span className="text-sand text-xs font-bold tracking-[0.14em]">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
                 <h3 className="font-display text-4xl leading-none transition-transform duration-500 group-hover:translate-x-2 sm:text-5xl">
                   {step.title}
                 </h3>

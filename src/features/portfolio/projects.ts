@@ -16,7 +16,7 @@ const weddings = [
     4000,
     6000,
     "Portrait rapproché d'un couple le jour de son mariage à Fès",
-    "Close portrait of a couple on their wedding day in Fès",
+    "Close portrait of a couple on their wedding day in Fez",
   ),
   photo(
     "/images/portfolio/weddings/0F2A6875.webp",
@@ -40,7 +40,7 @@ const events = [
     7008,
     4672,
     "Cérémonie de signature officielle lors d'un événement à Fès",
-    "Official signing ceremony during an event in Fès",
+    "Official signing ceremony during an event in Fez",
   ),
   photo(
     "/images/portfolio/events/DSC02377.webp",
@@ -99,7 +99,7 @@ const hospitality = [
     7020,
     4680,
     "Cour intérieure ornée de zellige et de plâtre sculpté à Fès",
-    "Interior courtyard with zellige and carved plaster in Fès",
+    "Interior courtyard with zellige and carved plaster in Fez",
   ),
   photo(
     "/images/portfolio/interiors/DSC01919.webp",
@@ -172,7 +172,7 @@ const food = [
     4492,
     6738,
     "Tables dressées sur une terrasse de restaurant à Fès",
-    "Set tables on a restaurant terrace in Fès",
+    "Set tables on a restaurant terrace in Fez",
   ),
   photo(
     "/images/portfolio/food/DSC02448.webp",
@@ -248,10 +248,10 @@ export const portfolioProjects: ProjectSummary[] = [
     },
     category: "weddings",
     categoryLabel: { fr: "Mariages", en: "Weddings" },
-    location: "Fès, Maroc",
+    location: { fr: "Fès, Maroc", en: "Fez, Morocco" },
     summary: {
       fr: "Trois photographies rapprochées d’un couple, d’un bouquet blanc et des mains réunies pendant un mariage à Fès.",
-      en: "Three close photographs of a couple, a white bouquet, and joined hands during a wedding in Fès.",
+      en: "Three close photographs of a couple, a white bouquet, and joined hands during a wedding in Fez.",
     },
     description: {
       fr: "Cette courte série associe un portrait du couple à deux détails de la tenue et du bouquet. Elle montre une approche du mariage centrée sur les personnes et les éléments visibles de la journée.",
@@ -271,7 +271,7 @@ export const portfolioProjects: ProjectSummary[] = [
     },
     category: "events",
     categoryLabel: { fr: "Événements", en: "Events" },
-    location: "Fès, Maroc",
+    location: { fr: "Fès, Maroc", en: "Fez, Morocco" },
     summary: {
       fr: "Un reportage d’événement réunissant signature officielle, table ronde, prises de parole, échanges entre invités et portrait de groupe.",
       en: "Event coverage bringing together an official signing, panel discussion, speeches, guest interactions, and a group portrait.",
@@ -297,7 +297,7 @@ export const portfolioProjects: ProjectSummary[] = [
       fr: "Hôtellerie & intérieurs",
       en: "Hospitality & interiors",
     },
-    location: "Fès, Maroc",
+    location: { fr: "Fès, Maroc", en: "Fez, Morocco" },
     summary: {
       fr: "Huit vues d’une cour en zellige, de chambres, de salons et d’espaces de repas traditionnels et contemporains.",
       en: "Eight views of a zellige courtyard, bedrooms, living rooms, and traditional and contemporary dining spaces.",
@@ -320,7 +320,7 @@ export const portfolioProjects: ProjectSummary[] = [
     },
     category: "food",
     categoryLabel: { fr: "Gastronomie", en: "Food" },
-    location: "Fès, Maroc",
+    location: { fr: "Fès, Maroc", en: "Fez, Morocco" },
     summary: {
       fr: "Douze images d’une cuisine en activité, d’une terrasse dressée, de tajines, de boissons et de plats servis.",
       en: "Twelve images of a working kitchen, a set terrace, tagines, drinks, and finished dishes.",

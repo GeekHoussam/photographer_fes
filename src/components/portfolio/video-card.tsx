@@ -36,6 +36,10 @@ export function VideoCard({
   const fallbackThumbnailUrl = getVideoThumbnailUrl(video.videoId);
   const aspectClass =
     video.contentType === "short" ? "aspect-[9/16]" : "aspect-video";
+  const title =
+    locale === "en"
+      ? video.title.replace(/F(?:[èé]|e[\u0300\u0301])s/giu, "Fez")
+      : video.title;
 
   function handleThumbnailError() {
     if (thumbnailUrl !== fallbackThumbnailUrl) {
@@ -60,7 +64,7 @@ export function VideoCard({
           <iframe
             className="absolute inset-0 h-full w-full border-0"
             src={`${getVideoEmbedUrl(video.videoId)}?autoplay=1&rel=0`}
-            title={video.title}
+            title={title}
             loading="lazy"
             allow="autoplay; encrypted-media; picture-in-picture"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -72,7 +76,7 @@ export function VideoCard({
             type="button"
             className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden text-left"
             onClick={() => setIsActive(true)}
-            aria-label={`${labels.play}: ${video.title}`}
+            aria-label={`${labels.play}: ${title}`}
             data-video-play
           >
             {thumbnailUnavailable ? (
@@ -120,7 +124,7 @@ export function VideoCard({
             className="font-display mt-3 text-[clamp(1.75rem,3vw,3.25rem)] leading-[1.02] tracking-[-0.03em] [overflow-wrap:anywhere]"
             dir="auto"
           >
-            {video.title}
+            {title}
           </h2>
         </div>
         <p className="shrink-0 pt-1 text-right text-[0.68rem] tracking-[0.1em] text-current/40 uppercase">
@@ -132,7 +136,7 @@ export function VideoCard({
         target="_blank"
         rel="noreferrer"
         className="text-link-arrow mt-5"
-        aria-label={`${labels.watchOnYouTube}: ${video.title}`}
+        aria-label={`${labels.watchOnYouTube}: ${title}`}
       >
         {labels.watchOnYouTube} <span aria-hidden="true">↗</span>
       </a>

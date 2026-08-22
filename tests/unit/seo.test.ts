@@ -67,18 +67,18 @@ describe("metadata", () => {
     });
   });
 
-  it("keeps thin and transitional routes out of the index", () => {
-    for (const key of ["journal", "privacy", "legal", "thankYou"] as const) {
+  it("indexes the completed Journal while keeping thin and transitional routes out", () => {
+    expect(getPageContent("journal", "fr").indexable).toBe(true);
+    for (const key of ["privacy", "legal", "thankYou"] as const) {
       expect(getPageContent(key, "fr").indexable).toBe(false);
     }
     const metadata = createPageMetadata({
       locale: "fr",
       path: "/journal",
-      title: "Journal photographique",
-      description: "Aucun article publié.",
-      noIndex: true,
+      title: "Journal photo et vidéo à Fès",
+      description: "Trois articles publiés.",
     });
-    expect(metadata.robots).toMatchObject({ index: false, follow: true });
+    expect(metadata.robots).toMatchObject({ index: true, follow: true });
   });
 });
 
@@ -175,7 +175,10 @@ describe("sitemap", () => {
   it("contains only canonical useful routes without invented dates", () => {
     const entries = sitemap();
     expect(entries.every((entry) => URL.canParse(entry.url))).toBe(true);
-    expect(entries.some((entry) => entry.url.endsWith("/journal"))).toBe(false);
+    expect(entries.some((entry) => entry.url.endsWith("/journal"))).toBe(true);
+    expect(
+      entries.filter((entry) => entry.url.includes("/journal/")).length,
+    ).toBe(6);
     expect(entries.some((entry) => entry.url.endsWith("/privacy"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/legal"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/thank-you"))).toBe(
