@@ -301,7 +301,7 @@ export function Header() {
             <p className="eyebrow text-sand mb-8">Menu</p>
             <div className="flex flex-1 flex-col">
               {[...links, ["contact", "/contact"] as const].map(
-                ([key, href], index) =>
+                ([key, href]) =>
                   key === "portfolio" ? (
                     <div key={key} ref={mobilePortfolioRef}>
                       <button
@@ -343,7 +343,7 @@ export function Header() {
                     <Link
                       key={key}
                       href={href}
-                      className="group font-display flex items-center justify-between border-t border-white/10 py-4 text-[clamp(2.8rem,12vw,5rem)] leading-none tracking-[-0.035em]"
+                      className="group font-display flex items-center border-t border-white/10 py-4 text-[clamp(2.8rem,12vw,5rem)] leading-none tracking-[-0.035em]"
                       onClick={() => {
                         setOpen(false);
                       }}
@@ -352,12 +352,6 @@ export function Header() {
                       }
                     >
                       <span>{t(key)}</span>
-                      <span
-                        aria-hidden="true"
-                        className="font-sans text-[0.62rem] font-bold tracking-[0.14em] text-white/35"
-                      >
-                        0{index + 1}
-                      </span>
                     </Link>
                   ),
               )}
@@ -365,7 +359,7 @@ export function Header() {
             <div className="mt-8 flex items-end justify-between border-t border-white/10 pt-6">
               <div>
                 <p className="eyebrow text-sand">
-                  {locale === "fr" ? "Fès · Maroc" : "Fès · Morocco"}
+                  {locale === "fr" ? "Fès · Maroc" : "Fez · Morocco"}
                 </p>
                 <p className="mt-3 max-w-xs text-sm text-white/50">
                   {footer("location")}

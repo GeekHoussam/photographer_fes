@@ -50,12 +50,12 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
     },
     en: {
       eyebrow: "Mohammed Laâchach",
-      metaTitle: "Photographer in Fès — Mohammed Laâchach",
+      metaTitle: "Photographer in Fez — Mohammed Laâchach",
       metaDescription:
-        "Mohammed Laâchach creates wedding, event, hospitality, and food photography in Fès and across Morocco, alongside film projects.",
-      h1: "Photographer and filmmaker in Fès.",
+        "Mohammed Laâchach creates wedding, event, hospitality, and food photography in Fez and across Morocco, alongside film projects.",
+      h1: "Photographer and filmmaker in Fez.",
       introduction:
-        "Wedding, event, interior, and food photography in Fès and across Morocco, with a precise approach attentive to people and place.",
+        "Wedding, event, interior, and food photography in Fez and across Morocco, with a precise approach attentive to people and place.",
     },
   },
   portfolio: {
@@ -72,10 +72,10 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
     },
     en: {
       eyebrow: "Portfolio",
-      metaTitle: "Photography portfolio in Fès",
+      metaTitle: "Photography portfolio in Fez",
       metaDescription:
-        "Four photographic series by Mohammed Laâchach covering weddings, events, interiors, and food in Fès.",
-      h1: "Photography portfolio in Fès.",
+        "Four photographic series by Mohammed Laâchach covering weddings, events, interiors, and food in Fez.",
+      h1: "Photography portfolio in Fez.",
       introduction:
         "Explore four published series: wedding portraits and details, an institutional ceremony, Moroccan interiors, and a working kitchen.",
     },
@@ -94,9 +94,9 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
     },
     en: {
       eyebrow: "Services",
-      metaTitle: "Photography and film services in Fès",
+      metaTitle: "Photography and film services in Fez",
       metaDescription:
-        "Wedding, event, corporate, product, food, hospitality, and portrait photography plus film production in Fès and across Morocco.",
+        "Wedding, event, corporate, product, food, hospitality, and portrait photography plus film production in Fez and across Morocco.",
       h1: "Photography and film services.",
       introduction:
         "Choose the service that fits your project, then share its intended use, location, and schedule to request a tailored proposal.",
@@ -120,10 +120,10 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       eyebrow: "About",
       metaTitle: "About the photographer and filmmaker",
       metaDescription:
-        "Meet Mohammed Laâchach, a photographer and filmmaker based in Fès, and learn about his documentary approach to people, places, and craft.",
+        "Meet Mohammed Laâchach, a photographer and filmmaker based in Fez, and learn about his documentary approach to people, places, and craft.",
       h1: "Mohammed Laâchach, photographer and filmmaker.",
       introduction:
-        "Based in Fès, Mohammed Laâchach photographs people, places, and craft with a quiet presence and precise direction.",
+        "Based in Fez, Mohammed Laâchach photographs people, places, and craft with a quiet presence and precise direction.",
       h2: "A documentary, attentive approach.",
       body: "Each project begins by understanding the subject, context, and intended use of the images. During production, Mohammed combines observation with direction to create a clear, coherent series that remains faithful to what unfolds in front of the camera.",
     },
@@ -192,24 +192,24 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
   },
   journal: {
     path: "/journal",
-    indexable: false,
+    indexable: true,
     fr: {
       eyebrow: "Journal",
-      metaTitle: "Journal photographique",
+      metaTitle: "Journal photo et vidéo à Fès",
       metaDescription:
-        "Le journal ne contient pas encore d’article publié. Les séries photographiques restent accessibles dans le portfolio.",
-      h1: "Journal photographique.",
+        "Trois articles de Mohammed Laâchach sur la photographie de mariage, la couverture événementielle et les contenus pour les réseaux sociaux à Fès.",
+      h1: "Journal photo et vidéo.",
       introduction:
-        "Aucun article n’est publié pour le moment. Le journal accueillera de futurs récits documentés avec leur auteur et leurs dates de publication.",
+        "Trois articles consacrés au mariage, aux événements professionnels et aux contenus pour les réseaux sociaux, illustrés par des photographies et des films de terrain.",
     },
     en: {
       eyebrow: "Journal",
-      metaTitle: "Photography journal",
+      metaTitle: "Photography and film journal in Fez",
       metaDescription:
-        "No journal article has been published yet. The photographic series remain available in the portfolio.",
-      h1: "Photography journal.",
+        "Three articles by Mohammed Laâchach on wedding photography, event coverage, and social media content in Fez.",
+      h1: "Photography and film journal.",
       introduction:
-        "No article is published at present. The journal will hold future documented stories with clear authorship and publication dates.",
+        "Three articles covering weddings, professional events, and social media content, illustrated with field photography and films.",
     },
   },
   contact: {
@@ -228,7 +228,7 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       eyebrow: "Contact",
       metaTitle: "Request a photography or film quotation",
       metaDescription:
-        "Contact Mohammed Laâchach about photography or film in Fès or elsewhere in Morocco. Share the project type, location, date, and intended use.",
+        "Contact Mohammed Laâchach about photography or film in Fez or elsewhere in Morocco. Share the project type, location, date, and intended use.",
       h1: "Request a photography or film quotation.",
       introduction:
         "Describe the project type, location, preferred date, and intended use. This information will help prepare a relevant response to your enquiry.",

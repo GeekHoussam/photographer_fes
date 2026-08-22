@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { locales, localizedUrl } from "@/config/site";
 import { staticPageContent } from "@/features/content/pages";
+import { journalArticles } from "@/features/journal/articles";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { services } from "@/features/services/services";
 
@@ -24,6 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticRoutes,
     ...portfolioProjects.map((project) => `/portfolio/${project.slug}`),
     ...services.map((service) => `/services/${service.slug}`),
+    ...journalArticles.map((article) => `/journal/${article.slug}`),
   ];
 
   return locales.flatMap((locale) =>

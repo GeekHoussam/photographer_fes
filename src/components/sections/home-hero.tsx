@@ -36,7 +36,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
   const titleLines = (
     fr
       ? copy.title.replace(" vidéaste ", "\nvidéaste ")
-      : copy.title.replace(" and ", "\nand ").replace(" in Fès", "\nin Fès")
+      : copy.title.replace(" and ", "\nand ").replace(" in Fez", "\nin Fez")
   ).split("\n");
 
   return (
@@ -47,7 +47,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
           alt={
             fr
               ? "Vidéaste filmant dans une rue de Fès"
-              : "Filmmaker shooting on a street in Fès"
+              : "Filmmaker shooting on a street in Fez"
           }
           fill
           priority

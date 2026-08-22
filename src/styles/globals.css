@@ -156,6 +156,10 @@ a {
   line-height: 0.87;
 }
 
+.home-work-heading {
+  line-height: 1.02;
+}
+
 .display-page {
   font-family: var(--font-display);
   font-size: clamp(3.25rem, 5.75vw, 6.5rem);
@@ -1276,7 +1280,9 @@ a {
   width: min(26rem, 42vw);
   gap: 0.5rem;
   border-top: 1px solid rgba(241, 242, 238, 0.52);
-  padding-top: 0.8rem;
+  padding-top: clamp(1.25rem, 2vw, 1.75rem);
+  padding-inline-end: clamp(0.75rem, 1.4vw, 1.25rem);
+  padding-bottom: clamp(0.5rem, 1vw, 0.75rem);
   text-align: right;
 }
 
@@ -1298,7 +1304,7 @@ a {
   font-size: clamp(2.6rem, 5.5vw, 6.2rem);
   font-weight: 400;
   letter-spacing: -0.045em;
-  line-height: 0.82;
+  line-height: 1;
 }
 
 .scroll-sequence-mark {
@@ -2099,6 +2105,101 @@ a {
   );
   content: "";
   pointer-events: none;
+}
+
+.journal-prose {
+  width: 100%;
+  max-width: 76rem;
+  margin-inline: auto;
+}
+
+.journal-prose > h2,
+.journal-prose > h3,
+.journal-prose > p,
+.journal-prose > ul {
+  max-width: 46rem;
+  margin-inline: auto;
+}
+
+.journal-prose > h2 {
+  margin-top: clamp(5rem, 10vw, 9rem);
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 5.5vw, 5.75rem);
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+.journal-prose > h2:first-child {
+  margin-top: 0;
+}
+
+.journal-prose > h3 {
+  margin-top: clamp(3.75rem, 7vw, 6rem);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.journal-prose > p {
+  margin-top: 1.75rem;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.9;
+}
+
+.journal-prose > h2 + p,
+.journal-prose > h3 + p {
+  margin-top: 2rem;
+}
+
+.journal-prose strong {
+  color: currentColor;
+  font-weight: 700;
+}
+
+.journal-prose > ul {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-left: 1.25rem;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.85;
+  list-style: disc;
+}
+
+.journal-inline-media,
+.journal-video-grid {
+  width: 100%;
+  margin-top: clamp(4rem, 8vw, 7rem);
+  margin-bottom: clamp(4rem, 8vw, 7rem);
+}
+
+.journal-inline-media[data-image-orientation="portrait"] {
+  max-width: 42rem;
+  margin-inline: auto;
+}
+
+.journal-video-grid {
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+
+.journal-video-portrait {
+  width: min(100%, 28rem);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .journal-video-grid-multiple {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
 }
 
 @media (max-width: 767px) {

@@ -13,7 +13,7 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     secondary: "/images/portfolio/weddings/0F2A6875.webp",
     heroAlt: {
       fr: "Portrait rapproché d’un couple le jour de son mariage à Fès",
-      en: "Close portrait of a couple on their wedding day in Fès",
+      en: "Close portrait of a couple on their wedding day in Fez",
     },
     secondaryAlt: {
       fr: "Bouquet de fleurs blanches tenu par la mariée",
@@ -73,7 +73,7 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     secondary: "/images/portfolio/interiors/DSC01925.webp",
     heroAlt: {
       fr: "Cour intérieure ornée de zellige et de plâtre sculpté à Fès",
-      en: "Interior courtyard with zellige and carved plaster in Fès",
+      en: "Interior courtyard with zellige and carved plaster in Fez",
     },
     secondaryAlt: {
       fr: "Chambre lumineuse avec détails artisanaux marocains",
@@ -85,7 +85,7 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     secondary: "/images/portfolio/events/IMG_0124-Enhanced-NR.webp",
     heroAlt: {
       fr: "Portrait rapproché d’un couple le jour de son mariage à Fès",
-      en: "Close portrait of a couple on their wedding day in Fès",
+      en: "Close portrait of a couple on their wedding day in Fez",
     },
     secondaryAlt: {
       fr: "Portrait d’un lauréat après une remise de prix",

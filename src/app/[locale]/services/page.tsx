@@ -49,15 +49,12 @@ export default async function ServicesPage({
       <section className="section-space bg-ink text-paper">
         <Container>
           <div className="border-t border-white/12">
-            {services.map((service, index) => (
+            {services.map((service) => (
               <Link
                 key={service.slug}
                 href={`/services/${service.slug}`}
-                className="group grid gap-6 border-b border-white/12 py-8 sm:grid-cols-[5rem_1fr] lg:grid-cols-[5rem_1fr_18rem] lg:items-center lg:py-10"
+                className="group grid gap-6 border-b border-white/12 py-8 lg:grid-cols-[1fr_18rem] lg:items-center lg:py-10"
               >
-                <span className="eyebrow text-sand">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
                 <div>
                   <h2 className="font-display group-hover:text-sand text-[clamp(2.75rem,5vw,5.5rem)] leading-[0.88] tracking-[-0.04em] transition-colors">
                     {service.title[locale]}

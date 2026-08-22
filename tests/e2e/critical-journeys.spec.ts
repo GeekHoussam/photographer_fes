@@ -562,7 +562,7 @@ test("theme initializer renders without React script warnings", async ({
     }
   });
 
-  await page.goto("/en", { waitUntil: "domcontentloaded" });
+  await page.goto("/en/journal", { waitUntil: "domcontentloaded" });
   await waitForHydration(page);
 
   expect(scriptWarnings).toEqual([]);
@@ -821,13 +821,31 @@ test("lightbox supports keyboard navigation and escape", async ({ page }) => {
   await expect(page.getByRole("dialog")).toBeHidden();
 });
 
-test("photo cards and galleries do not expose visual sequence indexes", async ({
-  page,
-}) => {
+test("pages do not expose decorative sequence indexes", async ({ page }) => {
   await page.goto("/fr");
   await waitForHydration(page);
+  await expect(page.getByText(/^0[1-9]$/)).toHaveCount(0);
   await expect(page.getByText(/01\s*\/\s*Mariages/i)).toHaveCount(0);
   await expect(page.getByText(/02\s*\/\s*Événements/i)).toHaveCount(0);
+
+  if ((page.viewportSize()?.width ?? 1280) < 1024) {
+    await page.getByRole("button", { name: "Ouvrir le menu" }).click();
+    await expect(
+      page
+        .getByRole("navigation", { name: "Navigation mobile" })
+        .getByText(/^0[1-9]$/),
+    ).toHaveCount(0);
+  }
+
+  for (const route of [
+    "/en/services",
+    "/en/services/wedding-photography",
+    "/en/process",
+  ]) {
+    await page.goto(route, { waitUntil: "domcontentloaded" });
+    await waitForHydration(page);
+    await expect(page.getByText(/^0[1-9]$/)).toHaveCount(0);
+  }
 
   await page.goto("/fr/portfolio");
   await waitForHydration(page);
@@ -885,6 +903,43 @@ test("reduced motion renders core content", async ({ browser }) => {
   await context.close();
 });
 
+test("English pages consistently use the Fez spelling", async ({ page }) => {
+  const routes = [
+    "/en",
+    "/en/portfolio",
+    "/en/portfolio?media=videos",
+    "/en/services",
+    "/en/about",
+    "/en/contact",
+  ];
+  const accentedFez = /F(?:[èé]|e[\u0300\u0301])s/iu;
+
+  for (const route of routes) {
+    await page.goto(route, { waitUntil: "domcontentloaded" });
+    await waitForHydration(page);
+    const englishSurface = await page.evaluate(() => [
+      document.title,
+      document.body.innerText,
+      ...Array.from(document.querySelectorAll("meta[content]"), (node) =>
+        node.getAttribute("content"),
+      ),
+      ...Array.from(
+        document.querySelectorAll("[alt], [title], [aria-label]"),
+        (node) =>
+          ["alt", "title", "aria-label"]
+            .map((attribute) => node.getAttribute(attribute))
+            .join(" "),
+      ),
+      ...Array.from(
+        document.querySelectorAll('script[type="application/ld+json"]'),
+        (node) => node.textContent,
+      ),
+    ]);
+
+    expect(englishSurface.join(" ")).not.toMatch(accentedFez);
+  }
+});
+
 test("representative French and English pages expose aligned SEO signals", async ({
   page,
 }) => {
@@ -898,7 +953,7 @@ test("representative French and English pages expose aligned SEO signals", async
     {
       path: "/en",
       locale: "en",
-      h1: "Photographer and filmmaker in Fès.",
+      h1: "Photographer and filmmaker in Fez.",
       schemaTypes: ["Person", "WebSite", "ProfessionalService", "WebPage"],
     },
     {
@@ -986,12 +1041,7 @@ test("representative French and English pages expose aligned SEO signals", async
 test("thin pages are noindex and unknown localized routes return 404", async ({
   page,
 }) => {
-  for (const path of [
-    "/fr/journal",
-    "/en/privacy",
-    "/fr/legal",
-    "/en/thank-you",
-  ]) {
+  for (const path of ["/en/privacy", "/fr/legal", "/en/thank-you"]) {
     const response = await page.goto(path, { waitUntil: "domcontentloaded" });
     expect(response?.status()).toBe(200);
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute(

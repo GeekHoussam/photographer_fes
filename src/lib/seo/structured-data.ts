@@ -7,9 +7,15 @@ import {
 } from "@/config/site";
 import type { Locale } from "@/config/site";
 import { getPageContent } from "@/features/content/pages";
+import { journalArticles } from "@/features/journal/articles";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { services } from "@/features/services/services";
-import type { ProjectSummary, ServiceSummary } from "@/types/content";
+import type {
+  JournalArticle,
+  JournalRichText,
+  ProjectSummary,
+  ServiceSummary,
+} from "@/types/content";
 
 type JsonLdValue =
   | string
@@ -78,7 +84,7 @@ function personEntity(locale: Locale) {
         : "Photographer and filmmaker",
     homeLocation: {
       "@type": "Place",
-      name: locale === "fr" ? "Fès, Maroc" : "Fès, Morocco",
+      name: locale === "fr" ? "Fès, Maroc" : "Fez, Morocco",
     },
     ...contactProperties(),
   };
@@ -327,6 +333,121 @@ export function portfolioPageJsonLd(locale: Locale): JsonLdDocument {
   };
 }
 
+function richTextPlainText(content: JournalRichText) {
+  return content
+    .map((segment) => (typeof segment === "string" ? segment : segment.text))
+    .join("");
+}
+
+export function journalPageJsonLd(locale: Locale): JsonLdDocument {
+  const content = getPageContent("journal", locale);
+  const url = localizedUrl(locale, content.path);
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      personEntity(locale),
+      websiteEntity(locale),
+      {
+        ...webPageEntity(
+          locale,
+          content.path,
+          content.metaTitle,
+          content.metaDescription,
+          "CollectionPage",
+        ),
+        "@type": "CollectionPage",
+        mainEntity: { "@id": `${url}#articles` },
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${url}#articles`,
+        numberOfItems: journalArticles.length,
+        itemListElement: journalArticles.map((article, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: article.content[locale].title,
+          url: localizedUrl(locale, `/journal/${article.slug}`),
+          image: absoluteUrl(article.images[0].src),
+        })),
+      },
+    ],
+  };
+}
+
+export function journalArticleJsonLd(
+  locale: Locale,
+  article: JournalArticle,
+): JsonLdDocument {
+  const content = article.content[locale];
+  const path = `/journal/${article.slug}`;
+  const url = localizedUrl(locale, path);
+  const webpageId = `${url}#webpage`;
+  const articleId = `${url}#article`;
+  const breadcrumbId = `${url}#breadcrumb`;
+  const faqId = `${url}#faq`;
+  const cover = article.images[0];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      personEntity(locale),
+      websiteEntity(locale),
+      {
+        ...webPageEntity(
+          locale,
+          path,
+          content.metaTitle,
+          content.metaDescription,
+        ),
+        "@id": webpageId,
+        mainEntity: { "@id": articleId },
+        breadcrumb: { "@id": breadcrumbId },
+      },
+      {
+        "@type": "BlogPosting",
+        "@id": articleId,
+        url,
+        headline: content.title,
+        description: content.metaDescription,
+        image: {
+          "@type": "ImageObject",
+          url: absoluteUrl(cover.src),
+          width: cover.width,
+          height: cover.height,
+          caption: cover.alt[locale],
+        },
+        author: { "@id": entityIds.person },
+        publisher: { "@id": entityIds.person },
+        mainEntityOfPage: { "@id": webpageId },
+        isPartOf: { "@id": entityIds.website },
+        inLanguage: locale,
+      },
+      {
+        "@type": "FAQPage",
+        "@id": faqId,
+        url: `${url}#faq`,
+        inLanguage: locale,
+        mainEntity: content.faqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.question,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: richTextPlainText(faq.answer),
+          },
+        })),
+      },
+      {
+        ...breadcrumbFor(locale, [
+          { name: homeName(locale), path: "" },
+          { name: "Journal", path: "/journal" },
+          { name: content.title, path },
+        ]),
+        "@id": breadcrumbId,
+      },
+    ],
+  };
+}
+
 export function projectPageJsonLd(
   locale: Locale,
   project: ProjectSummary,
@@ -358,7 +479,7 @@ export function projectPageJsonLd(
         creator: { "@id": entityIds.person },
         contentLocation: {
           "@type": "Place",
-          name: project.location,
+          name: project.location[locale],
         },
         associatedMedia: project.gallery.map((image, index) => ({
           "@type": "ImageObject",

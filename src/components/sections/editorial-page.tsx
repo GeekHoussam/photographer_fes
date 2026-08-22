@@ -26,7 +26,7 @@ export function EditorialPage({
         : "Mohammed Laâchach holding a cinema camera on set"
       : fr
         ? "Salon traditionnel de Fès aux boiseries sculptées"
-        : "Traditional Fès interior with carved woodwork";
+        : "Traditional Fez interior with carved woodwork";
 
   return (
     <>
@@ -67,19 +67,14 @@ export function EditorialPage({
                   <li
                     id={`step-${index + 1}`}
                     key={step.title}
-                    className="grid gap-3 border-b border-white/12 py-6 sm:grid-cols-[3rem_1fr]"
+                    className="border-b border-white/12 py-6"
                   >
-                    <span className="eyebrow text-sand">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <div>
-                      <h3 className="font-display text-3xl leading-none">
-                        {step.title}
-                      </h3>
-                      <p className="mt-4 text-sm leading-7 text-white/52">
-                        {step.text}
-                      </p>
-                    </div>
+                    <h3 className="font-display text-3xl leading-none">
+                      {step.title}
+                    </h3>
+                    <p className="mt-4 text-sm leading-7 text-white/52">
+                      {step.text}
+                    </p>
                   </li>
                 ))}
               </ol>
