@@ -5,7 +5,9 @@ import { localize, mapSlug } from "@/lib/sanity/mappers";
 describe("locale helpers", () => {
   it("recognizes supported locales", () => {
     expect(isLocale("fr")).toBe(true);
-    expect(isLocale("ar")).toBe(false);
+    expect(isLocale("en")).toBe(true);
+    expect(isLocale("ar")).toBe(true);
+    expect(isLocale("de")).toBe(false);
   });
   it("falls back from a missing English translation", () =>
     expect(localize({ fr: "Bonjour" }, "en")).toBe("Bonjour"));

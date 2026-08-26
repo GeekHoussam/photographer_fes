@@ -34,7 +34,6 @@ export function RotatingCatalogue({
   locale: Locale;
   items: CatalogueItem[];
 }) {
-  const fr = locale === "fr";
   const rootRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
   const [hidden, setHidden] = useState(false);
@@ -43,27 +42,38 @@ export function RotatingCatalogue({
   const [pageVisible, setPageVisible] = useState(true);
   const [reducedMotion, setReducedMotion] = useState(false);
 
-  const copy = fr
-    ? {
-        region: "Catalogue photographique en rotation",
-        hide: "Masquer le catalogue",
-        show: "Afficher le catalogue",
-        previous: "Image précédente",
-        next: "Image suivante",
-        open: "Ouvrir l'histoire",
-        select: "Afficher",
-        automatic: "Rotation automatique",
-      }
-    : {
-        region: "Rotating photography catalogue",
-        hide: "Hide catalogue",
-        show: "Show catalogue",
-        previous: "Previous image",
-        next: "Next image",
-        open: "Open story",
-        select: "View",
-        automatic: "Automatic rotation",
-      };
+  const copy = {
+    fr: {
+      region: "Catalogue photographique en rotation",
+      hide: "Masquer le catalogue",
+      show: "Afficher le catalogue",
+      previous: "Image précédente",
+      next: "Image suivante",
+      open: "Ouvrir l'histoire",
+      select: "Afficher",
+      automatic: "Rotation automatique",
+    },
+    en: {
+      region: "Rotating photography catalogue",
+      hide: "Hide catalogue",
+      show: "Show catalogue",
+      previous: "Previous image",
+      next: "Next image",
+      open: "Open story",
+      select: "View",
+      automatic: "Automatic rotation",
+    },
+    ar: {
+      region: "كتالوج فوتوغرافي دوّار",
+      hide: "إخفاء الكتالوج",
+      show: "إظهار الكتالوج",
+      previous: "الصورة السابقة",
+      next: "الصورة التالية",
+      open: "فتح السلسلة",
+      select: "عرض",
+      automatic: "دوران تلقائي",
+    },
+  }[locale];
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -218,7 +228,11 @@ export function RotatingCatalogue({
           onClick={previous}
           aria-label={copy.previous}
         >
-          <ChevronLeft aria-hidden="true" className="h-4 w-4" />
+          {locale === "ar" ? (
+            <ChevronRight aria-hidden="true" className="h-4 w-4" />
+          ) : (
+            <ChevronLeft aria-hidden="true" className="h-4 w-4" />
+          )}
         </button>
 
         <div className="catalogue-status" aria-live="polite" aria-atomic="true">
@@ -241,7 +255,11 @@ export function RotatingCatalogue({
           onClick={next}
           aria-label={copy.next}
         >
-          <ChevronRight aria-hidden="true" className="h-4 w-4" />
+          {locale === "ar" ? (
+            <ChevronLeft aria-hidden="true" className="h-4 w-4" />
+          ) : (
+            <ChevronRight aria-hidden="true" className="h-4 w-4" />
+          )}
         </button>
       </div>
     </div>

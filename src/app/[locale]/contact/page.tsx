@@ -32,8 +32,21 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
-  const fr = locale === "fr";
   const content = getPageContent("contact", locale);
+  const copy = {
+    fr: {
+      eyebrow: "Votre demande",
+      help: "Précisez aussi les personnes, espaces ou produits concernés, ainsi que les supports qui utiliseront les images.",
+    },
+    en: {
+      eyebrow: "Your enquiry",
+      help: "Also identify the people, spaces, or products involved and the channels where the images will be used.",
+    },
+    ar: {
+      eyebrow: "طلبك",
+      help: "حدّد أيضًا الأشخاص أو الفضاءات أو المنتجات المعنية، والوسائط التي ستستخدم فيها الصور.",
+    },
+  }[locale];
   return (
     <>
       <JsonLd data={contactPageJsonLd(locale)} />
@@ -46,14 +59,8 @@ export default async function ContactPage({
       <section className="section-space bg-ink text-paper">
         <Container className="grid grid-cols-12 gap-y-14 lg:gap-x-12">
           <div className="col-span-12 lg:col-span-4">
-            <p className="eyebrow text-sand">
-              {fr ? "Votre demande" : "Your enquiry"}
-            </p>
-            <p className="mt-7 max-w-sm leading-8 text-white/48">
-              {fr
-                ? "Précisez aussi les personnes, espaces ou produits concernés, ainsi que les supports qui utiliseront les images."
-                : "Also identify the people, spaces, or products involved and the channels where the images will be used."}
-            </p>
+            <p className="eyebrow text-sand">{copy.eyebrow}</p>
+            <p className="mt-7 max-w-sm leading-8 text-white/48">{copy.help}</p>
             <ContactMethods className="mt-9" />
           </div>
           <div className="col-span-12 lg:col-span-7 lg:col-start-6">

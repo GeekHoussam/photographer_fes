@@ -38,14 +38,23 @@ export function createPageMetadata({
       languages: {
         fr: localizedUrl("fr", path),
         en: localizedUrl("en", path),
+        ar: localizedUrl("ar", path),
         "x-default": localizedUrl("fr", path),
       },
     },
     openGraph: {
       type: openGraphType,
       siteName: brandTitles[locale],
-      locale: locale === "fr" ? "fr_FR" : "en_GB",
-      alternateLocale: locale === "fr" ? ["en_GB"] : ["fr_FR"],
+      locale: {
+        fr: "fr_FR",
+        en: "en_GB",
+        ar: "ar_MA",
+      }[locale],
+      alternateLocale: {
+        fr: ["en_GB", "ar_MA"],
+        en: ["fr_FR", "ar_MA"],
+        ar: ["fr_FR", "en_GB"],
+      }[locale],
       title: absoluteTitle,
       description,
       url: canonical,

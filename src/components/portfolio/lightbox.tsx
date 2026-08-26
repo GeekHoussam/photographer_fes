@@ -27,7 +27,29 @@ export function Lightbox({
   const [index, setIndex] = useState(0);
   const activeTrigger = useRef<HTMLButtonElement | null>(null);
   const touchStart = useRef(0);
-  const fr = locale === "fr";
+  const copy = {
+    fr: {
+      enlarge: "Agrandir",
+      gallery: "Galerie plein écran",
+      close: "Fermer",
+      previous: "Image précédente",
+      next: "Image suivante",
+    },
+    en: {
+      enlarge: "Enlarge",
+      gallery: "Full-screen gallery",
+      close: "Close",
+      previous: "Previous image",
+      next: "Next image",
+    },
+    ar: {
+      enlarge: "تكبير",
+      gallery: "معرض بملء الشاشة",
+      close: "إغلاق",
+      previous: "الصورة السابقة",
+      next: "الصورة التالية",
+    },
+  }[locale];
 
   const previous = () =>
     setIndex((value) => (value - 1 + images.length) % images.length);
@@ -54,14 +76,14 @@ export function Lightbox({
           <button
             key={image.src}
             type="button"
-            className={`group media-frame relative border border-white/10 text-left ${gridLayouts[imageIndex % gridLayouts.length]}`}
+            className={`group media-frame relative border border-white/10 text-start ${gridLayouts[imageIndex % gridLayouts.length]}`}
             style={{ aspectRatio: `${image.width} / ${image.height}` }}
             onClick={(event) => {
               activeTrigger.current = event.currentTarget;
               setIndex(imageIndex);
               setOpen(true);
             }}
-            aria-label={`${fr ? "Agrandir" : "Enlarge"}: ${image.alt[locale]}`}
+            aria-label={`${copy.enlarge}: ${image.alt[locale]}`}
           >
             <Image
               src={image.src}
@@ -88,11 +110,17 @@ export function Lightbox({
           <div
             role="dialog"
             aria-modal="true"
-            aria-label={fr ? "Galerie plein écran" : "Full-screen gallery"}
+            aria-label={copy.gallery}
             className="theme-lock-dark fixed inset-0 z-[var(--z-overlay)] flex flex-col bg-[#070809]/96 p-3 text-white backdrop-blur-xl sm:p-8"
             onKeyDown={(event) => {
-              if (event.key === "ArrowLeft") previous();
-              if (event.key === "ArrowRight") next();
+              if (event.key === "ArrowLeft") {
+                if (locale === "ar") next();
+                else previous();
+              }
+              if (event.key === "ArrowRight") {
+                if (locale === "ar") previous();
+                else next();
+              }
             }}
             onTouchStart={(event) => {
               touchStart.current = event.touches[0]?.clientX ?? 0;
@@ -101,7 +129,10 @@ export function Lightbox({
               const end = event.changedTouches[0]?.clientX ?? 0;
               const delta = end - touchStart.current;
               if (Math.abs(delta) > 50) {
-                if (delta > 0) previous();
+                if (delta > 0) {
+                  if (locale === "ar") next();
+                  else previous();
+                } else if (locale === "ar") previous();
                 else next();
               }
             }}
@@ -110,7 +141,7 @@ export function Lightbox({
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label={fr ? "Fermer" : "Close"}
+                aria-label={copy.close}
                 className="hover:border-sand hover:text-sand focus-visible:ring-sand inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 transition-colors focus-visible:ring-2"
               >
                 <X aria-hidden="true" />
@@ -120,10 +151,14 @@ export function Lightbox({
               <button
                 type="button"
                 onClick={previous}
-                aria-label={fr ? "Image précédente" : "Previous image"}
+                aria-label={copy.previous}
                 className="hover:border-sand hover:text-sand focus-visible:ring-sand inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 transition-colors focus-visible:ring-2"
               >
-                <ChevronLeft aria-hidden="true" />
+                {locale === "ar" ? (
+                  <ChevronRight aria-hidden="true" />
+                ) : (
+                  <ChevronLeft aria-hidden="true" />
+                )}
               </button>
               <div className="flex min-h-0 flex-1 flex-col items-center justify-center">
                 <div
@@ -148,10 +183,14 @@ export function Lightbox({
               <button
                 type="button"
                 onClick={next}
-                aria-label={fr ? "Image suivante" : "Next image"}
+                aria-label={copy.next}
                 className="hover:border-sand hover:text-sand focus-visible:ring-sand inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/20 transition-colors focus-visible:ring-2"
               >
-                <ChevronRight aria-hidden="true" />
+                {locale === "ar" ? (
+                  <ChevronLeft aria-hidden="true" />
+                ) : (
+                  <ChevronRight aria-hidden="true" />
+                )}
               </button>
             </div>
           </div>

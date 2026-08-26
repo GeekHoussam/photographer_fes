@@ -198,14 +198,18 @@ test("shared page titles keep readable spacing across page types", async ({
   }
 });
 
-test("language switching keeps the corresponding path", async ({ page }) => {
-  await page.goto("/fr/services");
+test("language switching keeps the corresponding path and query", async ({
+  page,
+}) => {
+  await page.goto("/fr/portfolio?media=videos&category=event");
   await waitForHydration(page);
   if ((page.viewportSize()?.width ?? 1280) < 1024) {
     await page.getByRole("button", { name: "Ouvrir le menu" }).click();
   }
-  await page.getByRole("button", { name: "Switch to English" }).click();
-  await expect(page).toHaveURL(/\/en\/services/);
+  await page
+    .getByRole("link", { name: "Afficher cette page en English" })
+    .click();
+  await expect(page).toHaveURL(/\/en\/portfolio\?media=videos&category=event/);
 });
 
 test("portfolio category disclosure is accessible and preserves selection", async ({
@@ -762,6 +766,11 @@ test("direct Contact fallback renders without JavaScript", async ({
       title: "Demander un devis photo ou vidéo.",
       emailLabel: /Photographie et demandes générales/,
     },
+    {
+      path: "/ar/contact",
+      title: "اطلب عرض سعر للتصوير الفوتوغرافي أو الفيديو.",
+      emailLabel: /التصوير الفوتوغرافي والطلبات العامة/,
+    },
   ];
 
   for (const route of routes) {
@@ -990,6 +999,9 @@ test("representative French and English pages expose aligned SEO signals", async
     ).toHaveCount(1);
     await expect(
       page.locator('link[rel="alternate"][hreflang="en"]'),
+    ).toHaveCount(1);
+    await expect(
+      page.locator('link[rel="alternate"][hreflang="ar"]'),
     ).toHaveCount(1);
     await expect(
       page.locator('link[rel="alternate"][hreflang="x-default"]'),

@@ -29,22 +29,31 @@ export default async function ThankYouPage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
-  const fr = locale === "fr";
   const content = getPageContent("thankYou", locale);
+  const copy = {
+    fr: {
+      eyebrow: "Message envoyé",
+      action: "Voir les séries photographiques",
+    },
+    en: {
+      eyebrow: "Message sent",
+      action: "View the photography series",
+    },
+    ar: {
+      eyebrow: "تم إرسال الرسالة",
+      action: "عرض السلاسل الفوتوغرافية",
+    },
+  }[locale];
   return (
     <section className="bg-ink text-paper flex min-h-[75vh] items-center pt-20">
       <Container>
-        <p className="eyebrow text-sand">
-          {fr ? "Message envoyé" : "Message sent"}
-        </p>
+        <p className="eyebrow text-sand">{copy.eyebrow}</p>
         <h1 className="display-page mt-6 max-w-4xl">{content.h1}</h1>
         <p className="mt-7 max-w-xl text-base leading-8 text-white/55">
           {content.introduction}
         </p>
         <ButtonLink href="/portfolio" className="bg-paper text-ink mt-10">
-          {fr
-            ? "Voir les séries photographiques"
-            : "View the photography series"}
+          {copy.action}
         </ButtonLink>
       </Container>
     </section>

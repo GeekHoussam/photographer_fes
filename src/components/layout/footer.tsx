@@ -17,6 +17,11 @@ export async function Footer() {
     getTranslations("Navigation"),
     getLocale(),
   ]);
+  const copy = {
+    fr: { location: "Fès · Maroc", navigation: "Navigation de pied de page" },
+    en: { location: "Fez · Morocco", navigation: "Footer navigation" },
+    ar: { location: "فاس · المغرب", navigation: "التنقل في تذييل الصفحة" },
+  }[locale as "fr" | "en" | "ar"];
 
   return (
     <footer className="bg-ink text-paper relative overflow-hidden border-t border-white/10 py-16 sm:py-24">
@@ -24,9 +29,7 @@ export async function Footer() {
       <Container>
         <div className="grid gap-16 lg:grid-cols-[1.4fr_0.6fr]">
           <div>
-            <p className="eyebrow text-sand">
-              {locale === "fr" ? "Fès · Maroc" : "Fez · Morocco"}
-            </p>
+            <p className="eyebrow text-sand">{copy.location}</p>
             <p className="display-section mt-7 max-w-5xl">
               Mohammed
               <br />
@@ -36,14 +39,7 @@ export async function Footer() {
               {t("tagline")}
             </p>
           </div>
-          <nav
-            aria-label={
-              locale === "fr"
-                ? "Navigation de pied de page"
-                : "Footer navigation"
-            }
-            className="lg:pt-20"
-          >
+          <nav aria-label={copy.navigation} className="lg:pt-20">
             {footerLinks.map(([label, href]) => (
               <Link
                 key={href}
@@ -61,7 +57,8 @@ export async function Footer() {
         </div>
         <div className="mt-20 flex flex-col gap-5 border-t border-white/10 pt-7 text-[0.65rem] tracking-[0.12em] text-white/35 uppercase sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} Mohammed Laâchach. {t("rights")}
+            <bdi dir="ltr">© {new Date().getFullYear()} Mohammed Laâchach.</bdi>{" "}
+            {t("rights")}
           </p>
           <div className="flex gap-6">
             <Link

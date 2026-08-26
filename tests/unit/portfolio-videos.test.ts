@@ -79,6 +79,8 @@ describe("NOM Films portfolio video inventory", () => {
       expect(getVideoEmbedUrl(video.videoId)).toBe(
         `https://www.youtube-nocookie.com/embed/${video.videoId}`,
       );
+      expect(video.titleByLocale.ar.trim().length).toBeGreaterThan(0);
+      expect(video.titleByLocale.fr).toBe(video.title);
     }
   });
 

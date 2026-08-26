@@ -51,7 +51,58 @@ export default async function ProjectPage({
       (projectIndex - 1 + portfolioProjects.length) % portfolioProjects.length
     ];
   const next = portfolioProjects[(projectIndex + 1) % portfolioProjects.length];
-  const fr = locale === "fr";
+  const copy = {
+    fr: {
+      location: "Lieu",
+      published: "Série publiée",
+      photographs: (count: number) => `${count} photographies`,
+      breadcrumb: "Fil d’Ariane",
+      home: "Accueil",
+      portfolio: "Portfolio",
+      series: "La série",
+      service: (category: string) =>
+        `Découvrir le service ${category.toLowerCase()}`,
+      adjacent: "Projets adjacents",
+      previous: "Projet précédent",
+      next: "Projet suivant",
+      contactTitle: "Un projet photo ou vidéo ?",
+      action: "Présenter votre demande",
+    },
+    en: {
+      location: "Location",
+      published: "Published series",
+      photographs: (count: number) => `${count} photographs`,
+      breadcrumb: "Breadcrumb",
+      home: "Home",
+      portfolio: "Portfolio",
+      series: "The series",
+      service: (category: string) =>
+        `Explore the ${category.toLowerCase()} service`,
+      adjacent: "Adjacent projects",
+      previous: "Previous project",
+      next: "Next project",
+      contactTitle: "A photography or film project?",
+      action: "Describe your enquiry",
+    },
+    ar: {
+      location: "المكان",
+      published: "سلسلة منشورة",
+      photographs: (count: number) => {
+        const value = new Intl.NumberFormat("ar-MA").format(count);
+        return `${value} ${count >= 3 && count <= 10 ? "صور فوتوغرافية" : "صورة فوتوغرافية"}`;
+      },
+      breadcrumb: "مسار التنقل",
+      home: "الرئيسية",
+      portfolio: "معرض الأعمال",
+      series: "السلسلة",
+      service: (category: string) => `اكتشف خدمة ${category}`,
+      adjacent: "المشاريع المجاورة",
+      previous: "المشروع السابق",
+      next: "المشروع التالي",
+      contactTitle: "هل لديك مشروع تصوير فوتوغرافي أو فيديو؟",
+      action: "عرّف بطلبك",
+    },
+  }[locale];
   const relatedServiceByCategory = {
     weddings: "wedding-photography",
     events: "event-photography",
@@ -86,17 +137,13 @@ export default async function ProjectPage({
           </div>
           <dl className="col-span-12 grid grid-cols-2 gap-7 border-t border-white/15 pt-6 text-sm lg:col-span-6 lg:col-start-7">
             <div>
-              <dt className="eyebrow text-white/38">
-                {fr ? "Lieu" : "Location"}
-              </dt>
+              <dt className="eyebrow text-white/38">{copy.location}</dt>
               <dd className="mt-2 text-white/75">{project.location[locale]}</dd>
             </div>
             <div>
-              <dt className="eyebrow text-white/38">
-                {fr ? "Série publiée" : "Published series"}
-              </dt>
+              <dt className="eyebrow text-white/38">{copy.published}</dt>
               <dd className="mt-2 text-white/75">
-                {project.gallery.length} {fr ? "photographies" : "photographs"}
+                {copy.photographs(project.gallery.length)}
               </dd>
             </div>
           </dl>
@@ -106,17 +153,17 @@ export default async function ProjectPage({
       <section className="section-space">
         <Container className="grid grid-cols-12 gap-y-10">
           <nav
-            aria-label={fr ? "Fil d’Ariane" : "Breadcrumb"}
+            aria-label={copy.breadcrumb}
             className="col-span-12 flex flex-wrap gap-2 text-xs tracking-[0.12em] text-white/45 uppercase"
           >
-            <Link href="/">{fr ? "Accueil" : "Home"}</Link>
+            <Link href="/">{copy.home}</Link>
             <span aria-hidden="true">/</span>
-            <Link href="/portfolio">Portfolio</Link>
+            <Link href="/portfolio">{copy.portfolio}</Link>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{project.title[locale]}</span>
           </nav>
           <p className="eyebrow text-sand col-span-12 lg:col-span-3">
-            {fr ? "La série" : "The series"}
+            {copy.series}
           </p>
           <div className="col-span-12 lg:col-span-7 lg:col-start-5">
             <p className="font-display text-[clamp(2.75rem,5vw,5.6rem)] leading-[0.92] tracking-[-0.035em]">
@@ -130,9 +177,7 @@ export default async function ProjectPage({
                 href={`/services/${relatedService}`}
                 className="text-link-arrow mt-8 inline-flex"
               >
-                {fr
-                  ? `Découvrir le service ${project.categoryLabel.fr.toLowerCase()}`
-                  : `Explore the ${project.categoryLabel.en.toLowerCase()} service`}
+                {copy.service(project.categoryLabel[locale])}
               </Link>
             ) : null}
           </div>
@@ -143,32 +188,41 @@ export default async function ProjectPage({
         <Lightbox locale={locale} images={project.gallery} />
       </Container>
 
-      <nav
-        aria-label={fr ? "Projets adjacents" : "Adjacent projects"}
-        className="border-y border-white/10"
-      >
+      <nav aria-label={copy.adjacent} className="border-y border-white/10">
         <Container className="grid sm:grid-cols-2">
           <Link
             href={`/portfolio/${previous?.slug ?? project.slug}`}
-            className="group border-b border-white/10 py-8 sm:border-r sm:border-b-0 sm:pr-10"
+            className="group border-b border-white/10 py-8 sm:border-e sm:border-b-0 sm:pe-10"
           >
             <span className="eyebrow text-sand flex items-center gap-2">
-              <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-              {fr ? "Projet précédent" : "Previous project"}
+              {locale === "ar" ? (
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              ) : (
+                <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              )}
+              {copy.previous}
             </span>
-            <span className="font-display mt-5 block text-4xl leading-none transition-transform group-hover:-translate-x-1">
+            <span
+              className={`font-display mt-5 block text-4xl leading-none transition-transform ${locale === "ar" ? "group-hover:translate-x-1" : "group-hover:-translate-x-1"}`}
+            >
               {previous?.title[locale]}
             </span>
           </Link>
           <Link
             href={`/portfolio/${next?.slug ?? project.slug}`}
-            className="group py-8 sm:pl-10 sm:text-right"
+            className="group py-8 sm:ps-10 sm:text-end"
           >
             <span className="eyebrow text-sand flex items-center justify-end gap-2">
-              {fr ? "Projet suivant" : "Next project"}
-              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              {copy.next}
+              {locale === "ar" ? (
+                <ArrowLeft aria-hidden="true" className="h-4 w-4" />
+              ) : (
+                <ArrowRight aria-hidden="true" className="h-4 w-4" />
+              )}
             </span>
-            <span className="font-display mt-5 block text-4xl leading-none transition-transform group-hover:translate-x-1">
+            <span
+              className={`font-display mt-5 block text-4xl leading-none transition-transform ${locale === "ar" ? "group-hover:-translate-x-1" : "group-hover:translate-x-1"}`}
+            >
               {next?.title[locale]}
             </span>
           </Link>
@@ -178,12 +232,10 @@ export default async function ProjectPage({
       <section className="bg-sand text-ink relative overflow-hidden py-24">
         <Container className="relative flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
           <h2 className="font-display text-[clamp(3.75rem,7vw,7rem)] leading-[0.82] tracking-[-0.045em]">
-            {fr
-              ? "Un projet photo ou vidéo ?"
-              : "A photography or film project?"}
+            {copy.contactTitle}
           </h2>
           <ButtonLink href="/contact" variant="inverse">
-            {fr ? "Présenter votre demande" : "Describe your enquiry"}
+            {copy.action}
           </ButtonLink>
         </Container>
       </section>

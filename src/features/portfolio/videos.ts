@@ -4,37 +4,49 @@ export const videoCategoryDefinitions = [
   {
     slug: "commercial-advertising",
     workbookCategory: "Commercial / Advertising",
-    label: { fr: "Commercial / Publicité", en: "Commercial / Advertising" },
+    label: {
+      fr: "Commercial / Publicité",
+      en: "Commercial / Advertising",
+      ar: "إعلان تجاري",
+    },
   },
   {
     slug: "corporate-event",
     workbookCategory: "Corporate Event",
-    label: { fr: "Événement corporate", en: "Corporate Event" },
+    label: {
+      fr: "Événement corporate",
+      en: "Corporate Event",
+      ar: "فعالية للشركات",
+    },
   },
   {
     slug: "corporate-film",
     workbookCategory: "Corporate Film",
-    label: { fr: "Film corporate", en: "Corporate Film" },
+    label: {
+      fr: "Film corporate",
+      en: "Corporate Film",
+      ar: "فيلم للشركات",
+    },
   },
   {
     slug: "documentary",
     workbookCategory: "Documentary",
-    label: { fr: "Documentaire", en: "Documentary" },
+    label: { fr: "Documentaire", en: "Documentary", ar: "وثائقي" },
   },
   {
     slug: "event",
     workbookCategory: "Event",
-    label: { fr: "Événement", en: "Event" },
+    label: { fr: "Événement", en: "Event", ar: "فعالية" },
   },
   {
     slug: "showreel",
     workbookCategory: "Showreel",
-    label: { fr: "Showreel", en: "Showreel" },
+    label: { fr: "Showreel", en: "Showreel", ar: "شريط استعراضي" },
   },
   {
     slug: "travel",
     workbookCategory: "Travel",
-    label: { fr: "Voyage", en: "Travel" },
+    label: { fr: "Voyage", en: "Travel", ar: "سفر" },
   },
   {
     slug: "music-video",
@@ -42,12 +54,13 @@ export const videoCategoryDefinitions = [
     label: {
       fr: "Clip vidéo / Vidéo musicale",
       en: "Video Clip / Music Video",
+      ar: "فيديو كليب / فيديو موسيقي",
     },
   },
   {
     slug: "wedding",
     workbookCategory: "Wedding",
-    label: { fr: "Mariage", en: "Wedding" },
+    label: { fr: "Mariage", en: "Wedding", ar: "حفل زفاف" },
   },
 ] as const;
 
@@ -57,6 +70,7 @@ type ThumbnailQuality = "maxresdefault" | "sddefault" | "hqdefault";
 
 export type PortfolioVideo = {
   title: string;
+  titleByLocale: Record<Locale, string>;
   videoId: string;
   youtubeUrl: string;
   category: VideoCategory;
@@ -385,6 +399,56 @@ const sourceVideos = [
   ],
 ] as const satisfies readonly SourceVideo[];
 
+const arabicTitleByVideoId = {
+  hwRnxpTd0Sw: "Smedian 2025 — مصور فعاليات في المغرب",
+  "0SQLAEjS8rg": "مونتاج فيديو زفاف — Lisa وFabien 4K",
+  yG7k5c7H0TQ: "مونتاج فيديو زفاف — Vanessa وSylvain 4K",
+  Oc5_dA0wNbc: "ملكة بلجيكا في الدار البيضاء",
+  eo6C0Xbxm0g: "فيلم مؤسساتي في المغرب — ITSA SH (تحاليل فيزيائية وكيميائية)",
+  "fNeOPXDlj-c": "مناقشة أطروحة دكتوراه في المغرب — تصوير متعدد الكاميرات",
+  VJlS_f4391s: "INWI — العمل معًا | أفضل اللقطات",
+  "5R2yrSbta6E": "EFA — حفل تخرج 2018 | NOM Films",
+  pgkUHijHiPc: "صانع أفلام زفاف في المغرب — Widad وAnas",
+  gz4gsmoSbXo: "EHTP ENTREPRISES 2018 — أفضل اللقطات",
+  _krTO4_MECg: "تجميعة NOM FILMS لعام 2020",
+  BAn5dW6SQhM:
+    "الرابطة المحمدية للعلماء - الكلمة الافتتاحية للمنتدى الاقليمي - ا.د احمد عبادي",
+  M1A0xXfhSJc: "فيلم فعالية في المغرب — جولة INWI Business وCFCIM",
+  m13WS5HmRSw: "المعاهد الفلاحية بجهة خنيفرة - بني ملال",
+  jJ_Hd2FnfBk: "رحلة في المغرب 2023 — ADAMA | من إنتاج NOM Films",
+  EPsGVE1K9Z4:
+    "Ummah Relief تدعم المتضررين من الزلزال في المغرب — من إنتاج NOM Films",
+  j41rP5oVH34: "جمعية الحق والعدالة — أفضل لقطات فعالية المضيق",
+  XPqQsqrK83Y: "أفضل لقطات MAROC WEB FTOUR — فطور رمضان مع Amine Raghib في فاس",
+  phuGhBW6lfI: "Sodap Maroc وSuper Cérame | أفضل لقطات المسابقة الوطنية",
+  qLhCXIvQOa8: "Orange وSofrecom — أفضل اللقطات",
+  ATPE1M7cf6w: "Docker Motocycles — يوم الموزعين 2019 — أفضل اللقطات",
+  oS5dLwFFseA: "عرض سينمائي للمغرب — NOM FILMS",
+  HnID1mKUrxg: "فعالية Cremai 2023 — Lesaffre Maroc | NOM Films",
+  "eemIo-p32_c": "احمد السعيد - شحال غزالة (فيديو كليب حصري)",
+  wYD_2Hi7XFc: "CREDIT DU MAROC — فيلم فعالية (أفضل اللقطات)",
+  gfPBbFgK1GE: "SPAB Maroc — مراحل الإنتاج — فيلم شركة",
+  vdKDtVcRKcE: "MAZARS — أفضل لقطات التدريب — من إنتاج NOM FILMS",
+  AxG6DcoIGfQ: "فيلم إعلاني — VROOM — من إنتاج NOM FILMS",
+  wFmxkMxjINs: "فيلم مؤسساتي في المغرب",
+  sevSTusXx6c:
+    "المهرجان الوطني لفنون الشارع، الدورة الثالثة في فاس — من إنتاج NOM FILMS",
+  "oLs8aa-z5Ro": "فيلم للشركات | GIANTLINK — من إنتاج NOM FILMS",
+  XxmZcJGFnM8: "وثائقي مغربي — NEJMA (قصة حقيقية)",
+  cGewLNvFHRs: "CFCIM — الأمسية الاقتصادية رقم 1000 — NOM FILMS",
+  "6IvFhB1KiII": "شريط استعراضي 2020 — NOM FILMS",
+  "ZnyEmw-TlxQ": "المغرب في ظل فيروس كورونا — تصوير سينمائي",
+  CPEDCDXkiQw: "تصوير سينمائي للمغرب — رحلة في المغرب 2020",
+  XtqmKDqIWeo: "الرابطة المحمدية للعلماء 2019",
+  WB6RlTIxtEA: "مطعم Benthai فاس — شريط استعراضي",
+  e7CMRHCQVqQ: "سطح المدينة العتيقة في فاس — فيديو من منظور الشخص الأول",
+  _eECOnRUsEY: "مطعم Benthai — إفطاران ياباني وتايلاندي",
+  MkdqPhVj0B4: "مطعم Benthai — إفطار رمضان التايلاندي",
+  "2HNDtgh8cQE": "مطعم Benthai — إفطار رمضان الياباني",
+  "D3-Y-Iipomo": "سطح المدينة العتيقة في فاس — عصير برتقال",
+  Yv7AHKH1Eck: "سطح المدينة العتيقة في فاس — عصير 1",
+} satisfies Record<(typeof sourceVideos)[number][1], string>;
+
 const definitionBySlug = new Map(
   videoCategoryDefinitions.map((definition) => [definition.slug, definition]),
 );
@@ -411,6 +475,11 @@ export const portfolioVideos: PortfolioVideo[] = sourceVideos.map(
 
     return {
       title,
+      titleByLocale: {
+        fr: title,
+        en: title.replace(/F(?:[èé]|e[\u0300\u0301])s/giu, "Fez"),
+        ar: arabicTitleByVideoId[videoId],
+      },
       videoId,
       youtubeUrl:
         contentType === "short"

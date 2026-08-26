@@ -20,7 +20,26 @@ export function HeroOrbitGallery({
   items: OrbitItem[];
   locale: Locale;
 }) {
-  const fr = locale === "fr";
+  const copy = {
+    fr: {
+      hideGallery: "Masquer la galerie",
+      showGallery: "Afficher la galerie",
+      hide: "Masquer",
+      gallery: "Galerie",
+    },
+    en: {
+      hideGallery: "Hide gallery",
+      showGallery: "Show gallery",
+      hide: "Hide",
+      gallery: "Gallery",
+    },
+    ar: {
+      hideGallery: "إخفاء المعرض",
+      showGallery: "إظهار المعرض",
+      hide: "إخفاء",
+      gallery: "المعرض",
+    },
+  }[locale];
   const [open, setOpen] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -50,15 +69,7 @@ export function HeroOrbitGallery({
         type="button"
         className="hero-orbit-trigger"
         aria-expanded={open}
-        aria-label={
-          open
-            ? fr
-              ? "Masquer la galerie"
-              : "Hide gallery"
-            : fr
-              ? "Afficher la galerie"
-              : "Show gallery"
-        }
+        aria-label={open ? copy.hideGallery : copy.showGallery}
         onClick={() => {
           if (open) {
             setOpen(false);
@@ -74,9 +85,7 @@ export function HeroOrbitGallery({
         ) : (
           <Images aria-hidden="true" className="h-4 w-4" />
         )}
-        <span>
-          {open ? (fr ? "Masquer" : "Hide") : fr ? "Galerie" : "Gallery"}
-        </span>
+        <span>{open ? copy.hide : copy.gallery}</span>
       </button>
 
       <div className="hero-orbit-track">

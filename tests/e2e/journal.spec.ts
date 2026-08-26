@@ -9,18 +9,21 @@ const articles = [
     slug: "photographe-mariage-fes",
     fr: "Votre photographe de mariage à Fès",
     en: "Your wedding photographer in Fez",
+    ar: "مصور حفل زفافك في فاس",
     videoIds: ["pgkUHijHiPc"],
   },
   {
     slug: "photographe-evenementiel-fes",
     fr: "Revivez votre événement en photo et vidéo",
     en: "Relive your event through photography and film",
+    ar: "استعد أجواء فعاليتك بالصور والفيديو",
     videoIds: ["HmHS5l-KxUw", "2qof4UTBzZk"],
   },
   {
     slug: "photographe-reseaux-sociaux-fes",
     fr: "Réussir votre présence sur les réseaux sociaux",
     en: "Build a stronger social media presence",
+    ar: "عزّز حضورك على شبكات التواصل الاجتماعي",
     videoIds: ["CkAa7Lae5LU", "a4PxHBb83PA"],
   },
 ] as const;
@@ -28,7 +31,7 @@ const articles = [
 test("Journal indexes list the same three localized articles", async ({
   page,
 }) => {
-  for (const locale of ["fr", "en"] as const) {
+  for (const locale of ["fr", "en", "ar"] as const) {
     await page.goto(`/${locale}/journal`);
     await waitForHydration(page);
     await expect(page.locator("[data-journal-card]")).toHaveCount(3);
@@ -51,7 +54,7 @@ test("Journal indexes list the same three localized articles", async ({
       await expect(
         page
           .getByRole("link", {
-            name: `${locale === "fr" ? "Lire l’article" : "Read article"} : ${title}`,
+            name: `${{ fr: "Lire l’article", en: "Read article", ar: "قراءة المقال" }[locale]}: ${title}`,
           })
           .first(),
       ).toHaveAttribute("href", `/${locale}/journal/${article.slug}`);
@@ -59,7 +62,7 @@ test("Journal indexes list the same three localized articles", async ({
   }
 });
 
-for (const locale of ["fr", "en"] as const) {
+for (const locale of ["fr", "en", "ar"] as const) {
   for (const article of articles) {
     test(`${locale} Journal article ${article.slug} renders complete media, SEO, and interaction`, async ({
       page,
@@ -84,7 +87,11 @@ for (const locale of ["fr", "en"] as const) {
       await expect(
         page
           .getByRole("link", {
-            name: locale === "fr" ? /Présenter|stratégie/ : /Describe/,
+            name: {
+              fr: /Présenter|stratégie/,
+              en: /Describe/,
+              ar: /عرّف|استراتيجية/,
+            }[locale],
           })
           .first(),
       ).toBeVisible();
@@ -93,7 +100,7 @@ for (const locale of ["fr", "en"] as const) {
         .locator('link[rel="canonical"]')
         .getAttribute("href");
       expect(new URL(canonical!).pathname).toBe(route);
-      for (const alternateLocale of ["fr", "en"] as const) {
+      for (const alternateLocale of ["fr", "en", "ar"] as const) {
         await expect(
           page.locator(`link[rel="alternate"][hreflang="${alternateLocale}"]`),
         ).toHaveAttribute(
@@ -145,10 +152,12 @@ test("language switching keeps every Journal article slug", async ({
     if ((page.viewportSize()?.width ?? 1280) < 1024) {
       await page.getByRole("button", { name: "Ouvrir le menu" }).click();
     }
-    await page.getByRole("button", { name: "Switch to English" }).click();
-    await expect(page).toHaveURL(new RegExp(`/en/journal/${article.slug}/?$`));
+    await page
+      .getByRole("link", { name: "Afficher cette page en العربية" })
+      .click();
+    await expect(page).toHaveURL(new RegExp(`/ar/journal/${article.slug}/?$`));
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-      article.en,
+      article.ar,
     );
   }
 });

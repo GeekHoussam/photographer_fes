@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale } from "next-intl";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/common/button";
+import type { Locale } from "@/config/site";
 import {
   contactSchema,
   projectTypes,
@@ -13,6 +14,158 @@ import {
 const fieldClass =
   "contact-form-control mt-2 min-h-14 w-full rounded-xl border border-white/12 bg-white/[0.035] px-4 py-3 text-base text-paper outline-none transition-all placeholder:text-white/25 hover:border-white/25 focus:border-sand focus:bg-white/[0.06]";
 
+type ContactFormCopy = {
+  subject: (name: string) => string;
+  mailLabels: {
+    name: string;
+    phone: string;
+    project: string;
+    date: string;
+    location: string;
+    budget: string;
+  };
+  sendFailure: string;
+  successTitle: string;
+  mailOpened: string;
+  sent: string;
+  error: string;
+  name: string;
+  phone: string;
+  projectType: string;
+  preferredDate: string;
+  location: string;
+  budget: string;
+  optional: string;
+  message: string;
+  messageError: string;
+  consent: string;
+  sending: string;
+  submit: string;
+  projectTypes: Record<(typeof projectTypes)[number], string>;
+};
+
+const contactFormCopy: Record<Locale, ContactFormCopy> = {
+  fr: {
+    subject: (name) => `Demande photo — ${name}`,
+    mailLabels: {
+      name: "Nom",
+      phone: "Téléphone",
+      project: "Projet",
+      date: "Date",
+      location: "Lieu",
+      budget: "Budget",
+    },
+    sendFailure: "L'envoi a échoué. Veuillez réessayer plus tard.",
+    successTitle: "Merci pour votre message.",
+    mailOpened: "Votre application e-mail a été ouverte avec votre message.",
+    sent: "Votre demande a bien été transmise.",
+    error: "Vérifiez ce champ.",
+    name: "Nom",
+    phone: "Téléphone ou WhatsApp",
+    projectType: "Type de projet",
+    preferredDate: "Date souhaitée",
+    location: "Lieu",
+    budget: "Budget estimé",
+    optional: "Facultatif",
+    message: "Votre message",
+    messageError: "Ajoutez au moins 20 caractères.",
+    consent:
+      "J'accepte que mes informations soient utilisées pour répondre à cette demande.",
+    sending: "Envoi…",
+    submit: "Envoyer la demande",
+    projectTypes: {
+      wedding: "Mariage",
+      event: "Événement",
+      corporate: "Corporate",
+      product: "Produit",
+      food: "Gastronomie",
+      hospitality: "Hôtellerie ou intérieur",
+      portrait: "Portrait",
+      video: "Vidéo",
+      other: "Autre projet",
+    },
+  },
+  en: {
+    subject: (name) => `Photography enquiry — ${name}`,
+    mailLabels: {
+      name: "Name",
+      phone: "Phone",
+      project: "Project",
+      date: "Date",
+      location: "Location",
+      budget: "Budget",
+    },
+    sendFailure: "Sending failed. Please try again later.",
+    successTitle: "Thank you for your message.",
+    mailOpened: "Your email application has opened with your message.",
+    sent: "Your enquiry has been sent.",
+    error: "Please check this field.",
+    name: "Name",
+    phone: "Phone or WhatsApp",
+    projectType: "Project type",
+    preferredDate: "Preferred date",
+    location: "Location",
+    budget: "Estimated budget",
+    optional: "Optional",
+    message: "Your message",
+    messageError: "Please add at least 20 characters.",
+    consent:
+      "I agree that my information may be used to respond to this enquiry.",
+    sending: "Sending…",
+    submit: "Send enquiry",
+    projectTypes: {
+      wedding: "Wedding",
+      event: "Event",
+      corporate: "Corporate",
+      product: "Product",
+      food: "Food",
+      hospitality: "Hospitality or interior",
+      portrait: "Portrait",
+      video: "Film",
+      other: "Other project",
+    },
+  },
+  ar: {
+    subject: (name) => `طلب تصوير — ${name}`,
+    mailLabels: {
+      name: "الاسم",
+      phone: "الهاتف",
+      project: "المشروع",
+      date: "التاريخ",
+      location: "المكان",
+      budget: "الميزانية",
+    },
+    sendFailure: "تعذر الإرسال. يرجى المحاولة مرة أخرى لاحقًا.",
+    successTitle: "شكرًا على رسالتك.",
+    mailOpened: "فُتح تطبيق البريد الإلكتروني ومعه رسالتك.",
+    sent: "تم إرسال طلبك بنجاح.",
+    error: "يرجى التحقق من هذا الحقل.",
+    name: "الاسم",
+    phone: "الهاتف أو WhatsApp",
+    projectType: "نوع المشروع",
+    preferredDate: "التاريخ المفضل",
+    location: "المكان",
+    budget: "الميزانية التقديرية",
+    optional: "اختياري",
+    message: "رسالتك",
+    messageError: "يرجى إضافة 20 حرفًا على الأقل.",
+    consent: "أوافق على استخدام معلوماتي للرد على هذا الطلب.",
+    sending: "جارٍ الإرسال…",
+    submit: "إرسال الطلب",
+    projectTypes: {
+      wedding: "حفل زفاف",
+      event: "فعالية",
+      corporate: "شركة",
+      product: "منتج",
+      food: "أطعمة",
+      hospitality: "ضيافة أو فضاء داخلي",
+      portrait: "صور شخصية",
+      video: "فيديو",
+      other: "مشروع آخر",
+    },
+  },
+};
+
 export function ContactForm({
   idPrefix = "contact-form",
   variant = "default",
@@ -20,8 +173,8 @@ export function ContactForm({
   idPrefix?: string;
   variant?: "default" | "dialog";
 }) {
-  const locale = useLocale();
-  const fr = locale === "fr";
+  const locale = useLocale() as Locale;
+  const copy = contactFormCopy[locale];
   const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
   const {
     register,
@@ -46,17 +199,16 @@ export function ContactForm({
 
   async function submit(values: ContactInput) {
     if (contactEmail) {
-      const subject = fr
-        ? `Demande photo — ${values.name}`
-        : `Photography enquiry — ${values.name}`;
+      const subject = copy.subject(values.name);
+      const labels = copy.mailLabels;
       const body = [
-        `${fr ? "Nom" : "Name"}: ${values.name}`,
+        `${labels.name}: ${values.name}`,
         `Email: ${values.email}`,
-        `${fr ? "Téléphone" : "Phone"}: ${values.phone || "—"}`,
-        `${fr ? "Projet" : "Project"}: ${values.projectType}`,
-        `${fr ? "Date" : "Date"}: ${values.preferredDate || "—"}`,
-        `${fr ? "Lieu" : "Location"}: ${values.location}`,
-        `${fr ? "Budget" : "Budget"}: ${values.budget || "—"}`,
+        `${labels.phone}: ${values.phone || "—"}`,
+        `${labels.project}: ${copy.projectTypes[values.projectType]}`,
+        `${labels.date}: ${values.preferredDate || "—"}`,
+        `${labels.location}: ${values.location}`,
+        `${labels.budget}: ${values.budget || "—"}`,
         "",
         values.message,
       ].join("\n");
@@ -73,9 +225,7 @@ export function ContactForm({
     });
     if (!response.ok)
       setError("root", {
-        message: fr
-          ? "L'envoi a échoué. Veuillez réessayer plus tard."
-          : "Sending failed. Please try again later.",
+        message: copy.sendFailure,
       });
   }
 
@@ -85,46 +235,15 @@ export function ContactForm({
         role="status"
         className="border-sand/50 bg-surface rounded-2xl border p-8"
       >
-        <h2 className="font-display text-4xl">
-          {fr ? "Merci pour votre message." : "Thank you for your message."}
-        </h2>
+        <h2 className="font-display text-4xl">{copy.successTitle}</h2>
         <p className="mt-4 text-white/50">
-          {contactEmail
-            ? fr
-              ? "Votre application e-mail a été ouverte avec votre message."
-              : "Your email application has opened with your message."
-            : fr
-              ? "Votre demande a bien été transmise."
-              : "Your enquiry has been sent."}
+          {contactEmail ? copy.mailOpened : copy.sent}
         </p>
       </div>
     );
   }
 
-  const errorText = fr ? "Vérifiez ce champ." : "Please check this field.";
-  const projectTypeLabels: Record<(typeof projectTypes)[number], string> = fr
-    ? {
-        wedding: "Mariage",
-        event: "Événement",
-        corporate: "Corporate",
-        product: "Produit",
-        food: "Gastronomie",
-        hospitality: "Hôtellerie ou intérieur",
-        portrait: "Portrait",
-        video: "Vidéo",
-        other: "Autre projet",
-      }
-    : {
-        wedding: "Wedding",
-        event: "Event",
-        corporate: "Corporate",
-        product: "Product",
-        food: "Food",
-        hospitality: "Hospitality or interior",
-        portrait: "Portrait",
-        video: "Film",
-        other: "Other project",
-      };
+  const errorText = copy.error;
   const fieldId = (name: string) => `${idPrefix}-${name}`;
   return (
     <form
@@ -142,7 +261,7 @@ export function ContactForm({
         />
       </div>
       <Field
-        label={fr ? "Nom" : "Name"}
+        label={copy.name}
         id={fieldId("name")}
         error={errors.name?.message && errorText}
       >
@@ -166,6 +285,7 @@ export function ContactForm({
         <input
           id={fieldId("email")}
           type="email"
+          dir="ltr"
           autoComplete="email"
           aria-required="true"
           className={fieldClass}
@@ -176,20 +296,18 @@ export function ContactForm({
           {...register("email")}
         />
       </Field>
-      <Field
-        label={fr ? "Téléphone ou WhatsApp" : "Phone or WhatsApp"}
-        id={fieldId("phone")}
-      >
+      <Field label={copy.phone} id={fieldId("phone")}>
         <input
           id={fieldId("phone")}
           type="tel"
+          dir="ltr"
           autoComplete="tel"
           className={fieldClass}
           {...register("phone")}
         />
       </Field>
       <Field
-        label={fr ? "Type de projet" : "Project type"}
+        label={copy.projectType}
         id={fieldId("projectType")}
         error={errors.projectType?.message && errorText}
       >
@@ -205,24 +323,22 @@ export function ContactForm({
         >
           {projectTypes.map((value) => (
             <option key={value} value={value}>
-              {projectTypeLabels[value]}
+              {copy.projectTypes[value]}
             </option>
           ))}
         </select>
       </Field>
-      <Field
-        label={fr ? "Date souhaitée" : "Preferred date"}
-        id={fieldId("preferredDate")}
-      >
+      <Field label={copy.preferredDate} id={fieldId("preferredDate")}>
         <input
           id={fieldId("preferredDate")}
           type="date"
+          dir="ltr"
           className={fieldClass}
           {...register("preferredDate")}
         />
       </Field>
       <Field
-        label={fr ? "Lieu" : "Location"}
+        label={copy.location}
         id={fieldId("location")}
         error={errors.location?.message && errorText}
       >
@@ -237,14 +353,12 @@ export function ContactForm({
           {...register("location")}
         />
       </Field>
-      <Field
-        label={fr ? "Budget estimé" : "Estimated budget"}
-        id={fieldId("budget")}
-      >
+      <Field label={copy.budget} id={fieldId("budget")}>
         <input
           id={fieldId("budget")}
           className={fieldClass}
-          placeholder={fr ? "Facultatif" : "Optional"}
+          placeholder={copy.optional}
+          dir="auto"
           {...register("budget")}
         />
       </Field>
@@ -252,14 +366,9 @@ export function ContactForm({
         <div className="hidden sm:block" aria-hidden="true" />
       ) : null}
       <Field
-        label={fr ? "Votre message" : "Your message"}
+        label={copy.message}
         id={fieldId("message")}
-        error={
-          errors.message?.message &&
-          (fr
-            ? "Ajoutez au moins 20 caractères."
-            : "Please add at least 20 characters.")
-        }
+        error={errors.message?.message && copy.messageError}
         className="sm:col-span-2"
       >
         <textarea
@@ -287,9 +396,7 @@ export function ContactForm({
           {...register("consent")}
         />
         <span className="text-sm leading-6">
-          {fr
-            ? "J'accepte que mes informations soient utilisées pour répondre à cette demande."
-            : "I agree that my information may be used to respond to this enquiry."}
+          {copy.consent}
           {errors.consent ? (
             <span
               id={`${fieldId("consent")}-error`}
@@ -314,13 +421,7 @@ export function ContactForm({
           disabled={isSubmitting}
           className={variant === "dialog" ? "w-full sm:w-auto" : ""}
         >
-          {isSubmitting
-            ? fr
-              ? "Envoi…"
-              : "Sending…"
-            : fr
-              ? "Envoyer la demande"
-              : "Send enquiry"}
+          {isSubmitting ? copy.sending : copy.submit}
         </Button>
       </div>
     </form>

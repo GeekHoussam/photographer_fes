@@ -14,10 +14,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Portrait rapproché d’un couple le jour de son mariage à Fès",
       en: "Close portrait of a couple on their wedding day in Fez",
+      ar: "صورة مقربة لعروسين يوم زفافهما في فاس",
     },
     secondaryAlt: {
       fr: "Bouquet de fleurs blanches tenu par la mariée",
       en: "White bridal bouquet held by the bride",
+      ar: "باقة زهور بيضاء تحملها العروس",
     },
   },
   "event-photography": {
@@ -26,10 +28,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Vue large d’une table ronde institutionnelle",
       en: "Wide view of an institutional panel discussion",
+      ar: "لقطة واسعة لطاولة مستديرة مؤسساتية",
     },
     secondaryAlt: {
       fr: "Échange entre invités pendant une réception",
       en: "Conversation between guests during a reception",
+      ar: "حديث بين ضيوف خلال حفل استقبال",
     },
   },
   "corporate-photography": {
@@ -38,10 +42,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Intervenant prenant la parole devant un public",
       en: "Speaker addressing an audience",
+      ar: "متحدث يلقي كلمة أمام جمهور",
     },
     secondaryAlt: {
       fr: "Détail de mains signant un document officiel",
       en: "Close detail of hands signing an official document",
+      ar: "لقطة مقربة ليدين توقعان وثيقة رسمية",
     },
   },
   "product-photography": {
@@ -50,10 +56,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Assiette marocaine aux légumes et condiments colorés",
       en: "Moroccan plate with colourful vegetables and condiments",
+      ar: "طبق مغربي بخضراوات وتوابل ملونة",
     },
     secondaryAlt: {
       fr: "Boisson fraîche à l’orange servie en terrasse",
       en: "Fresh orange drink served on a terrace",
+      ar: "مشروب برتقال منعش مقدم على شرفة",
     },
   },
   "food-photography": {
@@ -62,10 +70,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Chef devant une flambée en cuisine ouverte",
       en: "Chef standing behind a flame in an open kitchen",
+      ar: "طاه يقف خلف لهب في مطبخ مفتوح",
     },
     secondaryAlt: {
       fr: "Table de déjeuner marocaine entièrement dressée",
       en: "Fully set Moroccan lunch table",
+      ar: "مائدة غداء مغربية مكتملة الإعداد",
     },
   },
   "hospitality-photography": {
@@ -74,10 +84,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Cour intérieure ornée de zellige et de plâtre sculpté à Fès",
       en: "Interior courtyard with zellige and carved plaster in Fez",
+      ar: "فناء داخلي مزين بالزليج والجبس المنقوش في فاس",
     },
     secondaryAlt: {
       fr: "Chambre lumineuse avec détails artisanaux marocains",
       en: "Bright bedroom with Moroccan craft details",
+      ar: "غرفة نوم مضيئة بتفاصيل حرفية مغربية",
     },
   },
   "portrait-photography": {
@@ -86,10 +98,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Portrait rapproché d’un couple le jour de son mariage à Fès",
       en: "Close portrait of a couple on their wedding day in Fez",
+      ar: "صورة مقربة لعروسين يوم زفافهما في فاس",
     },
     secondaryAlt: {
       fr: "Portrait d’un lauréat après une remise de prix",
       en: "Portrait of a recipient after an award presentation",
+      ar: "صورة شخصية لفائز بعد حفل توزيع جوائز",
     },
   },
   "video-production": {
@@ -98,10 +112,12 @@ const mediaBySlug: Record<string, ServiceMedia> = {
     heroAlt: {
       fr: "Vue large d’une table ronde institutionnelle",
       en: "Wide view of an institutional panel discussion",
+      ar: "لقطة واسعة لطاولة مستديرة مؤسساتية",
     },
     secondaryAlt: {
       fr: "Cuisinière travaillant devant une flamme vive",
       en: "Cook working in front of a vivid flame",
+      ar: "طاهية تعمل أمام لهب متقد",
     },
   },
 };

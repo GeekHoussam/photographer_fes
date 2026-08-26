@@ -87,6 +87,53 @@ body {
     color 240ms ease;
 }
 
+html[lang="ar"] {
+  --font-site: var(--font-arabic), var(--font-jost), Arial, sans-serif;
+}
+
+html[lang="ar"] body {
+  line-height: 1.75;
+}
+
+html[lang="ar"] .eyebrow,
+html[lang="ar"] .uppercase {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+html[lang="ar"] .display-hero,
+html[lang="ar"] .display-section,
+html[lang="ar"] .display-page,
+html[lang="ar"] .font-display {
+  letter-spacing: 0;
+}
+
+html[lang="ar"] .display-hero {
+  line-height: 1.14;
+}
+
+html[lang="ar"] .display-section,
+html[lang="ar"] .display-page,
+html[lang="ar"] .font-display {
+  line-height: 1.08;
+}
+
+html[lang="ar"] .home-work-heading {
+  line-height: 1.1;
+}
+
+.header-progress-fill {
+  transform-origin: left;
+}
+
+html[dir="rtl"] .header-progress-fill {
+  transform-origin: right;
+}
+
+html[dir="rtl"] .group\/button svg {
+  scale: -1 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   body {
     transition: none;
@@ -343,7 +390,7 @@ a {
   .reference-home-hero-copy {
     align-self: end;
     margin-bottom: clamp(12.5rem, 36svh, 18rem);
-    padding-right: clamp(1rem, 3vw, 3rem);
+    padding-inline-end: clamp(1rem, 3vw, 3rem);
   }
 }
 
@@ -357,7 +404,7 @@ a {
   --orbit-radius: clamp(8.25rem, 11.5vw, 11.25rem);
   position: absolute;
   top: 50%;
-  right: clamp(0.75rem, 3vw, 3.5rem);
+  inset-inline-end: clamp(0.75rem, 3vw, 3.5rem);
   z-index: 4;
   width: clamp(21rem, 30vw, 34rem);
   aspect-ratio: 1;
@@ -1074,7 +1121,7 @@ a {
 
 .artist-caption {
   position: absolute;
-  right: 1.25rem;
+  inset-inline-end: 1.25rem;
   bottom: 1.25rem;
   padding: 0.6rem 0.75rem;
   color: var(--color-paper);
@@ -1108,7 +1155,7 @@ a {
 
 .selected-frame figcaption {
   position: absolute;
-  right: 0.8rem;
+  inset-inline-end: 0.8rem;
   bottom: 0.8rem;
   padding: 0.35rem 0.55rem;
   color: white;
@@ -1273,7 +1320,7 @@ a {
 
 .scroll-sequence-caption {
   position: absolute;
-  right: var(--sequence-gutter);
+  inset-inline-end: var(--sequence-gutter);
   bottom: var(--sequence-gutter);
   z-index: 4;
   display: grid;
@@ -1283,7 +1330,7 @@ a {
   padding-top: clamp(1.25rem, 2vw, 1.75rem);
   padding-inline-end: clamp(0.75rem, 1.4vw, 1.25rem);
   padding-bottom: clamp(0.5rem, 1vw, 0.75rem);
-  text-align: right;
+  text-align: end;
 }
 
 .scroll-sequence-caption span,
@@ -1307,10 +1354,14 @@ a {
   line-height: 1;
 }
 
+html[lang="ar"] .scroll-sequence-caption strong {
+  line-height: 1.08;
+}
+
 .scroll-sequence-mark {
   position: absolute;
   top: var(--sequence-gutter);
-  right: var(--sequence-gutter);
+  inset-inline-end: var(--sequence-gutter);
   z-index: 4;
   margin: 0;
   color: rgba(241, 242, 238, 0.6);
@@ -1323,7 +1374,7 @@ a {
 .scroll-sequence-rail {
   position: absolute;
   top: 50%;
-  left: calc(var(--sequence-gutter) + 0.2rem);
+  inset-inline-start: calc(var(--sequence-gutter) + 0.2rem);
   z-index: 12;
   display: flex;
   height: min(56vh, 32rem);
@@ -1394,7 +1445,7 @@ a {
     bottom: 1.2rem;
     left: 1rem;
     width: auto;
-    text-align: left;
+    text-align: start;
   }
 
   .scroll-sequence-caption strong {
@@ -1570,8 +1621,8 @@ a {
   width: 6.75rem;
   aspect-ratio: 1;
   margin-top: 0.35rem;
-  margin-left: auto;
-  margin-right: 8%;
+  margin-inline-start: auto;
+  margin-inline-end: 8%;
   color: var(--color-sand);
   transform: translate3d(var(--contact-pointer-x), var(--contact-pointer-y), 0);
   transition: transform 900ms var(--ease-out);
@@ -1666,7 +1717,7 @@ a {
 }
 
 .contact-method:hover {
-  padding-left: 1.1rem;
+  padding-inline-start: 1.1rem;
   background: rgba(255, 255, 255, 0.045);
 }
 
@@ -1701,7 +1752,7 @@ a {
 }
 
 .contact-form label:has(+ .contact-form-control[aria-required="true"])::after {
-  margin-left: 0.28rem;
+  margin-inline-start: 0.28rem;
   color: var(--color-sand);
   content: "*";
 }
@@ -1850,7 +1901,7 @@ a {
 }
 
 .gallery-expand {
-  right: 0.75rem;
+  inset-inline-end: 0.75rem;
   width: 2.25rem;
   opacity: 0;
   transform: translateY(0.4rem);
@@ -1970,6 +2021,10 @@ a {
     background-color 300ms ease,
     transform 420ms var(--ease-out);
   transform-origin: left;
+}
+
+html[dir="rtl"] .portfolio-project-preview-progress span {
+  transform-origin: right;
 }
 
 .portfolio-project-preview-progress span.is-active {
@@ -2166,7 +2221,7 @@ a {
   display: grid;
   gap: 1rem;
   margin-top: 2rem;
-  padding-left: 1.25rem;
+  padding-inline-start: 1.25rem;
   color: color-mix(in srgb, currentColor 72%, transparent);
   font-size: clamp(1rem, 1.3vw, 1.125rem);
   line-height: 1.85;

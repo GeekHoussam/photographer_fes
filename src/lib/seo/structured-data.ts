@@ -33,12 +33,57 @@ export const entityIds = {
   business: absoluteUrl("/#photography-service"),
 } as const;
 
+const schemaLabels: Record<
+  Locale,
+  {
+    language: string;
+    home: string;
+    jobTitle: string;
+    location: string;
+    country: string;
+    services: string;
+    portfolio: string;
+    journal: string;
+  }
+> = {
+  fr: {
+    language: "français",
+    home: "Accueil",
+    jobTitle: "Photographe et vidéaste",
+    location: "Fès, Maroc",
+    country: "Maroc",
+    services: "Services",
+    portfolio: "Portfolio",
+    journal: "Journal",
+  },
+  en: {
+    language: "English",
+    home: "Home",
+    jobTitle: "Photographer and filmmaker",
+    location: "Fez, Morocco",
+    country: "Morocco",
+    services: "Services",
+    portfolio: "Portfolio",
+    journal: "Journal",
+  },
+  ar: {
+    language: "العربية",
+    home: "الرئيسية",
+    jobTitle: "مصور فوتوغرافي وصانع أفلام",
+    location: "فاس، المغرب",
+    country: "المغرب",
+    services: "الخدمات",
+    portfolio: "معرض الأعمال",
+    journal: "المدونة",
+  },
+};
+
 function languageName(locale: Locale) {
-  return locale === "fr" ? "français" : "English";
+  return schemaLabels[locale].language;
 }
 
 function homeName(locale: Locale) {
-  return locale === "fr" ? "Accueil" : "Home";
+  return schemaLabels[locale].home;
 }
 
 export function verifiedContactProperties(config: {
@@ -78,13 +123,10 @@ function personEntity(locale: Locale) {
     name: siteConfig.name,
     url: localizedUrl(locale, "/about"),
     image: absoluteUrl("/images/portfolio/personal/m2.webp"),
-    jobTitle:
-      locale === "fr"
-        ? "Photographe et vidéaste"
-        : "Photographer and filmmaker",
+    jobTitle: schemaLabels[locale].jobTitle,
     homeLocation: {
       "@type": "Place",
-      name: locale === "fr" ? "Fès, Maroc" : "Fez, Morocco",
+      name: schemaLabels[locale].location,
     },
     ...contactProperties(),
   };
@@ -96,7 +138,7 @@ function websiteEntity(locale: Locale) {
     "@id": entityIds.website,
     name: brandTitles[locale],
     url: siteConfig.publicBaseUrl,
-    inLanguage: ["fr", "en"],
+    inLanguage: ["fr", "en", "ar"],
     publisher: { "@id": entityIds.person },
   };
 }
@@ -110,7 +152,7 @@ function businessEntity(locale: Locale) {
     description: getPageContent("home", locale).metaDescription,
     areaServed: {
       "@type": "Country",
-      name: locale === "fr" ? "Maroc" : "Morocco",
+      name: schemaLabels[locale].country,
     },
     ...contactProperties(),
   };
@@ -281,7 +323,7 @@ export function servicePageJsonLd(
         serviceType: service.title[locale],
         areaServed: {
           "@type": "Country",
-          name: locale === "fr" ? "Maroc" : "Morocco",
+          name: schemaLabels[locale].country,
         },
         provider: { "@id": entityIds.business },
       },
@@ -289,7 +331,7 @@ export function servicePageJsonLd(
         ...breadcrumbFor(locale, [
           { name: homeName(locale), path: "" },
           {
-            name: locale === "fr" ? "Services" : "Services",
+            name: schemaLabels[locale].services,
             path: "/services",
           },
           { name: service.title[locale], path },
@@ -439,7 +481,7 @@ export function journalArticleJsonLd(
       {
         ...breadcrumbFor(locale, [
           { name: homeName(locale), path: "" },
-          { name: "Journal", path: "/journal" },
+          { name: schemaLabels[locale].journal, path: "/journal" },
           { name: content.title, path },
         ]),
         "@id": breadcrumbId,
@@ -495,7 +537,7 @@ export function projectPageJsonLd(
       {
         ...breadcrumbFor(locale, [
           { name: homeName(locale), path: "" },
-          { name: "Portfolio", path: "/portfolio" },
+          { name: schemaLabels[locale].portfolio, path: "/portfolio" },
           { name: project.title[locale], path },
         ]),
         "@id": `${url}#breadcrumb`,

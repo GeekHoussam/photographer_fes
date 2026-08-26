@@ -32,9 +32,9 @@ describe("Journal article collection", () => {
     expect(journalArticles.map((article) => article.order)).toEqual([1, 2, 3]);
   });
 
-  it("contains complete, structurally equivalent French and English copy", () => {
+  it("contains complete, structurally equivalent French, English, and Arabic copy", () => {
     for (const article of journalArticles) {
-      for (const locale of ["fr", "en"] as const) {
+      for (const locale of ["fr", "en", "ar"] as const) {
         const content = article.content[locale];
         expect(content.title.length).toBeGreaterThan(20);
         expect(content.summary.length).toBeGreaterThan(100);
@@ -74,6 +74,22 @@ describe("Journal article collection", () => {
       );
       expect(article.content.fr.faqs).toHaveLength(
         article.content.en.faqs.length,
+      );
+      expect(
+        article.content.ar.body.map((block) =>
+          block.type === "heading"
+            ? `${block.type}-${block.level}`
+            : block.type,
+        ),
+      ).toEqual(
+        article.content.fr.body.map((block) =>
+          block.type === "heading"
+            ? `${block.type}-${block.level}`
+            : block.type,
+        ),
+      );
+      expect(article.content.ar.faqs).toHaveLength(
+        article.content.fr.faqs.length,
       );
       expect(JSON.stringify(article.content.en)).not.toMatch(
         /F(?:[èé]|e[\u0300\u0301])s/iu,
@@ -141,7 +157,7 @@ describe("Journal article collection", () => {
     ).toEqual([1, 2, 3]);
 
     for (const article of journalArticles) {
-      for (const locale of ["fr", "en"] as const) {
+      for (const locale of ["fr", "en", "ar"] as const) {
         const schema = journalArticleJsonLd(locale, article) as JsonObject;
         const posting = entryOfType(schema, "BlogPosting");
         const faq = entryOfType(schema, "FAQPage");

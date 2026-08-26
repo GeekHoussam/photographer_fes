@@ -1,9 +1,18 @@
 import localFont from "next/font/local";
+import type { Locale } from "@/config/site";
+import { ThemeInitializer } from "@/components/layout/theme-initializer";
 
 const siteFont = localFont({
   src: "../../node_modules/@fontsource-variable/jost/files/jost-latin-wght-normal.woff2",
   weight: "100 900",
   variable: "--font-jost",
+  display: "swap",
+});
+
+const arabicFont = localFont({
+  src: "../../node_modules/@fontsource-variable/noto-sans-arabic/files/noto-sans-arabic-arabic-wght-normal.woff2",
+  weight: "100 900",
+  variable: "--font-arabic",
   display: "swap",
 });
 
@@ -25,22 +34,20 @@ export function RootDocument({
   lang,
   children,
 }: Readonly<{
-  lang: "fr" | "en";
+  lang: Locale;
   children: React.ReactNode;
 }>) {
   return (
     <html
       lang={lang}
-      className={siteFont.variable}
+      dir={lang === "ar" ? "rtl" : "ltr"}
+      className={`${siteFont.variable} ${arabicFont.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <head>
         <meta name="theme-color" content="#101112" />
-        <script
-          id="theme-initializer"
-          dangerouslySetInnerHTML={{ __html: themeScript }}
-        />
+        <ThemeInitializer script={themeScript} />
       </head>
       <body>{children}</body>
     </html>
