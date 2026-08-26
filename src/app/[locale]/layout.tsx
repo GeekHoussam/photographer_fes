@@ -55,9 +55,15 @@ export default async function LocaleLayout({
           <SmoothScroll />
           <a
             href="#main-content"
-            className="bg-paper text-ink fixed top-4 left-4 z-[100] -translate-y-24 px-4 py-3 text-sm transition-transform focus:translate-y-0"
+            className="bg-paper text-ink fixed start-4 top-4 z-[100] -translate-y-24 px-4 py-3 text-sm transition-transform focus:translate-y-0"
           >
-            {locale === "fr" ? "Aller au contenu" : "Skip to content"}
+            {
+              {
+                fr: "Aller au contenu",
+                en: "Skip to content",
+                ar: "الانتقال إلى المحتوى",
+              }[locale]
+            }
           </a>
           <Header />
           <main id="main-content">{children}</main>

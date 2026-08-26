@@ -1,4 +1,4 @@
-export const locales = ["fr", "en"] as const;
+export const locales = ["fr", "en", "ar"] as const;
 export type Locale = (typeof locales)[number];
 
 export const defaultLocale: Locale = "fr";
@@ -6,6 +6,7 @@ export const defaultLocale: Locale = "fr";
 export const brandTitles: Record<Locale, string> = {
   fr: "Photographe Fès — Mohammed Laâchach",
   en: "Photographer in Fez — Mohammed Laâchach",
+  ar: "مصور فوتوغرافي في فاس — محمد لعشاش",
 };
 
 export const contactDetails = {

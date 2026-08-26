@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
 import type { Locale } from "@/config/site";
 import { Container } from "@/components/common/container";
 import { ResponsiveMedia } from "@/components/common/responsive-media";
@@ -12,7 +12,53 @@ import { HomeHero } from "./home-hero";
 import { ScrollTransitionFrames } from "./scroll-transition-frames";
 
 export function HomePage({ locale }: { locale: Locale }) {
-  const fr = locale === "fr";
+  const copy = {
+    fr: {
+      published: "Séries publiées",
+      publishedTitle: "Mariage, événement, intérieurs et gastronomie.",
+      behindLens: "Derrière l'objectif",
+      aboutTitle: "Un photographe et vidéaste basé à Fès.",
+      aboutText:
+        "Mohammed Laâchach photographie les personnes, les lieux et les gestes avec une approche calme, précise et profondément visuelle.",
+      meet: "Découvrir Mohammed",
+      selectionTitle: "Six photographies, quatre types de projets.",
+      selectionText:
+        "Cette sélection relie portraits de mariage, reportage d’événement, intérieurs marocains et travail en cuisine.",
+      method: "Méthode",
+      contactTitle: "Présentez votre projet photo ou vidéo.",
+      quote: "Demander un devis",
+    },
+    en: {
+      published: "Published series",
+      publishedTitle: "Wedding, event, interiors, and food.",
+      behindLens: "Behind the lens",
+      aboutTitle: "Photographer and filmmaker based in Fez.",
+      aboutText:
+        "Mohammed Laâchach photographs people, places, and craft with a calm, precise, and deeply visual approach.",
+      meet: "Meet Mohammed",
+      selectionTitle: "Six photographs, four kinds of work.",
+      selectionText:
+        "This selection connects wedding portraits, event coverage, Moroccan interiors, and kitchen craft.",
+      method: "Method",
+      contactTitle: "Tell me about your photography or film project.",
+      quote: "Request a quotation",
+    },
+    ar: {
+      published: "سلاسل منشورة",
+      publishedTitle: "حفلات الزفاف والفعاليات والفضاءات الداخلية والأطعمة.",
+      behindLens: "خلف العدسة",
+      aboutTitle: "مصور فوتوغرافي وصانع أفلام مقيم في فاس.",
+      aboutText:
+        "يصور Mohammed Laâchach الأشخاص والأماكن والحرف بمنهجية هادئة ودقيقة وذات حس بصري عميق.",
+      meet: "تعرّف إلى Mohammed",
+      selectionTitle: "ست صور وأربعة أنواع من المشاريع.",
+      selectionText:
+        "يجمع هذا الاختيار بين صور الزفاف وتغطية الفعاليات والفضاءات الداخلية المغربية والعمل داخل المطبخ.",
+      method: "المنهجية",
+      contactTitle: "عرّف بمشروعك في التصوير الفوتوغرافي أو الفيديو.",
+      quote: "طلب عرض سعر",
+    },
+  }[locale];
   const processPage = getPageContent("process", locale);
   const selectedWork = [
     {
@@ -50,14 +96,8 @@ export function HomePage({ locale }: { locale: Locale }) {
       <section className="section-space bg-ink text-paper">
         <Container>
           <div className="mb-14 max-w-4xl sm:mb-20">
-            <p className="eyebrow text-sand">
-              {fr ? "Séries publiées" : "Published series"}
-            </p>
-            <h2 className="display-section mt-6">
-              {fr
-                ? "Mariage, événement, intérieurs et gastronomie."
-                : "Wedding, event, interiors, and food."}
-            </h2>
+            <p className="eyebrow text-sand">{copy.published}</p>
+            <h2 className="display-section mt-6">{copy.publishedTitle}</h2>
           </div>
 
           <div className="space-y-5 md:space-y-8">
@@ -115,30 +155,31 @@ export function HomePage({ locale }: { locale: Locale }) {
               imageClassName="object-center"
             />
           </div>
-          <div className="col-span-12 md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-8 lg:-ml-20">
+          <div className="col-span-12 md:col-span-9 md:col-start-4 lg:col-span-5 lg:col-start-8 lg:-ms-20">
             <div className="border-ink/15 bg-paper relative border p-6 sm:p-10 lg:p-12">
-              <p className="eyebrow text-muted">
-                {fr ? "Derrière l'objectif" : "Behind the lens"}
-              </p>
+              <p className="eyebrow text-muted">{copy.behindLens}</p>
               <h2 className="font-display mt-6 text-[clamp(3.4rem,6vw,6.5rem)] leading-[0.87] tracking-[-0.045em]">
-                {fr
-                  ? "Un photographe et vidéaste basé à Fès."
-                  : "Photographer and filmmaker based in Fez."}
+                {copy.aboutTitle}
               </h2>
               <p className="text-ink/65 mt-7 max-w-lg text-base leading-8">
-                {fr
-                  ? "Mohammed Laâchach photographie les personnes, les lieux et les gestes avec une approche calme, précise et profondément visuelle."
-                  : "Mohammed Laâchach photographs people, places, and craft with a calm, precise, and deeply visual approach."}
+                {copy.aboutText}
               </p>
               <Link
                 href="/about"
                 className="group mt-8 inline-flex min-h-11 items-center gap-3 text-xs font-bold tracking-[0.13em] uppercase"
               >
-                {fr ? "Découvrir Mohammed" : "Meet Mohammed"}
-                <ArrowRight
-                  aria-hidden="true"
-                  className="h-4 w-4 transition-transform group-hover:translate-x-2"
-                />
+                {copy.meet}
+                {locale === "ar" ? (
+                  <ArrowLeft
+                    aria-hidden="true"
+                    className="h-4 w-4 transition-transform group-hover:-translate-x-2"
+                  />
+                ) : (
+                  <ArrowRight
+                    aria-hidden="true"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-2"
+                  />
+                )}
               </Link>
             </div>
           </div>
@@ -149,14 +190,10 @@ export function HomePage({ locale }: { locale: Locale }) {
         <Container>
           <div className="max-w-4xl">
             <h2 className="home-work-heading display-section">
-              {fr
-                ? "Six photographies, quatre types de projets."
-                : "Six photographs, four kinds of work."}
+              {copy.selectionTitle}
             </h2>
             <p className="mt-7 max-w-xl text-base leading-8 text-white/55">
-              {fr
-                ? "Cette sélection relie portraits de mariage, reportage d’événement, intérieurs marocains et travail en cuisine."
-                : "This selection connects wedding portraits, event coverage, Moroccan interiors, and kitchen craft."}
+              {copy.selectionText}
             </p>
           </div>
         </Container>
@@ -174,7 +211,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <section className="section-space bg-ink text-paper">
         <Container>
           <div className="max-w-4xl">
-            <p className="eyebrow text-sand">{fr ? "Méthode" : "Method"}</p>
+            <p className="eyebrow text-sand">{copy.method}</p>
             <h2 className="display-section mt-6">{processPage.h2}</h2>
           </div>
           <ol className="mt-16 border-t border-white/15 sm:mt-24">
@@ -202,12 +239,10 @@ export function HomePage({ locale }: { locale: Locale }) {
         >
           <Container className="grid grid-cols-12 gap-y-9">
             <h2 className="font-display col-span-12 text-[clamp(4rem,9vw,10rem)] leading-[0.8] tracking-[-0.055em] lg:col-span-10">
-              {fr
-                ? "Présentez votre projet photo ou vidéo."
-                : "Tell me about your photography or film project."}
+              {copy.contactTitle}
             </h2>
             <span className="col-span-12 inline-flex items-center gap-3 text-xs font-bold tracking-[0.14em] uppercase lg:col-span-2 lg:justify-end lg:self-end">
-              {fr ? "Demander un devis" : "Request a quotation"}
+              {copy.quote}
               <ArrowUpRight
                 aria-hidden="true"
                 className="h-5 w-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"

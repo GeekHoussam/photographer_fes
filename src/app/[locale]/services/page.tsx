@@ -68,9 +68,9 @@ export default async function ServicesPage({
                     src={serviceMedia(service.slug).hero}
                     alt={serviceMedia(service.slug).heroAlt[locale]}
                     sizes="18rem"
-                    className="aspect-[16/10] translate-x-4 opacity-55 transition-all duration-700 group-hover:translate-x-0 group-hover:opacity-100"
+                    className={`aspect-[16/10] opacity-55 transition-all duration-700 group-hover:translate-x-0 group-hover:opacity-100 ${locale === "ar" ? "-translate-x-4" : "translate-x-4"}`}
                   />
-                  <span className="bg-paper text-ink absolute top-4 right-4 inline-flex h-10 w-10 items-center justify-center rounded-full">
+                  <span className="bg-paper text-ink absolute end-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full">
                     <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                   </span>
                 </div>

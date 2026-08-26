@@ -39,6 +39,11 @@ export default async function JournalPage({
   const { locale } = await params;
   if (!isLocale(locale)) return null;
   const content = getPageContent("journal", locale);
+  const readArticle = {
+    fr: "Lire l’article",
+    en: "Read article",
+    ar: "قراءة المقال",
+  }[locale];
 
   return (
     <>
@@ -73,9 +78,7 @@ export default async function JournalPage({
                   <Link
                     href={`/journal/${article.slug}`}
                     className={`group col-span-12 block ${mediaClass}`}
-                    aria-label={`${
-                      locale === "fr" ? "Lire l’article" : "Read article"
-                    } : ${articleContent.title}`}
+                    aria-label={`${readArticle}: ${articleContent.title}`}
                   >
                     <ResponsiveMedia
                       src={cover.src}
@@ -102,11 +105,9 @@ export default async function JournalPage({
                     <Link
                       href={`/journal/${article.slug}`}
                       className="text-link-arrow mt-8 w-fit"
-                      aria-label={`${
-                        locale === "fr" ? "Lire l’article" : "Read article"
-                      } : ${articleContent.title}`}
+                      aria-label={`${readArticle}: ${articleContent.title}`}
                     >
-                      {locale === "fr" ? "Lire l’article" : "Read article"}
+                      {readArticle}
                     </Link>
                   </div>
                 </article>

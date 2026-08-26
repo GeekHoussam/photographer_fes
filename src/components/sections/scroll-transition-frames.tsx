@@ -19,7 +19,23 @@ export function ScrollTransitionFrames({
   locale: Locale;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const fr = locale === "fr";
+  const copy = {
+    fr: {
+      region: "Séquence photographique",
+      scroll: "Défilement",
+      mark: "ML / FÈS",
+    },
+    en: {
+      region: "Photographic sequence",
+      scroll: "Scroll",
+      mark: "ML / FEZ",
+    },
+    ar: {
+      region: "تسلسل فوتوغرافي",
+      scroll: "تمرير",
+      mark: "ML / فاس",
+    },
+  }[locale];
 
   useEffect(() => {
     const root = rootRef.current;
@@ -139,11 +155,11 @@ export function ScrollTransitionFrames({
           "--sequence-count": frames.length,
         } as CSSProperties
       }
-      aria-label={fr ? "Séquence photographique" : "Photographic sequence"}
+      aria-label={copy.region}
     >
       <div className="scroll-sequence-stage">
         <div className="scroll-sequence-rail" aria-hidden="true">
-          <span>{fr ? "Défilement" : "Scroll"}</span>
+          <span>{copy.scroll}</span>
           <i>
             <b className="scroll-sequence-progress-fill" />
           </i>
@@ -173,7 +189,7 @@ export function ScrollTransitionFrames({
               </div>
 
               <p className="scroll-sequence-mark" aria-hidden="true">
-                {fr ? "ML / FÈS" : "ML / FEZ"}
+                {copy.mark}
               </p>
             </li>
           ))}

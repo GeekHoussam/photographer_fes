@@ -44,7 +44,41 @@ export default async function ServicePage({
   if (!isLocale(locale)) return null;
   const service = services.find((entry) => entry.slug === slug);
   if (!service) notFound();
-  const fr = locale === "fr";
+  const copy = {
+    fr: {
+      service: "Service",
+      breadcrumb: "Fil d’Ariane",
+      home: "Accueil",
+      services: "Services",
+      about: "Ce service",
+      include: "À préciser dans votre demande",
+      related: "Voir la série liée",
+      faq: "Questions fréquentes",
+      action: "Présenter ce projet et demander un devis",
+    },
+    en: {
+      service: "Service",
+      breadcrumb: "Breadcrumb",
+      home: "Home",
+      services: "Services",
+      about: "About this service",
+      include: "Include in your enquiry",
+      related: "View the related series",
+      faq: "Frequently asked questions",
+      action: "Describe this project and request a quotation",
+    },
+    ar: {
+      service: "الخدمة",
+      breadcrumb: "مسار التنقل",
+      home: "الرئيسية",
+      services: "الخدمات",
+      about: "عن هذه الخدمة",
+      include: "ما ينبغي تحديده في طلبك",
+      related: "عرض السلسلة المرتبطة",
+      faq: "الأسئلة الشائعة",
+      action: "عرّف بهذا المشروع واطلب عرض سعر",
+    },
+  }[locale];
   const media = serviceMedia(service.slug);
   const relatedProject = service.relatedProjectSlug
     ? portfolioProjects.find(
@@ -56,7 +90,7 @@ export default async function ServicePage({
     <>
       <JsonLd data={servicePageJsonLd(locale, service)} />
       <PageHero
-        eyebrow={fr ? "Service" : "Service"}
+        eyebrow={copy.service}
         title={service.title[locale]}
         introduction={service.introduction[locale]}
         mediaSrc={media.hero}
@@ -65,21 +99,19 @@ export default async function ServicePage({
       <section className="section-space bg-ink text-paper">
         <Container>
           <nav
-            aria-label={fr ? "Fil d’Ariane" : "Breadcrumb"}
+            aria-label={copy.breadcrumb}
             className="mb-14 flex flex-wrap gap-2 text-xs tracking-[0.12em] text-white/45 uppercase"
           >
-            <Link href="/">{fr ? "Accueil" : "Home"}</Link>
+            <Link href="/">{copy.home}</Link>
             <span aria-hidden="true">/</span>
-            <Link href="/services">Services</Link>
+            <Link href="/services">{copy.services}</Link>
             <span aria-hidden="true">/</span>
             <span aria-current="page">{service.title[locale]}</span>
           </nav>
 
           <div className="grid grid-cols-12 gap-y-12 lg:gap-x-12">
             <div className="col-span-12 lg:col-span-5">
-              <p className="eyebrow text-sand">
-                {fr ? "Ce service" : "About this service"}
-              </p>
+              <p className="eyebrow text-sand">{copy.about}</p>
               <h2 className="font-display mt-7 text-[clamp(3.25rem,6vw,6.5rem)] leading-[0.85] tracking-[-0.045em]">
                 {service.overviewTitle[locale]}
               </h2>
@@ -88,11 +120,7 @@ export default async function ServicePage({
               <p className="text-base leading-8 text-white/52">
                 {service.overview[locale]}
               </p>
-              <h3 className="eyebrow text-sand mt-12">
-                {fr
-                  ? "À préciser dans votre demande"
-                  : "Include in your enquiry"}
-              </h3>
+              <h3 className="eyebrow text-sand mt-12">{copy.include}</h3>
               <ul className="mt-5 border-t border-white/12">
                 {service.planningPoints.map((item) => (
                   <li
@@ -132,9 +160,7 @@ export default async function ServicePage({
                 href={`/portfolio/${relatedProject.slug}`}
                 className="text-link-arrow"
               >
-                {fr
-                  ? `Voir la série liée : ${relatedProject.title.fr}`
-                  : `View the related series: ${relatedProject.title.en}`}
+                {copy.related}: {relatedProject.title[locale]}
               </Link>
             </p>
           ) : null}
@@ -145,7 +171,7 @@ export default async function ServicePage({
         <Container>
           <div className="grid grid-cols-12 gap-y-10">
             <h2 className="display-section col-span-12 lg:col-span-5">
-              {fr ? "Questions fréquentes" : "Frequently asked questions"}
+              {copy.faq}
             </h2>
             <div className="col-span-12 lg:col-span-6 lg:col-start-7">
               {service.faqs.map((faq) => (
@@ -162,9 +188,7 @@ export default async function ServicePage({
                 </details>
               ))}
               <ButtonLink href="/contact" className="mt-10">
-                {fr
-                  ? "Présenter ce projet et demander un devis"
-                  : "Describe this project and request a quotation"}
+                {copy.action}
               </ButtonLink>
             </div>
           </div>

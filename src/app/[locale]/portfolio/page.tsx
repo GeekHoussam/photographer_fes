@@ -32,8 +32,12 @@ export default async function PortfolioPage({
 }) {
   const { locale } = await params;
   if (!isLocale(locale)) return null;
-  const fr = locale === "fr";
   const content = getPageContent("portfolio", locale);
+  const loading = {
+    fr: "Chargement des filtres…",
+    en: "Loading filters…",
+    ar: "جارٍ تحميل عوامل التصفية…",
+  }[locale];
   return (
     <>
       <JsonLd data={portfolioPageJsonLd(locale)} />
@@ -44,13 +48,7 @@ export default async function PortfolioPage({
       />
       <section className="section-space bg-ink text-paper">
         <Container>
-          <Suspense
-            fallback={
-              <p className="text-muted">
-                {fr ? "Chargement des filtres…" : "Loading filters…"}
-              </p>
-            }
-          >
+          <Suspense fallback={<p className="text-muted">{loading}</p>}>
             <PortfolioFilters />
           </Suspense>
         </Container>

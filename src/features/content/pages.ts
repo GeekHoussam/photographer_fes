@@ -31,9 +31,7 @@ type PageCopy = {
 type PageContent = {
   path: string;
   indexable: boolean;
-  fr: PageCopy;
-  en: PageCopy;
-};
+} & Record<Locale, PageCopy>;
 
 export const staticPageContent: Record<StaticPageKey, PageContent> = {
   home: {
@@ -57,6 +55,15 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       introduction:
         "Wedding, event, interior, and food photography in Fez and across Morocco, with a precise approach attentive to people and place.",
     },
+    ar: {
+      eyebrow: "Mohammed Laâchach",
+      metaTitle: "مصور فوتوغرافي في فاس — Mohammed Laâchach",
+      metaDescription:
+        "ينجز Mohammed Laâchach تصوير حفلات الزفاف والفعاليات والضيافة والأطعمة في فاس وفي مختلف أنحاء المغرب، إلى جانب مشاريع الفيديو.",
+      h1: "مصور فوتوغرافي وصانع أفلام في فاس.",
+      introduction:
+        "تصوير حفلات الزفاف والفعاليات والفضاءات الداخلية والأطعمة في فاس وفي مختلف أنحاء المغرب، بمنهجية دقيقة تهتم بالأشخاص والأماكن على حد سواء.",
+    },
   },
   portfolio: {
     path: "/portfolio",
@@ -79,6 +86,15 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       introduction:
         "Explore four published series: wedding portraits and details, an institutional ceremony, Moroccan interiors, and a working kitchen.",
     },
+    ar: {
+      eyebrow: "معرض الأعمال",
+      metaTitle: "معرض أعمال التصوير الفوتوغرافي في فاس",
+      metaDescription:
+        "أربع سلاسل فوتوغرافية من أعمال Mohammed Laâchach عن حفلات الزفاف والفعاليات والفضاءات الداخلية والأطعمة في فاس.",
+      h1: "معرض أعمال التصوير الفوتوغرافي في فاس.",
+      introduction:
+        "استكشف أربع سلاسل منشورة: صور وتفاصيل من حفل زفاف، ومراسم مؤسساتية، وفضاءات داخلية مغربية، ومطبخ أثناء العمل.",
+    },
   },
   services: {
     path: "/services",
@@ -100,6 +116,15 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       h1: "Photography and film services.",
       introduction:
         "Choose the service that fits your project, then share its intended use, location, and schedule to request a tailored proposal.",
+    },
+    ar: {
+      eyebrow: "الخدمات",
+      metaTitle: "خدمات التصوير الفوتوغرافي والفيديو في فاس",
+      metaDescription:
+        "تصوير حفلات الزفاف والفعاليات والشركات والمنتجات والأطعمة والضيافة والصور الشخصية، إلى جانب إنتاج الفيديو في فاس وفي مختلف أنحاء المغرب.",
+      h1: "خدمات التصوير الفوتوغرافي والفيديو.",
+      introduction:
+        "اختر الخدمة التي تناسب مشروعك، ثم حدّد الاستخدام والمكان والجدول الزمني لطلب عرض ملائم.",
     },
   },
   about: {
@@ -126,6 +151,17 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
         "Based in Fez, Mohammed Laâchach photographs people, places, and craft with a quiet presence and precise direction.",
       h2: "A documentary, attentive approach.",
       body: "Each project begins by understanding the subject, context, and intended use of the images. During production, Mohammed combines observation with direction to create a clear, coherent series that remains faithful to what unfolds in front of the camera.",
+    },
+    ar: {
+      eyebrow: "نبذة",
+      metaTitle: "نبذة عن المصور الفوتوغرافي وصانع الأفلام",
+      metaDescription:
+        "تعرّف إلى Mohammed Laâchach، مصور فوتوغرافي وصانع أفلام مقيم في فاس، وإلى منهجيته التوثيقية في تصوير الأشخاص والأماكن والحرف.",
+      h1: "Mohammed Laâchach، مصور فوتوغرافي وصانع أفلام.",
+      introduction:
+        "يقيم Mohammed Laâchach في فاس، ويصور الأشخاص والأماكن والحرف بحضور هادئ وتوجيه دقيق.",
+      h2: "منهجية توثيقية متأنية.",
+      body: "يبدأ كل مشروع بفهم الموضوع والسياق والاستخدام المقصود للصور. وأثناء التصوير، يجمع Mohammed بين الملاحظة والتوجيه لإنتاج سلسلة واضحة ومتماسكة تظل وفية لما يجري أمام العدسة.",
     },
   },
   process: {
@@ -189,6 +225,35 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
         },
       ],
     },
+    ar: {
+      eyebrow: "المنهجية",
+      metaTitle: "مراحل مشروع تصوير فوتوغرافي أو فيديو",
+      metaDescription:
+        "المراحل الأربع لمشروع مع Mohammed Laâchach: تحديد الحاجة، وإعداد التوجه البصري، وإنجاز الصور، ثم اختيار السلسلة ووضع اللمسات النهائية عليها.",
+      h1: "كيف يسير مشروع تصوير فوتوغرافي أو فيديو؟",
+      introduction:
+        "يوفّق إطار من أربع مراحل بين الهدف والتصوير والاستخدام النهائي للصور، مع بقائه قابلًا للتكيّف مع سياق المشروع.",
+      h2: "أربع مراحل، من الموجز إلى السلسلة النهائية.",
+      body: "يتوقف الجدول الزمني والمحتوى الدقيق على الموضوع. يتيح نموذج التواصل إرسال المكان والتاريخ والاحتياجات اللازمة لإعداد عرض.",
+      steps: [
+        {
+          title: "تحديد الحاجة",
+          text: "تحديد الموضوع والمكان والتاريخ والأشخاص المعنيين والاستخدام المقصود للصور الفوتوغرافية أو الفيديو.",
+        },
+        {
+          title: "إعداد التوجه البصري",
+          text: "تنظيم القيود المهمة ووضع توجه بصري منسجم مع سياق المشروع.",
+        },
+        {
+          title: "إنجاز الصور",
+          text: "التصوير الفوتوغرافي أو تصوير الفيديو بالجمع بين الملاحظة والتكوين والتوجيه عندما يتطلب الموقف ذلك.",
+        },
+        {
+          title: "الاختيار ووضع اللمسات النهائية",
+          text: "بناء اختيار متماسك ووضع اللمسات النهائية على الصور وفق الاستخدام المحدد منذ البداية.",
+        },
+      ],
+    },
   },
   journal: {
     path: "/journal",
@@ -211,6 +276,15 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       introduction:
         "Three articles covering weddings, professional events, and social media content, illustrated with field photography and films.",
     },
+    ar: {
+      eyebrow: "المدونة",
+      metaTitle: "مدونة التصوير الفوتوغرافي والفيديو في فاس",
+      metaDescription:
+        "ثلاثة مقالات بقلم Mohammed Laâchach عن تصوير حفلات الزفاف وتغطية الفعاليات ومحتوى شبكات التواصل الاجتماعي في فاس.",
+      h1: "مدونة التصوير الفوتوغرافي والفيديو.",
+      introduction:
+        "ثلاثة مقالات عن حفلات الزفاف والفعاليات المهنية ومحتوى شبكات التواصل الاجتماعي، مصحوبة بصور وأفلام من الميدان.",
+    },
   },
   contact: {
     path: "/contact",
@@ -232,6 +306,15 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       h1: "Request a photography or film quotation.",
       introduction:
         "Describe the project type, location, preferred date, and intended use. This information will help prepare a relevant response to your enquiry.",
+    },
+    ar: {
+      eyebrow: "تواصل",
+      metaTitle: "طلب عرض سعر للتصوير الفوتوغرافي أو الفيديو",
+      metaDescription:
+        "تواصل مع Mohammed Laâchach بشأن مشروع تصوير فوتوغرافي أو فيديو في فاس أو في مكان آخر بالمغرب. حدّد نوع المشروع ومكانه وتاريخه والاستخدام المقصود.",
+      h1: "اطلب عرض سعر للتصوير الفوتوغرافي أو الفيديو.",
+      introduction:
+        "عرّف بنوع المشروع ومكانه والتاريخ المفضل والاستخدام المقصود. ستساعد هذه المعلومات في إعداد رد مناسب لطلبك.",
     },
   },
   privacy: {
@@ -259,6 +342,17 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       h2: "Contact form data.",
       body: "The form collects the contact and project information you choose to submit so that the enquiry can be answered. No retention period or additional legal information is displayed until it has been confirmed.",
     },
+    ar: {
+      eyebrow: "الخصوصية",
+      metaTitle: "سياسة الخصوصية",
+      metaDescription:
+        "معلومات مؤقتة عن البيانات المرسلة عبر نموذج التواصل الخاص بـ Mohammed Laâchach.",
+      h1: "سياسة الخصوصية.",
+      introduction:
+        "تصف هذه النسخة الاستخدام الحالي للنموذج فقط. ولا يزال مسؤول معالجة البيانات ومدة الاحتفاظ بها والحقوق المعمول بها بحاجة إلى الاعتماد قبل النشر النهائي.",
+      h2: "بيانات نموذج التواصل.",
+      body: "يجمع النموذج بيانات التواصل ومعلومات المشروع التي تختار إرسالها من أجل الرد على طلبك. ولا تُعرض أي مدة للاحتفاظ بالبيانات أو معلومات قانونية إضافية إلى أن يتم تأكيدها.",
+    },
   },
   legal: {
     path: "/legal",
@@ -285,6 +379,17 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       h2: "Publisher and hosting.",
       body: "The legal name, publishable business address, business identifiers, publication director, and hosting information will be added only after approval by the site owner.",
     },
+    ar: {
+      eyebrow: "المعلومات القانونية",
+      metaTitle: "الإشعار القانوني",
+      metaDescription:
+        "إشعار قانوني مؤقت لمعرض أعمال التصوير الفوتوغرافي المهني الخاص بـ Mohammed Laâchach.",
+      h1: "الإشعار القانوني.",
+      introduction:
+        "تظل هذه الصفحة مؤقتة إلى أن يتم تأكيد المعلومات الإلزامية الخاصة بالناشر والاستضافة.",
+      h2: "الناشر والاستضافة.",
+      body: "لن يُضاف الاسم القانوني وعنوان النشاط القابل للنشر ومعرّفات النشاط ومدير النشر ومعلومات الاستضافة إلا بعد اعتماد مالك الموقع.",
+    },
   },
   thankYou: {
     path: "/thank-you",
@@ -302,6 +407,13 @@ export const staticPageContent: Record<StaticPageKey, PageContent> = {
       metaDescription: "Confirmation that your enquiry has been received.",
       h1: "Thank you. Your enquiry has been received.",
       introduction: "You can now return to the portfolio.",
+    },
+    ar: {
+      eyebrow: "تم إرسال الرسالة",
+      metaTitle: "تم استلام الطلب",
+      metaDescription: "تأكيد استلام طلبك.",
+      h1: "شكرًا لك. تم استلام طلبك بنجاح.",
+      introduction: "يمكنك الآن العودة إلى معرض الأعمال.",
     },
   },
 };

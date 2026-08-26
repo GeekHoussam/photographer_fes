@@ -25,6 +25,25 @@ export function JournalVideo({
   const fallbackThumbnailUrl = getVideoThumbnailUrl(video.videoId);
   const title = video.label[locale];
   const portrait = video.aspect === "portrait";
+  const copy = {
+    fr: {
+      play: "Lire la vidéo",
+      unavailable:
+        "Miniature indisponible. La vidéo reste accessible sur YouTube.",
+      youtube: "Voir sur YouTube",
+    },
+    en: {
+      play: "Play video",
+      unavailable:
+        "Thumbnail unavailable. The video remains available on YouTube.",
+      youtube: "Watch on YouTube",
+    },
+    ar: {
+      play: "تشغيل الفيديو",
+      unavailable: "الصورة المصغرة غير متاحة. يبقى الفيديو متاحًا على YouTube.",
+      youtube: "المشاهدة على YouTube",
+    },
+  }[locale];
 
   function handleThumbnailError() {
     if (thumbnailUrl !== fallbackThumbnailUrl) {
@@ -60,16 +79,14 @@ export function JournalVideo({
         ) : (
           <button
             type="button"
-            className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden text-left"
+            className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden text-start"
             onClick={() => setIsActive(true)}
-            aria-label={`${locale === "fr" ? "Lire la vidéo" : "Play video"}: ${title}`}
+            aria-label={`${copy.play}: ${title}`}
             data-journal-video-play
           >
             {thumbnailUnavailable ? (
               <span className="absolute inset-0 flex items-center justify-center px-6 text-center text-sm text-current/55">
-                {locale === "fr"
-                  ? "Miniature indisponible. La vidéo reste accessible sur YouTube."
-                  : "Thumbnail unavailable. The video remains available on YouTube."}
+                {copy.unavailable}
               </span>
             ) : (
               <Image
@@ -95,7 +112,7 @@ export function JournalVideo({
                 data-video-play-control
               >
                 <Play
-                  className="ml-1 h-7 w-7 fill-current"
+                  className="ms-1 h-7 w-7 fill-current"
                   aria-hidden="true"
                 />
               </span>
@@ -110,10 +127,9 @@ export function JournalVideo({
           target="_blank"
           rel="noopener noreferrer"
           className="text-link-arrow mt-3"
-          aria-label={`${locale === "fr" ? "Voir sur YouTube" : "Watch on YouTube"}: ${title}`}
+          aria-label={`${copy.youtube}: ${title}`}
         >
-          {locale === "fr" ? "Voir sur YouTube" : "Watch on YouTube"}{" "}
-          <span aria-hidden="true">↗</span>
+          {copy.youtube} <span aria-hidden="true">↗</span>
         </a>
       </figcaption>
     </figure>

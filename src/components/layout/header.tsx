@@ -6,6 +6,7 @@ import FocusTrap from "focus-trap-react";
 import { ArrowUpRight, ChevronDown, Menu, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { brandTitles } from "@/config/site";
+import type { Locale } from "@/config/site";
 import { Link, usePathname } from "@/i18n/navigation";
 import { LanguageSwitcher } from "./language-switcher";
 import { ThemeToggle } from "./theme-toggle";
@@ -19,7 +20,7 @@ const links = [
 ] as const;
 
 export function Header() {
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const t = useTranslations("Navigation");
   const portfolioT = useTranslations("Portfolio");
   const footer = useTranslations("Footer");
@@ -34,7 +35,27 @@ export function Header() {
   const mobilePortfolioRef = useRef<HTMLDivElement>(null);
   const mobilePortfolioTriggerRef = useRef<HTMLButtonElement>(null);
   const suppressPortfolioFocusRef = useRef(false);
-  const brandName = brandTitles[locale === "fr" ? "fr" : "en"];
+  const brandName = brandTitles[locale];
+  const headerCopy = {
+    fr: {
+      primaryNavigation: "Navigation principale",
+      mobileNavigation: "Navigation mobile",
+      menu: "Menu",
+      location: "Fès · Maroc",
+    },
+    en: {
+      primaryNavigation: "Primary navigation",
+      mobileNavigation: "Mobile navigation",
+      menu: "Menu",
+      location: "Fez · Morocco",
+    },
+    ar: {
+      primaryNavigation: "التنقل الرئيسي",
+      mobileNavigation: "التنقل على الهاتف",
+      menu: "القائمة",
+      location: "فاس · المغرب",
+    },
+  }[locale];
 
   useEffect(() => {
     const onScroll = () => {
@@ -132,16 +153,17 @@ export function Header() {
               className="h-full w-full object-contain p-1.5"
             />
           </span>
-          <span className="max-w-[7rem] text-[0.78rem] leading-[1.08] min-[430px]:max-w-[11.5rem] min-[430px]:text-[0.9rem] sm:max-w-none sm:text-[clamp(0.95rem,1.2vw,1.35rem)] sm:whitespace-nowrap">
+          <span
+            className="max-w-[7rem] text-[0.78rem] leading-[1.08] min-[430px]:max-w-[11.5rem] min-[430px]:text-[0.9rem] sm:max-w-none sm:text-[clamp(0.95rem,1.2vw,1.35rem)] sm:whitespace-nowrap"
+            dir={locale === "ar" ? "rtl" : "ltr"}
+          >
             {brandName}
           </span>
         </Link>
 
         <nav
           className="hidden items-center gap-1 border-y border-white/12 bg-black/20 px-2 backdrop-blur-md xl:flex"
-          aria-label={
-            locale === "fr" ? "Navigation principale" : "Primary navigation"
-          }
+          aria-label={headerCopy.primaryNavigation}
         >
           {links.map(([key, href]) =>
             key === "portfolio" ? (
@@ -176,6 +198,7 @@ export function Header() {
                 <Link
                   ref={desktopPortfolioTriggerRef}
                   href={href}
+                  prefetch={false}
                   aria-current={pathname.startsWith(href) ? "page" : undefined}
                   aria-expanded={portfolioOpen}
                   aria-controls="desktop-portfolio-submenu"
@@ -204,22 +227,23 @@ export function Header() {
                 {portfolioOpen ? (
                   <div
                     id="desktop-portfolio-submenu"
-                    className="absolute top-full left-0 w-56 pt-3"
+                    className="absolute start-0 top-full w-56 pt-3"
                   >
                     <div className="bg-ink/96 border border-white/15 p-4 shadow-2xl backdrop-blur-xl">
                       <p
                         className="eyebrow text-sand border-b border-white/10 pb-3"
                         aria-hidden="true"
                       >
-                        Portfolio
+                        {t("portfolio")}
                       </p>
-                      <div className="mt-3 ml-1 grid border-l border-white/25 pl-4">
+                      <div className="ms-1 mt-3 grid border-s border-white/25 ps-4">
                         {(["photos", "videos"] as const).map((media) => (
                           <Link
                             key={media}
                             href={`/portfolio?media=${media}`}
+                            prefetch={false}
                             onClick={() => setPortfolioOpen(false)}
-                            className="hover:text-sand relative min-h-11 border-b border-white/10 py-3 text-xs font-bold tracking-[0.13em] uppercase transition-colors before:absolute before:top-1/2 before:-left-4 before:w-3 before:border-t before:border-white/25 last:border-b-0"
+                            className="hover:text-sand relative min-h-11 border-b border-white/10 py-3 text-xs font-bold tracking-[0.13em] uppercase transition-colors before:absolute before:-start-4 before:top-1/2 before:w-3 before:border-t before:border-white/25 last:border-b-0"
                           >
                             {portfolioT(media)}
                           </Link>
@@ -277,7 +301,7 @@ export function Header() {
         aria-hidden="true"
       >
         <div
-          className="bg-sand h-full origin-left transition-transform duration-150"
+          className="header-progress-fill bg-sand h-full transition-transform duration-150"
           style={{ transform: `scaleX(${progress})` }}
         />
       </div>
@@ -294,11 +318,9 @@ export function Header() {
           <nav
             id="mobile-navigation"
             className="bg-ink absolute inset-x-0 top-full z-[var(--z-overlay)] flex h-[calc(100svh-var(--header-height))] flex-col overflow-y-auto px-[var(--page-gutter)] pt-10 pb-8 xl:hidden"
-            aria-label={
-              locale === "fr" ? "Navigation mobile" : "Mobile navigation"
-            }
+            aria-label={headerCopy.mobileNavigation}
           >
-            <p className="eyebrow text-sand mb-8">Menu</p>
+            <p className="eyebrow text-sand mb-8">{headerCopy.menu}</p>
             <div className="flex flex-1 flex-col">
               {[...links, ["contact", "/contact"] as const].map(
                 ([key, href]) =>
@@ -310,7 +332,7 @@ export function Header() {
                         aria-expanded={portfolioOpen}
                         aria-controls="mobile-portfolio-submenu"
                         onClick={() => setPortfolioOpen((value) => !value)}
-                        className="group font-display flex w-full items-center justify-between border-t border-white/10 py-4 text-left text-[clamp(2.8rem,12vw,5rem)] leading-none tracking-[-0.035em]"
+                        className="group font-display flex w-full items-center justify-between border-t border-white/10 py-4 text-start text-[clamp(2.8rem,12vw,5rem)] leading-none tracking-[-0.035em]"
                       >
                         <span>{t(key)}</span>
                         <ChevronDown
@@ -321,13 +343,13 @@ export function Header() {
                       {portfolioOpen ? (
                         <div
                           id="mobile-portfolio-submenu"
-                          className="mb-4 ml-2 grid border-l border-white/25 pl-6"
+                          className="ms-2 mb-4 grid border-s border-white/25 ps-6"
                         >
                           {(["photos", "videos"] as const).map((media) => (
                             <Link
                               key={media}
                               href={`/portfolio?media=${media}`}
-                              className="hover:text-sand relative border-t border-white/10 py-4 text-sm font-bold tracking-[0.14em] uppercase transition-colors before:absolute before:top-1/2 before:-left-6 before:w-5 before:border-t before:border-white/25"
+                              className="hover:text-sand relative border-t border-white/10 py-4 text-sm font-bold tracking-[0.14em] uppercase transition-colors before:absolute before:-start-6 before:top-1/2 before:w-5 before:border-t before:border-white/25"
                               onClick={() => {
                                 setPortfolioOpen(false);
                                 setOpen(false);
@@ -358,9 +380,7 @@ export function Header() {
             </div>
             <div className="mt-8 flex items-end justify-between border-t border-white/10 pt-6">
               <div>
-                <p className="eyebrow text-sand">
-                  {locale === "fr" ? "Fès · Maroc" : "Fez · Morocco"}
-                </p>
+                <p className="eyebrow text-sand">{headerCopy.location}</p>
                 <p className="mt-3 max-w-xs text-sm text-white/50">
                   {footer("location")}
                 </p>

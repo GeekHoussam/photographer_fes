@@ -30,9 +30,12 @@ export function ContactMethods({
         </span>
         <span className="min-w-0">
           <span className="block font-semibold">WhatsApp</span>
-          <span className="mt-1 block text-xs break-words text-white/55">
+          <bdi
+            dir="ltr"
+            className="mt-1 block text-xs break-words text-white/55"
+          >
             {contactDetails.whatsapp.display}
-          </span>
+          </bdi>
         </span>
       </a>
       <a href={`mailto:${contactDetails.generalEmail}`} className={methodClass}>
@@ -41,9 +44,9 @@ export function ContactMethods({
         </span>
         <span className="min-w-0">
           <span className="block font-semibold">{t("generalEmailLabel")}</span>
-          <span className="mt-1 block text-xs break-all text-white/55">
+          <bdi dir="ltr" className="mt-1 block text-xs break-all text-white/55">
             {contactDetails.generalEmail}
-          </span>
+          </bdi>
         </span>
       </a>
       <a href={`mailto:${contactDetails.filmEmail}`} className={methodClass}>
@@ -52,9 +55,9 @@ export function ContactMethods({
         </span>
         <span className="min-w-0">
           <span className="block font-semibold">{t("filmEmailLabel")}</span>
-          <span className="mt-1 block text-xs break-all text-white/55">
+          <bdi dir="ltr" className="mt-1 block text-xs break-all text-white/55">
             {contactDetails.filmEmail}
-          </span>
+          </bdi>
         </span>
       </a>
       {showFullPageLink ? (

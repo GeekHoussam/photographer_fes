@@ -12,6 +12,7 @@ function alternates(path: string) {
     languages: {
       fr: localizedUrl("fr", path),
       en: localizedUrl("en", path),
+      ar: localizedUrl("ar", path),
       "x-default": localizedUrl("fr", path),
     },
   };

@@ -35,7 +35,7 @@ function entryOfType(data: JsonLdDocument, type: string) {
 
 describe("metadata", () => {
   it("uses the requested localized brand title on each homepage", () => {
-    for (const locale of ["fr", "en"] as const) {
+    for (const locale of ["fr", "en", "ar"] as const) {
       const metadata = createPageMetadata({
         locale,
         title: getPageContent("home", locale).metaTitle,
@@ -63,6 +63,7 @@ describe("metadata", () => {
     expect(metadata.alternates?.languages).toEqual({
       fr: `${siteConfig.publicBaseUrl}/fr/services/wedding-photography`,
       en: `${siteConfig.publicBaseUrl}/en/services/wedding-photography`,
+      ar: `${siteConfig.publicBaseUrl}/ar/services/wedding-photography`,
       "x-default": `${siteConfig.publicBaseUrl}/fr/services/wedding-photography`,
     });
   });
@@ -95,8 +96,10 @@ describe("structured data", () => {
   it("uses stable absolute entity IDs and locale-correct home content", () => {
     const fr = homePageJsonLd("fr");
     const en = homePageJsonLd("en");
+    const ar = homePageJsonLd("ar");
     const frPage = entryOfType(fr, "WebPage");
     const enPage = entryOfType(en, "WebPage");
+    const arPage = entryOfType(ar, "WebPage");
 
     expect(entityIds.person).toBe(`${siteConfig.publicBaseUrl}/#person`);
     expect(Object.values(entityIds).every((id) => URL.canParse(id))).toBe(true);
@@ -108,8 +111,16 @@ describe("structured data", () => {
       inLanguage: "en",
       url: `${siteConfig.publicBaseUrl}/en`,
     });
+    expect(arPage).toMatchObject({
+      inLanguage: "ar",
+      url: `${siteConfig.publicBaseUrl}/ar`,
+    });
     expect(entryOfType(fr, "WebSite")?.name).toBe(brandTitles.fr);
     expect(entryOfType(en, "WebSite")?.name).toBe(brandTitles.en);
+    expect(entryOfType(ar, "WebSite")).toMatchObject({
+      name: brandTitles.ar,
+      inLanguage: ["fr", "en", "ar"],
+    });
     expect(entryOfType(fr, "ProfessionalService")).toMatchObject({
       email: [contactDetails.generalEmail, contactDetails.filmEmail],
       telephone: "+212627151618",
@@ -178,7 +189,7 @@ describe("sitemap", () => {
     expect(entries.some((entry) => entry.url.endsWith("/journal"))).toBe(true);
     expect(
       entries.filter((entry) => entry.url.includes("/journal/")).length,
-    ).toBe(6);
+    ).toBe(9);
     expect(entries.some((entry) => entry.url.endsWith("/privacy"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/legal"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/thank-you"))).toBe(

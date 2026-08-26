@@ -88,7 +88,8 @@ export function ContactDialogProvider({
       if (
         url.origin === window.location.origin &&
         (normalizedPath.endsWith("/fr/contact") ||
-          normalizedPath.endsWith("/en/contact"))
+          normalizedPath.endsWith("/en/contact") ||
+          normalizedPath.endsWith("/ar/contact"))
       ) {
         event.preventDefault();
         const stableTrigger = anchor.closest("#mobile-navigation")
@@ -240,7 +241,7 @@ export function ContactDialogProvider({
                   <ContactMethods showFullPageLink className="mt-5" />
                 </div>
 
-                <div className="contact-dialog-form-shell border-t border-white/12 p-5 sm:p-8 lg:border-t-0 lg:border-l lg:p-9">
+                <div className="contact-dialog-form-shell border-t border-white/12 p-5 sm:p-8 lg:border-s lg:border-t-0 lg:p-9">
                   <div className="mb-6 flex items-center justify-between gap-5 border-b border-white/10 pb-4">
                     <p className="text-[0.62rem] font-bold tracking-[0.16em] text-white/55 uppercase">
                       {t("projectDetails")}

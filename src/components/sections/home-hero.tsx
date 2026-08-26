@@ -9,23 +9,45 @@ import { getPageContent } from "@/features/content/pages";
 import { HeroOrbitGallery } from "./hero-orbit-gallery";
 
 export function HomeHero({ locale }: { locale: Locale }) {
-  const fr = locale === "fr";
   const page = getPageContent("home", locale);
-  const copy = fr
-    ? {
+  const copy = (
+    {
+      fr: {
         eyebrow: page.eyebrow,
         title: page.h1,
         intro: page.introduction,
         portfolio: "Voir les séries photographiques",
         quote: "Demander un devis",
-      }
-    : {
+        heroAlt: "Vidéaste filmant dans une rue de Fès",
+      },
+      en: {
         eyebrow: page.eyebrow,
         title: page.h1,
         intro: page.introduction,
         portfolio: "View the photography series",
         quote: "Request a quotation",
-      };
+        heroAlt: "Filmmaker shooting on a street in Fez",
+      },
+      ar: {
+        eyebrow: page.eyebrow,
+        title: page.h1,
+        intro: page.introduction,
+        portfolio: "عرض السلاسل الفوتوغرافية",
+        quote: "طلب عرض سعر",
+        heroAlt: "صانع أفلام يصور في أحد شوارع فاس",
+      },
+    } satisfies Record<
+      Locale,
+      {
+        eyebrow: string;
+        title: string;
+        intro: string;
+        portfolio: string;
+        quote: string;
+        heroAlt: string;
+      }
+    >
+  )[locale];
 
   const orbitItems = portfolioProjects.map((project) => ({
     href: `/portfolio/${project.slug}`,
@@ -33,22 +55,20 @@ export function HomeHero({ locale }: { locale: Locale }) {
     src: project.cover.src,
     alt: project.cover.alt[locale],
   }));
-  const titleLines = (
-    fr
-      ? copy.title.replace(" vidéaste ", "\nvidéaste ")
-      : copy.title.replace(" and ", "\nand ").replace(" in Fez", "\nin Fez")
-  ).split("\n");
+  const titleLines = {
+    fr: copy.title.replace(" vidéaste ", "\nvidéaste "),
+    en: copy.title.replace(" and ", "\nand ").replace(" in Fez", "\nin Fez"),
+    ar: copy.title
+      .replace(" وصانع أفلام ", "\nوصانع أفلام ")
+      .replace(" في فاس", "\nفي فاس"),
+  }[locale].split("\n");
 
   return (
     <section className="theme-lock-dark reference-home-hero bg-ink text-paper relative min-h-[100svh] overflow-hidden pt-[var(--header-height)]">
       <div className="absolute inset-0">
         <Image
           src="/images/portfolio/personal/m3.png"
-          alt={
-            fr
-              ? "Vidéaste filmant dans une rue de Fès"
-              : "Filmmaker shooting on a street in Fez"
-          }
+          alt={copy.heroAlt}
           fill
           priority
           sizes="100vw"

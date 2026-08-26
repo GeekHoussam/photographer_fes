@@ -12,21 +12,30 @@ export function EditorialPage({
   locale: Locale;
   kind: "about" | "process" | "privacy" | "legal";
 }) {
-  const fr = locale === "fr";
   const content = getPageContent(kind, locale);
   const visual = kind === "about" || kind === "process";
   const image =
     kind === "about"
       ? "/images/portfolio/personal/m2.webp"
       : "/images/portfolio/interiors/DSC01919.webp";
-  const imageAlt =
-    kind === "about"
-      ? fr
-        ? "Mohammed Laâchach tenant une caméra de cinéma sur un plateau"
-        : "Mohammed Laâchach holding a cinema camera on set"
-      : fr
-        ? "Salon traditionnel de Fès aux boiseries sculptées"
-        : "Traditional Fez interior with carved woodwork";
+  const copy = {
+    fr: {
+      aboutAlt: "Mohammed Laâchach tenant une caméra de cinéma sur un plateau",
+      processAlt: "Salon traditionnel de Fès aux boiseries sculptées",
+      action: "Présenter votre projet",
+    },
+    en: {
+      aboutAlt: "Mohammed Laâchach holding a cinema camera on set",
+      processAlt: "Traditional Fez interior with carved woodwork",
+      action: "Tell me about your project",
+    },
+    ar: {
+      aboutAlt: "Mohammed Laâchach يحمل كاميرا سينمائية في موقع تصوير",
+      processAlt: "غرفة جلوس تقليدية في فاس بأعمال خشبية منقوشة",
+      action: "عرّف بمشروعك",
+    },
+  }[locale];
+  const imageAlt = kind === "about" ? copy.aboutAlt : copy.processAlt;
 
   return (
     <>
@@ -82,7 +91,7 @@ export function EditorialPage({
 
             {visual ? (
               <ButtonLink href="/contact" variant="secondary" className="mt-9">
-                {fr ? "Présenter votre projet" : "Tell me about your project"}
+                {copy.action}
               </ButtonLink>
             ) : null}
           </div>

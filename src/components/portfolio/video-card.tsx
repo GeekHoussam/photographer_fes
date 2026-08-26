@@ -36,10 +36,7 @@ export function VideoCard({
   const fallbackThumbnailUrl = getVideoThumbnailUrl(video.videoId);
   const aspectClass =
     video.contentType === "short" ? "aspect-[9/16]" : "aspect-video";
-  const title =
-    locale === "en"
-      ? video.title.replace(/F(?:[èé]|e[\u0300\u0301])s/giu, "Fez")
-      : video.title;
+  const title = video.titleByLocale[locale];
 
   function handleThumbnailError() {
     if (thumbnailUrl !== fallbackThumbnailUrl) {
@@ -74,7 +71,7 @@ export function VideoCard({
         ) : (
           <button
             type="button"
-            className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden text-left"
+            className="group absolute inset-0 block h-full w-full cursor-pointer overflow-hidden text-start"
             onClick={() => setIsActive(true)}
             aria-label={`${labels.play}: ${title}`}
             data-video-play
@@ -107,7 +104,7 @@ export function VideoCard({
                 data-video-play-control
               >
                 <Play
-                  className="ml-1 h-7 w-7 fill-current"
+                  className="ms-1 h-7 w-7 fill-current"
                   aria-hidden="true"
                 />
               </span>
@@ -122,12 +119,12 @@ export function VideoCard({
           </p>
           <h2
             className="font-display mt-3 text-[clamp(1.75rem,3vw,3.25rem)] leading-[1.02] tracking-[-0.03em] [overflow-wrap:anywhere]"
-            dir="auto"
+            dir={locale === "ar" ? "rtl" : "auto"}
           >
             {title}
           </h2>
         </div>
-        <p className="shrink-0 pt-1 text-right text-[0.68rem] tracking-[0.1em] text-current/40 uppercase">
+        <p className="shrink-0 pt-1 text-end text-[0.68rem] tracking-[0.1em] text-current/40 uppercase">
           {video.contentType === "short" ? labels.short : labels.longForm}
         </p>
       </div>
