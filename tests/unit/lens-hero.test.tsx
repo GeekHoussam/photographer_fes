@@ -168,7 +168,7 @@ afterEach(() => {
 });
 
 async function mountLens() {
-  render(<LensHero label="Interactive lens" hint="Swipe to rotate" />);
+  render(<LensHero label="Interactive lens" />);
   return screen.findByRole("button", { name: "Interactive lens" });
 }
 
@@ -183,6 +183,13 @@ const touch = {
 const input = () => canvas.props!.input.current;
 
 describe("interactive hero lens", () => {
+  it("keeps its accessible control without visible instruction text", async () => {
+    const control = await mountLens();
+    expect(control).toHaveAccessibleName("Interactive lens");
+    expect(control).toBeEmptyDOMElement();
+    expect(document.querySelector(".hero-lens-hint")).not.toBeInTheDocument();
+  });
+
   it("tracks a captured touch relative to the lens without rerendering for every move", async () => {
     const control = await mountLens();
     fireEvent.pointerDown(control, touch);

@@ -36,8 +36,8 @@
     "semantic_hash": "8b45d6f1bde21181496b7a6adb19eeef"
   },
   "next-env.d.ts": {
-    "mtime": 1787859584.506766,
-    "seen": 1787860505.4106932,
+    "mtime": 1787860542.3619943,
+    "seen": 1787861593.6506271,
     "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
     "semantic_hash": ""
   },
@@ -378,9 +378,9 @@
     "semantic_hash": "2f2cd569023ed93858783acb1bac4d20"
   },
   "src/components/sections/home-hero.tsx": {
-    "mtime": 1787859062.2960396,
-    "seen": 1787859426.579535,
-    "ast_hash": "370880eca79a06b3f9323902f3a27012",
+    "mtime": 1787861570.7891445,
+    "seen": 1787861593.650688,
+    "ast_hash": "e9815c76da5999237062936d4c32d886",
     "semantic_hash": ""
   },
   "src/components/sections/home-page.tsx": {
@@ -414,15 +414,15 @@
     "semantic_hash": "116f045ed5c24492cd8f1cc729077cd6"
   },
   "src/components/three/lens-canvas.tsx": {
-    "mtime": 1787860300.4295743,
-    "seen": 1787860505.4107609,
+    "mtime": 1787861536.7756839,
+    "seen": 1787861593.650696,
     "ast_hash": "e074a9c6f3b69bc11632ce3c03f05443",
     "semantic_hash": ""
   },
   "src/components/three/lens-hero.tsx": {
-    "mtime": 1787860368.888381,
-    "seen": 1787860505.410762,
-    "ast_hash": "1c409c98354048de26407d5b82dc4a8b",
+    "mtime": 1787861570.7887547,
+    "seen": 1787861593.650697,
+    "ast_hash": "9b600ca13de73c4af0928b4c79ca87ba",
     "semantic_hash": ""
   },
   "src/config/redirects.ts": {
@@ -570,9 +570,9 @@
     "semantic_hash": "b8775bea79d8bb1a55f6d2366d4385b5"
   },
   "tests/e2e/critical-journeys.spec.ts": {
-    "mtime": 1787860415.4311633,
-    "seen": 1787860505.4107862,
-    "ast_hash": "2c86b1bcf901783f9a9a0e17de5dec7f",
+    "mtime": 1787861586.4144251,
+    "seen": 1787861593.650723,
+    "ast_hash": "09b9c95b3735cdc1928a0dbaeed0e97a",
     "semantic_hash": ""
   },
   "tests/e2e/journal.spec.ts": {
@@ -1296,14 +1296,14 @@
     "semantic_hash": ""
   },
   "tests/unit/lens-hero.test.tsx": {
-    "mtime": 1787860300.9067693,
-    "seen": 1787860505.4107919,
-    "ast_hash": "562b237543c9bf31281cd3c81b95edd4",
+    "mtime": 1787861570.790726,
+    "seen": 1787861593.650728,
+    "ast_hash": "406b6ffcb0b23b87aa4138a8074201b1",
     "semantic_hash": ""
   },
   "src/components/three/lens-animation.ts": {
-    "mtime": 1787860300.3800113,
-    "seen": 1787860505.41076,
+    "mtime": 1787861536.7754793,
+    "seen": 1787861593.6506948,
     "ast_hash": "e6f128d90453e4e38f0bb0a473aafe60",
     "semantic_hash": ""
   }
