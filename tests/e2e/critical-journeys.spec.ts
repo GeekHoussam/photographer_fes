@@ -193,6 +193,23 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
   }
 });
 
+test("3D lens has no visible instruction text in any locale", async ({
+  page,
+}) => {
+  for (const locale of ["fr", "en", "ar"]) {
+    await page.goto(`/${locale}`);
+    await waitForHydration(page);
+    const lens = page.locator(".hero-lens-3d");
+    await expect(lens).toHaveAttribute("data-ready", "true");
+    await expect(lens.locator("canvas")).toBeVisible();
+    const control = lens.getByRole("button");
+    await expect(control).toBeVisible();
+    await expect(control).toHaveAccessibleName(/\S/);
+    await expect(control).toHaveText("");
+    await expect(page.locator(".hero-lens-hint")).toHaveCount(0);
+  }
+});
+
 test("3D lens stays mounted when resizing between desktop and mobile", async ({
   page,
 }) => {

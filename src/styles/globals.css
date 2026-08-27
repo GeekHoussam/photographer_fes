@@ -315,20 +315,6 @@ a {
   cursor: grabbing;
 }
 
-.hero-lens-hint {
-  position: absolute;
-  top: calc(100% + 0.25rem);
-  left: 50%;
-  width: max-content;
-  max-width: 17rem;
-  transform: translateX(-50%);
-  color: var(--color-paper);
-  font-size: 0.625rem;
-  line-height: 1.5;
-  opacity: 0.7;
-  pointer-events: none;
-}
-
 /* The full-height grid must not intercept gestures above the actual copy. */
 .reference-home-hero-content {
   pointer-events: none;
@@ -336,17 +322,6 @@ a {
 
 .reference-home-hero-content > div {
   pointer-events: auto;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .hero-lens-hint {
-    opacity: 0;
-    transition: opacity 200ms ease;
-  }
-
-  .hero-lens-control:is(:hover, :focus-visible) .hero-lens-hint {
-    opacity: 0.7;
-  }
 }
 
 .hero-lens-fallback {
@@ -465,7 +440,7 @@ a {
 
 @media (max-width: 1023px) {
   .reference-home-hero-content {
-    /* Reserve room for the touch target and its hint above the stacked copy. */
+    /* Reserve room for the touch target above the stacked copy. */
     padding-top: calc(var(--hero-lens-size) + 2.5rem);
   }
 }

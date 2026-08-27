@@ -7,7 +7,7 @@ import type { LensInput } from "./lens-animation";
 
 const LensCanvas = dynamic(() => import("./lens-canvas"), { ssr: false });
 
-export function LensHero({ label, hint }: { label: string; hint: string }) {
+export function LensHero({ label }: { label: string }) {
   const root = useRef<HTMLDivElement>(null);
   const control = useRef<HTMLButtonElement>(null);
   const input = useRef<LensInput>({
@@ -261,11 +261,7 @@ export function LensHero({ label, hint }: { label: string; hint: string }) {
               resetInteraction();
             }
           }}
-        >
-          <span className="hero-lens-hint" aria-hidden="true">
-            {hint}
-          </span>
-        </button>
+        />
       ) : null}
     </div>
   );
