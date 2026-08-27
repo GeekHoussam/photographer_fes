@@ -67,20 +67,30 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
     testInfo.project.name === "mobile",
     "The explicit viewport matrix already includes mobile widths",
   );
-  test.setTimeout(90_000);
+  test.setTimeout(180_000);
   const viewports = [
     { width: 360, height: 640 },
     { width: 390, height: 720 },
+    { width: 606, height: 909 },
     { width: 768, height: 800 },
+    { width: 1023, height: 768 },
     { width: 1024, height: 600 },
+    { width: 1219, height: 909 },
+    { width: 1279, height: 720 },
     { width: 1280, height: 720 },
     { width: 1440, height: 800 },
   ];
 
-  for (const viewport of viewports) {
+  const cases = ["en", "fr", "ar"].flatMap((locale) =>
+    viewports.map((viewport) => ({ locale, viewport })),
+  );
+  for (const { locale, viewport } of cases) {
     await page.setViewportSize(viewport);
-    await page.goto("/en", { waitUntil: "domcontentloaded" });
+    await page.goto(`/${locale}`, { waitUntil: "domcontentloaded" });
     await waitForHydration(page);
+    const lens = page.locator(".hero-lens-3d");
+    await expect(lens).toHaveAttribute("data-ready", "true");
+    await expect(lens.locator("canvas")).toBeVisible();
 
     const metrics = await page
       .locator(".reference-home-hero")
@@ -119,6 +129,7 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
         const heroRect = hero.getBoundingClientRect();
         const titleRect = visibleRect(".reference-home-hero-title");
         const lensRect = visibleRect(".hero-lens-3d");
+        const introRect = visibleRect(".reference-home-hero-intro");
         const galleryRect = visibleRect(".hero-orbit-gallery");
         let ancestor: HTMLElement | null = title;
         let translucentTextAncestor = false;
@@ -139,6 +150,14 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
             bottom: heroRect.bottom,
             left: heroRect.left,
           },
+          headerBottom: document
+            .querySelector("header")!
+            .getBoundingClientRect().bottom,
+          lens: lensRect,
+          lensBlocksInteraction:
+            getComputedStyle(hero.querySelector(".hero-lens-3d")!)
+              .pointerEvents !== "none",
+          introCollidesWithLens: overlaps(introRect, lensRect),
           title: titleRect,
           titleCollidesWithGallery: overlaps(titleRect, galleryRect),
           titleCollidesWithLens: overlaps(titleRect, lensRect),
@@ -154,8 +173,38 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
     expect(metrics.title!.bottom).toBeLessThanOrEqual(metrics.hero.bottom + 1);
     expect(metrics.titleCollidesWithGallery).toBe(false);
     expect(metrics.titleCollidesWithLens).toBe(false);
+    expect(metrics.introCollidesWithLens).toBe(false);
+    expect(metrics.lensBlocksInteraction).toBe(false);
+    expect(metrics.lens).not.toBeNull();
+    expect(metrics.lens!.left).toBeGreaterThanOrEqual(metrics.hero.left);
+    expect(metrics.lens!.right).toBeLessThanOrEqual(metrics.hero.right);
+    expect(metrics.lens!.top).toBeGreaterThanOrEqual(metrics.headerBottom);
+    expect(metrics.lens!.bottom).toBeLessThanOrEqual(metrics.hero.bottom);
+    if (viewport.width < 1280) {
+      expect(metrics.lens!.right - metrics.lens!.left).toBeLessThanOrEqual(224);
+    }
     expect(metrics.translucentTextAncestor).toBe(false);
     expect(metrics.galleryVisible).toBe(viewport.width >= 1280);
+  }
+});
+
+test("3D lens stays mounted when resizing between desktop and mobile", async ({
+  page,
+}) => {
+  await page.goto("/en");
+  await waitForHydration(page);
+  const lens = page.locator(".hero-lens-3d");
+  await expect(lens).toHaveAttribute("data-ready", "true");
+  const canvas = await lens.locator("canvas").elementHandle();
+  expect(canvas).not.toBeNull();
+
+  for (const width of [1440, 1219, 768, 390, 320, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(lens.locator("canvas")).toBeVisible();
+    expect(await canvas!.evaluate((element) => element.isConnected)).toBe(true);
+    const bounds = await lens.boundingBox();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
   }
 });
 
@@ -908,7 +957,11 @@ test("reduced motion renders core content", async ({ browser }) => {
   await page.goto("/en");
   await waitForHydration(page);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.locator("canvas")).toHaveCount(0);
+  for (const width of [320, 390, 768, 1219, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect(page.locator(".hero-lens-fallback")).toBeVisible();
+    await expect(page.locator("canvas")).toHaveCount(0);
+  }
   await context.close();
 });
 

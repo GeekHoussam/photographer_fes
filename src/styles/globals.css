@@ -394,9 +394,22 @@ a {
   }
 }
 
-@media (min-width: 768px) and (max-width: 1023px) {
+@media (max-width: 1279px) {
+  .reference-home-hero {
+    --hero-lens-size: clamp(6rem, 18vw, 14rem);
+  }
+
   .hero-lens-3d {
-    display: none;
+    top: calc(var(--header-height) + 1rem);
+    width: var(--hero-lens-size);
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 1023px) {
+  .reference-home-hero-content {
+    /* Keep the smaller lens above the existing stacked hero copy. */
+    padding-top: calc(var(--hero-lens-size) + 2rem);
   }
 }
 
@@ -2270,10 +2283,6 @@ html[dir="rtl"] .portfolio-project-preview-progress span {
 
   .hero-media-image {
     object-position: 52% center;
-  }
-
-  .hero-lens-3d {
-    display: none;
   }
 
   .home-hero::after {
