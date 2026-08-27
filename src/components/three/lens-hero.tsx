@@ -14,18 +14,15 @@ export function LensHero() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const desktop = window.matchMedia("(min-width: 1280px)");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => {
-      const shouldEnable = desktop.matches && !motion.matches;
+      const shouldEnable = !motion.matches;
       setEnabled(shouldEnable);
       if (!shouldEnable) setReady(false);
     };
     update();
-    desktop.addEventListener("change", update);
     motion.addEventListener("change", update);
     return () => {
-      desktop.removeEventListener("change", update);
       motion.removeEventListener("change", update);
     };
   }, []);
@@ -34,6 +31,7 @@ export function LensHero() {
     if (!enabled) return;
     let frame = 0;
     const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
       cancelAnimationFrame(frame);
       frame = requestAnimationFrame(() => {
         setPointer([
@@ -96,7 +94,7 @@ export function LensHero() {
   return (
     <div
       ref={root}
-      className="hero-lens-3d hidden xl:block"
+      className="hero-lens-3d"
       data-ready={ready}
       aria-hidden="true"
     >
