@@ -1,23 +1,23 @@
 # Graph Report - photographer_fes  (2026-08-27)
 
 ## Corpus Check
-- 157 files · ~3,430,705 words
+- 159 files · ~3,433,012 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1223 nodes · 1790 edges · 107 communities (86 shown, 21 thin omitted)
+- 1241 nodes · 1823 edges · 107 communities (87 shown, 20 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7eaca5ba`
+- Built from commit: `92c052fa`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- isLocale
+- site.ts
 - structured-data.ts
-- Locale
+- project-card.tsx
 - devDependencies
 - dependencies
 - videos.ts
@@ -25,7 +25,6 @@
 - compilerOptions
 - index.ts
 - contact-form.tsx
-- site.ts
 - audit_photos.py
 - [locale]/layout.tsx
 - arabic-locale.spec.ts
@@ -34,7 +33,7 @@
 - Threat model
 - next.config.ts
 - hero-media.tsx
-- rotating-catalogue.tsx
+- Locale
 - Hard rules
 - client.ts
 - queries.ts
@@ -111,6 +110,7 @@
 - deployment.md
 - sanity-editor-guide.md
 - threejs-performance.md
+- lens-hero.test.tsx
 
 ## God Nodes (most connected - your core abstractions)
 1. `isLocale()` - 44 edges
@@ -139,19 +139,19 @@
 ## Import Cycles
 - None detected.
 
-## Communities (107 total, 21 thin omitted)
+## Communities (107 total, 20 thin omitted)
 
-### Community 0 - "isLocale"
-Cohesion: 0.09
-Nodes (50): generateMetadata(), Page(), ContactPage(), generateMetadata(), generateMetadata(), JournalPage(), generateMetadata(), JournalArticlePage() (+42 more)
+### Community 0 - "site.ts"
+Cohesion: 0.07
+Nodes (59): generateMetadata(), Page(), ContactPage(), generateMetadata(), generateMetadata(), JournalPage(), generateMetadata(), JournalArticlePage() (+51 more)
 
 ### Community 1 - "structured-data.ts"
-Cohesion: 0.07
-Nodes (63): dynamic, robots(), alternates(), dynamic, sitemap(), absoluteUrl(), brandTitles, contactDetails (+55 more)
+Cohesion: 0.06
+Nodes (63): metadata, dynamic, robots(), alternates(), dynamic, sitemap(), absoluteUrl(), brandTitles (+55 more)
 
-### Community 2 - "Locale"
-Cohesion: 0.16
-Nodes (13): gridLayouts, Lightbox(), aspectClasses, ProjectCard(), ProjectPreview(), handlePointerMove(), paintPointerPosition(), resetPreview() (+5 more)
+### Community 2 - "project-card.tsx"
+Cohesion: 0.32
+Nodes (7): aspectClasses, ProjectCard(), ProjectPreview(), handlePointerMove(), paintPointerPosition(), resetPreview(), ProjectSummary
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.05
@@ -162,8 +162,8 @@ Cohesion: 0.05
 Nodes (43): focus-trap-react, @fontsource-variable/jost, @fontsource-variable/noto-sans-arabic, @hookform/resolvers, lucide-react, next, next-intl, next-sanity (+35 more)
 
 ### Community 5 - "videos.ts"
-Cohesion: 0.15
-Nodes (16): JournalVideo(), VideoCardLabels, arabicTitleByVideoId, definitionBySlug, getVideoEmbedUrl(), getVideoThumbnailUrl(), PortfolioVideo, portfolioVideos (+8 more)
+Cohesion: 0.14
+Nodes (18): JournalVideo(), VideoCard(), VideoCardLabels, arabicTitleByVideoId, definitionBySlug, getVideoEmbedUrl(), getVideoThumbnailUrl(), PortfolioVideo (+10 more)
 
 ### Community 6 - "scripts"
 Cohesion: 0.07
@@ -178,20 +178,16 @@ Cohesion: 0.10
 Nodes (18): accessibleImage, category, client, faq, homepage, journalArticle, localizedPortableText, localizedString (+10 more)
 
 ### Community 9 - "contact-form.tsx"
-Cohesion: 0.10
-Nodes (17): POST(), Button(), ContactDialogContext, ContactDialogContextValue, ContactDialogProvider(), ContactMethods(), ContactForm(), ContactFormCopy (+9 more)
-
-### Community 10 - "site.ts"
-Cohesion: 0.19
-Nodes (7): configuredBasePath, configuredUrl, defaultLocale, normalizeBasePath(), normalizeSiteUrl(), publicBaseUrl, resolvePublicBaseUrl()
+Cohesion: 0.11
+Nodes (16): POST(), Button(), ContactDialogContext, ContactDialogContextValue, ContactDialogProvider(), ContactForm(), ContactFormCopy, attempts (+8 more)
 
 ### Community 11 - "audit_photos.py"
 Cohesion: 0.28
 Nodes (12): Image, ImageFont, Path, difference_hash(), display_category(), hamming(), inspect(), label_font() (+4 more)
 
 ### Community 12 - "[locale]/layout.tsx"
-Cohesion: 0.06
-Nodes (20): metadata, generateMetadata(), arabicFont, RootDocument(), siteFont, Footer(), Header(), links (+12 more)
+Cohesion: 0.07
+Nodes (18): generateMetadata(), arabicFont, RootDocument(), siteFont, Footer(), Header(), links, HydrationMarker() (+10 more)
 
 ### Community 13 - "arabic-locale.spec.ts"
 Cohesion: 0.17
@@ -213,9 +209,9 @@ Nodes (29): 1. IDOR via Predictable Resource IDs, 2. Server Function Input Manip
 Cohesion: 0.40
 Nodes (4): nextConfig, withNextIntl, LegacyRedirect, legacyRedirects
 
-### Community 19 - "rotating-catalogue.tsx"
-Cohesion: 0.67
-Nodes (3): CatalogueItem, circularOffset(), RotatingCatalogue()
+### Community 19 - "Locale"
+Cohesion: 0.19
+Nodes (9): gridLayouts, Lightbox(), CatalogueItem, circularOffset(), RotatingCatalogue(), ScrollTransitionFrame, ScrollTransitionFrames(), Locale (+1 more)
 
 ### Community 21 - "Hard rules"
 Cohesion: 0.08
@@ -242,8 +238,8 @@ Cohesion: 0.11
 Nodes (17): 0a. Higgsfield packages and template modules, 0b. Supercomputer Design mode inspector, 1. SSR-safe rendering, 2. Server-only code stays server-only, 3. Higgsfield (fnf) calls are BACKEND-ONLY — and auth is MANDATORY, 3a. An app is end-to-end — real backend + real DB, never a mock, 4. Cloudflare bindings via `cloudflare:workers`, 5. Opted-in storage is LIVE — one deploy, one database (+9 more)
 
 ### Community 43 - "portfolio-filters.tsx"
-Cohesion: 0.18
-Nodes (11): PortfolioFilters(), projectCardClasses, VideoCard(), categoryLabel(), categoryOrder, isPortfolioCategory(), labels, filterPortfolioVideos() (+3 more)
+Cohesion: 0.24
+Nodes (8): PortfolioFilters(), projectCardClasses, categoryLabel(), categoryOrder, isPortfolioCategory(), labels, filterPortfolioVideos(), isVideoCategory()
 
 ### Community 44 - "Skill: Auth Boundary"
 Cohesion: 0.13
@@ -270,8 +266,8 @@ Cohesion: 0.15
 Nodes (12): A quoi sert une Vidéo pour un Couple à fès ?, Au-delà de l'Image Fixe : Votre Vidéaste Mariage Maroc, Capturer l'Essence des Lieux de Réception Prestigieux, Contactez Votre Photographe de Mariage à Fès, L'Expertise Locale : Lumière, Lieux et Logistique, L’Élégance Intemporelle : L'Importance d'un Photographe de Mariage à Fès, La Magie de la Médina pour Votre Séance Photo Couple, NOM Films : L'Excellence Cinématographique à Fès (+4 more)
 
 ### Community 50 - "content.ts"
-Cohesion: 0.19
-Nodes (10): JournalArticleContent(), RichText(), mediaBySlug, JournalArticle, JournalBodyBlock, JournalLocaleContent, JournalRichText, JournalVideo (+2 more)
+Cohesion: 0.22
+Nodes (9): JournalArticleContent(), RichText(), JournalArticle, JournalBodyBlock, JournalLocaleContent, JournalRichText, LocalizedFaq, PortfolioCategory (+1 more)
 
 ### Community 51 - "4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)"
 Cohesion: 0.17
@@ -441,25 +437,33 @@ Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
+### Community 93 - "mappers.ts"
+Cohesion: 0.60
+Nodes (3): localize(), mapSlug(), LocalizedText
+
+### Community 107 - "lens-hero.test.tsx"
+Cohesion: 0.14
+Nodes (12): createLensInput(), createLensMotion(), idleInput, LensInput, LensParts, updateLensFrame(), LensAssembly(), LensCanvas() (+4 more)
+
 ## Knowledge Gaps
-- **709 isolated node(s):** `lintStagedConfig`, `withNextIntl`, `nextConfig`, `name`, `version` (+704 more)
+- **713 isolated node(s):** `lintStagedConfig`, `withNextIntl`, `nextConfig`, `name`, `version` (+708 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **21 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `sharp` connect `scripts` to `structured-data.ts`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+  _High betweenness centrality (0.049) - this node is a cross-community bridge._
 - **What connects `lintStagedConfig`, `withNextIntl`, `nextConfig` to the rest of the system?**
-  _709 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `isLocale` be split into smaller, more focused modules?**
-  _Cohesion score 0.09185329438493996 - nodes in this community are weakly interconnected._
+  _713 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `site.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.07481125600549074 - nodes in this community are weakly interconnected._
 - **Should `structured-data.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.06771929824561404 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.06493506493506493 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.046511627906976744 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.046511627906976744 - nodes in this community are weakly interconnected._
 - **Should `videos.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.14761904761904762 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.13768115942028986 - nodes in this community are weakly interconnected._

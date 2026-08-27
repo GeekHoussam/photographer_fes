@@ -19,6 +19,9 @@ export function HomeHero({ locale }: { locale: Locale }) {
         portfolio: "Voir les séries photographiques",
         quote: "Demander un devis",
         heroAlt: "Vidéaste filmant dans une rue de Fès",
+        lensLabel:
+          "Objectif 3D interactif. Glissez horizontalement ou utilisez les flèches pour le tourner. Touchez ou appuyez sur Entrée pour faire la mise au point.",
+        lensHint: "Glissez · Touchez pour la mise au point",
       },
       en: {
         eyebrow: page.eyebrow,
@@ -27,6 +30,9 @@ export function HomeHero({ locale }: { locale: Locale }) {
         portfolio: "View the photography series",
         quote: "Request a quotation",
         heroAlt: "Filmmaker shooting on a street in Fez",
+        lensLabel:
+          "Interactive 3D lens. Swipe horizontally or use arrow keys to rotate. Tap or press Enter to focus.",
+        lensHint: "Swipe to rotate · Tap to focus",
       },
       ar: {
         eyebrow: page.eyebrow,
@@ -35,6 +41,9 @@ export function HomeHero({ locale }: { locale: Locale }) {
         portfolio: "عرض السلاسل الفوتوغرافية",
         quote: "طلب عرض سعر",
         heroAlt: "صانع أفلام يصور في أحد شوارع فاس",
+        lensLabel:
+          "عدسة ثلاثية الأبعاد تفاعلية. اسحب أفقياً أو استخدم مفاتيح الأسهم لتدويرها. المس العدسة أو اضغط على مفتاح الإدخال لضبط التركيز.",
+        lensHint: "اسحب للتدوير · المس لضبط التركيز",
       },
     } satisfies Record<
       Locale,
@@ -45,6 +54,8 @@ export function HomeHero({ locale }: { locale: Locale }) {
         portfolio: string;
         quote: string;
         heroAlt: string;
+        lensLabel: string;
+        lensHint: string;
       }
     >
   )[locale];
@@ -79,7 +90,7 @@ export function HomeHero({ locale }: { locale: Locale }) {
         className="reference-home-hero-overlay pointer-events-none absolute inset-0"
         aria-hidden="true"
       />
-      <LensHero />
+      <LensHero label={copy.lensLabel} hint={copy.lensHint} />
       <HeroOrbitGallery items={orbitItems} locale={locale} />
 
       <Container className="reference-home-hero-content relative z-[3] grid min-h-[calc(100svh-var(--header-height))] grid-cols-12 content-center gap-y-8 pt-20 pb-8 sm:pb-12 lg:items-end">

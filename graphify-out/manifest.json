@@ -36,10 +36,10 @@
     "semantic_hash": "8b45d6f1bde21181496b7a6adb19eeef"
   },
   "next-env.d.ts": {
-    "mtime": 1787779988.6476007,
-    "seen": 1787857018.010151,
+    "mtime": 1787859584.506766,
+    "seen": 1787860505.4106932,
     "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
-    "semantic_hash": "d0f8375ae1199dc7acd3977fc33b78b8"
+    "semantic_hash": ""
   },
   "next.config.ts": {
     "mtime": 1786916404.0603426,
@@ -378,10 +378,10 @@
     "semantic_hash": "2f2cd569023ed93858783acb1bac4d20"
   },
   "src/components/sections/home-hero.tsx": {
-    "mtime": 1787770277.5837703,
-    "seen": 1787857018.010209,
-    "ast_hash": "7a6d701cb9716c21e7a664a07cf094e9",
-    "semantic_hash": "7a6d701cb9716c21e7a664a07cf094e9"
+    "mtime": 1787859062.2960396,
+    "seen": 1787859426.579535,
+    "ast_hash": "370880eca79a06b3f9323902f3a27012",
+    "semantic_hash": ""
   },
   "src/components/sections/home-page.tsx": {
     "mtime": 1787770277.5840812,
@@ -414,15 +414,15 @@
     "semantic_hash": "116f045ed5c24492cd8f1cc729077cd6"
   },
   "src/components/three/lens-canvas.tsx": {
-    "mtime": 1786916404.0661023,
-    "seen": 1787769038.250946,
-    "ast_hash": "b14823e4d41e59613430ea72cf81b317",
-    "semantic_hash": "b14823e4d41e59613430ea72cf81b317"
+    "mtime": 1787860300.4295743,
+    "seen": 1787860505.4107609,
+    "ast_hash": "e074a9c6f3b69bc11632ce3c03f05443",
+    "semantic_hash": ""
   },
   "src/components/three/lens-hero.tsx": {
-    "mtime": 1787856762.3150272,
-    "seen": 1787857018.010216,
-    "ast_hash": "9cef47802a2a4c722874744a3d7a9d66",
+    "mtime": 1787860368.888381,
+    "seen": 1787860505.410762,
+    "ast_hash": "1c409c98354048de26407d5b82dc4a8b",
     "semantic_hash": ""
   },
   "src/config/redirects.ts": {
@@ -570,9 +570,9 @@
     "semantic_hash": "b8775bea79d8bb1a55f6d2366d4385b5"
   },
   "tests/e2e/critical-journeys.spec.ts": {
-    "mtime": 1787856915.8159993,
-    "seen": 1787857018.01024,
-    "ast_hash": "31a58149c4f43056c9be8cf76d14f5a8",
+    "mtime": 1787860415.4311633,
+    "seen": 1787860505.4107862,
+    "ast_hash": "2c86b1bcf901783f9a9a0e17de5dec7f",
     "semantic_hash": ""
   },
   "tests/e2e/journal.spec.ts": {
@@ -1293,6 +1293,18 @@
     "mtime": 1783814939.836237,
     "seen": 1787857018.010367,
     "ast_hash": "50a49dfaa01897af9930310379baf9ce",
+    "semantic_hash": ""
+  },
+  "tests/unit/lens-hero.test.tsx": {
+    "mtime": 1787860300.9067693,
+    "seen": 1787860505.4107919,
+    "ast_hash": "562b237543c9bf31281cd3c81b95edd4",
+    "semantic_hash": ""
+  },
+  "src/components/three/lens-animation.ts": {
+    "mtime": 1787860300.3800113,
+    "seen": 1787860505.41076,
+    "ast_hash": "e6f128d90453e4e38f0bb0a473aafe60",
     "semantic_hash": ""
   }
 }

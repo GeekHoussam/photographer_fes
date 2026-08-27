@@ -1,7 +1,7 @@
 {
-  "0": "isLocale",
+  "0": "site.ts",
   "1": "structured-data.ts",
-  "2": "Locale",
+  "2": "project-card.tsx",
   "3": "devDependencies",
   "4": "dependencies",
   "5": "videos.ts",
@@ -9,7 +9,6 @@
   "7": "compilerOptions",
   "8": "index.ts",
   "9": "contact-form.tsx",
-  "10": "site.ts",
   "11": "audit_photos.py",
   "12": "[locale]/layout.tsx",
   "13": "arabic-locale.spec.ts",
@@ -18,7 +17,7 @@
   "16": "Threat model",
   "17": "next.config.ts",
   "18": "hero-media.tsx",
-  "19": "rotating-catalogue.tsx",
+  "19": "Locale",
   "20": "start-comfyui.ps1",
   "21": "Hard rules",
   "22": "client.ts",
@@ -105,5 +104,6 @@
   "103": "content-migration.md",
   "104": "deployment.md",
   "105": "sanity-editor-guide.md",
-  "106": "threejs-performance.md"
+  "106": "threejs-performance.md",
+  "107": "lens-hero.test.tsx"
 }

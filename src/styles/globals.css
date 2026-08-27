@@ -292,6 +292,63 @@ a {
   height: 100% !important;
 }
 
+.hero-lens-control {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  background: transparent;
+  pointer-events: auto;
+  touch-action: pan-y pinch-zoom;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: grab;
+}
+
+.hero-lens-control:focus-visible {
+  outline: 1px solid var(--color-paper);
+  outline-offset: 5px;
+}
+
+.hero-lens-3d[data-interacting="true"] .hero-lens-control {
+  cursor: grabbing;
+}
+
+.hero-lens-hint {
+  position: absolute;
+  top: calc(100% + 0.25rem);
+  left: 50%;
+  width: max-content;
+  max-width: 17rem;
+  transform: translateX(-50%);
+  color: var(--color-paper);
+  font-size: 0.625rem;
+  line-height: 1.5;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* The full-height grid must not intercept gestures above the actual copy. */
+.reference-home-hero-content {
+  pointer-events: none;
+}
+
+.reference-home-hero-content > div {
+  pointer-events: auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-lens-hint {
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .hero-lens-control:is(:hover, :focus-visible) .hero-lens-hint {
+    opacity: 0.7;
+  }
+}
+
 .hero-lens-fallback {
   position: absolute;
   inset: 8%;
@@ -396,7 +453,7 @@ a {
 
 @media (max-width: 1279px) {
   .reference-home-hero {
-    --hero-lens-size: clamp(6rem, 18vw, 14rem);
+    --hero-lens-size: clamp(11rem, 18vw, 14rem);
   }
 
   .hero-lens-3d {
@@ -408,8 +465,8 @@ a {
 
 @media (max-width: 1023px) {
   .reference-home-hero-content {
-    /* Keep the smaller lens above the existing stacked hero copy. */
-    padding-top: calc(var(--hero-lens-size) + 2rem);
+    /* Reserve room for the touch target and its hint above the stacked copy. */
+    padding-top: calc(var(--hero-lens-size) + 2.5rem);
   }
 }
 

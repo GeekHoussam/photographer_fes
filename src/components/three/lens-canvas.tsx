@@ -1,147 +1,68 @@
 "use client";
 
-import { AdaptiveDpr } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
-import { MathUtils } from "three";
-import type { Group } from "three";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import type { RefObject } from "react";
+import { Color, Object3D } from "three";
+import type { Group, InstancedMesh } from "three";
+
+import { createLensMotion, updateLensFrame } from "./lens-animation";
+import type { LensInput } from "./lens-animation";
 
 const TAU = Math.PI * 2;
 
-function LensAssembly({
-  progress,
-  reducedMotion,
-  pointer,
-}: {
-  progress: number;
-  reducedMotion: boolean;
-  pointer: [number, number];
-}) {
+function LensGrip() {
+  const mesh = useRef<InstancedMesh>(null);
+
+  useLayoutEffect(() => {
+    if (!mesh.current) return;
+    const transform = new Object3D();
+    const color = new Color();
+    for (let index = 0; index < 72; index += 1) {
+      const angle = (index / 72) * TAU;
+      transform.position.set(
+        Math.cos(angle) * 2.11,
+        Math.sin(angle) * 2.11,
+        -0.12,
+      );
+      transform.rotation.set(0, 0, angle);
+      transform.updateMatrix();
+      mesh.current.setMatrixAt(index, transform.matrix);
+      mesh.current.setColorAt(
+        index,
+        color.set(index % 2 === 0 ? "#171a1d" : "#0b0d0f"),
+      );
+    }
+    mesh.current.instanceMatrix.needsUpdate = true;
+    if (mesh.current.instanceColor)
+      mesh.current.instanceColor.needsUpdate = true;
+    mesh.current.computeBoundingSphere();
+  }, []);
+
+  // The same 72 grip details in a single draw call, including on phones.
+  return (
+    <instancedMesh ref={mesh} args={[undefined, undefined, 72]}>
+      <boxGeometry args={[0.025, 0.19, 0.48]} />
+      <meshStandardMaterial
+        roughness={0.66}
+        metalness={0.48}
+        transparent
+        opacity={0.82}
+      />
+    </instancedMesh>
+  );
+}
+
+function LensAssembly({ input }: { input: RefObject<LensInput> }) {
   const group = useRef<Group>(null);
   const glass = useRef<Group>(null);
   const iris = useRef<Group>(null);
   const reflections = useRef<Group>(null);
-  const smoothProgress = useRef(0);
+  const motion = useRef(createLensMotion());
+  const parts = { group, glass, iris, reflections };
 
   useFrame(({ clock }, delta) => {
-    if (!group.current) return;
-    const influence = reducedMotion ? 0 : 1;
-    smoothProgress.current = MathUtils.damp(
-      smoothProgress.current,
-      progress,
-      5.5,
-      delta,
-    );
-    const scroll = smoothProgress.current;
-    const pointerDistance = Math.min(1, Math.hypot(pointer[0], pointer[1]));
-
-    group.current.rotation.x = MathUtils.damp(
-      group.current.rotation.x,
-      pointer[1] * 0.1 * influence - 0.035,
-      4.6,
-      delta,
-    );
-    group.current.rotation.y = MathUtils.damp(
-      group.current.rotation.y,
-      pointer[0] * 0.12 * influence + 0.075,
-      4.6,
-      delta,
-    );
-    group.current.rotation.z = MathUtils.damp(
-      group.current.rotation.z,
-      scroll * 0.24 +
-        pointer[0] * 0.025 * influence +
-        Math.sin(clock.elapsedTime * 0.26) * 0.008 * influence,
-      4.2,
-      delta,
-    );
-    group.current.position.x = MathUtils.damp(
-      group.current.position.x,
-      pointer[0] * 0.055 * influence,
-      4.4,
-      delta,
-    );
-    group.current.position.y = MathUtils.damp(
-      group.current.position.y,
-      pointer[1] * 0.04 * influence,
-      4.4,
-      delta,
-    );
-    group.current.position.z = MathUtils.damp(
-      group.current.position.z,
-      scroll * 0.08 + pointerDistance * 0.025 * influence,
-      4.1,
-      delta,
-    );
-    const targetScale =
-      0.96 + scroll * 0.1 + pointerDistance * 0.015 * influence;
-    const nextScale = MathUtils.damp(
-      group.current.scale.x,
-      targetScale,
-      4.8,
-      delta,
-    );
-    group.current.scale.setScalar(nextScale);
-
-    if (glass.current) {
-      glass.current.position.x = MathUtils.damp(
-        glass.current.position.x,
-        pointer[0] * -0.025 * influence,
-        5.4,
-        delta,
-      );
-      glass.current.position.y = MathUtils.damp(
-        glass.current.position.y,
-        pointer[1] * -0.02 * influence,
-        5.4,
-        delta,
-      );
-      glass.current.rotation.z = MathUtils.damp(
-        glass.current.rotation.z,
-        pointer[0] * -0.04 * influence + scroll * 0.055,
-        4.8,
-        delta,
-      );
-    }
-
-    if (iris.current) {
-      iris.current.rotation.z = MathUtils.damp(
-        iris.current.rotation.z,
-        -scroll * 0.48 +
-          pointer[0] * 0.05 * influence +
-          clock.elapsedTime * 0.012 * influence,
-        4.6,
-        delta,
-      );
-      const irisScale = MathUtils.damp(
-        iris.current.scale.x,
-        1 - scroll * 0.065 + pointerDistance * 0.015 * influence,
-        4.4,
-        delta,
-      );
-      iris.current.scale.setScalar(irisScale);
-    }
-
-    if (reflections.current) {
-      reflections.current.rotation.z = MathUtils.damp(
-        reflections.current.rotation.z,
-        (pointer[0] * 0.09 - pointer[1] * 0.05) * influence,
-        5.6,
-        delta,
-      );
-      reflections.current.position.x = MathUtils.damp(
-        reflections.current.position.x,
-        pointer[0] * -0.045 * influence,
-        5.6,
-        delta,
-      );
-      reflections.current.position.y = MathUtils.damp(
-        reflections.current.position.y,
-        pointer[1] * -0.035 * influence,
-        5.6,
-        delta,
-      );
-    }
+    updateLensFrame(parts, motion.current, input, clock.elapsedTime, delta);
   });
 
   return (
@@ -157,25 +78,7 @@ function LensAssembly({
         />
       </mesh>
 
-      {Array.from({ length: 72 }, (_, index) => {
-        const angle = (index / 72) * TAU;
-        return (
-          <mesh
-            key={`grip-${index}`}
-            position={[Math.cos(angle) * 2.11, Math.sin(angle) * 2.11, -0.12]}
-            rotation={[0, 0, angle]}
-          >
-            <boxGeometry args={[0.025, 0.19, 0.48]} />
-            <meshStandardMaterial
-              color={index % 2 === 0 ? "#171a1d" : "#0b0d0f"}
-              roughness={0.66}
-              metalness={0.48}
-              transparent
-              opacity={0.82}
-            />
-          </mesh>
-        );
-      })}
+      <LensGrip />
 
       <mesh position={[0, 0, 0.14]}>
         <ringGeometry args={[1.76, 2.15, 120]} />
@@ -325,15 +228,13 @@ function LensAssembly({
 }
 
 export default function LensCanvas({
-  progress = 0,
-  reducedMotion = false,
-  pointer = [0, 0],
+  input,
+  dpr,
   active = true,
   onReady,
 }: {
-  progress?: number;
-  reducedMotion?: boolean;
-  pointer?: [number, number];
+  input: RefObject<LensInput>;
+  dpr: number;
   active?: boolean;
   onReady?: () => void;
 }) {
@@ -351,7 +252,7 @@ export default function LensCanvas({
     <Canvas
       aria-hidden="true"
       camera={{ position: [0, 0, 6.2], fov: 42 }}
-      dpr={[1, 1.5]}
+      dpr={dpr}
       frameloop={visible && active ? "always" : "never"}
       gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       onCreated={({ gl }) => {
@@ -378,12 +279,7 @@ export default function LensCanvas({
         color="#a7adb2"
         distance={9}
       />
-      <AdaptiveDpr pixelated />
-      <LensAssembly
-        progress={progress}
-        reducedMotion={reducedMotion}
-        pointer={pointer}
-      />
+      <LensAssembly input={input} />
     </Canvas>
   );
 }

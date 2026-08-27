@@ -73,11 +73,13 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
     { width: 390, height: 720 },
     { width: 606, height: 909 },
     { width: 768, height: 800 },
+    { width: 931, height: 909 },
     { width: 1023, height: 768 },
     { width: 1024, height: 600 },
     { width: 1219, height: 909 },
     { width: 1279, height: 720 },
     { width: 1280, height: 720 },
+    { width: 1366, height: 768 },
     { width: 1440, height: 800 },
   ];
 
@@ -173,7 +175,10 @@ test("homepage hero copy stays inside the viewport without effect collisions", a
     expect(metrics.title!.bottom).toBeLessThanOrEqual(metrics.hero.bottom + 1);
     expect(metrics.titleCollidesWithGallery).toBe(false);
     expect(metrics.titleCollidesWithLens).toBe(false);
-    expect(metrics.introCollidesWithLens).toBe(false);
+    expect(
+      metrics.introCollidesWithLens,
+      `${locale} ${viewport.width}x${viewport.height}: ${JSON.stringify(metrics)}`,
+    ).toBe(false);
     expect(metrics.lensBlocksInteraction).toBe(false);
     expect(metrics.lens).not.toBeNull();
     expect(metrics.lens!.left).toBeGreaterThanOrEqual(metrics.hero.left);
@@ -205,6 +210,170 @@ test("3D lens stays mounted when resizing between desktop and mobile", async ({
     const bounds = await lens.boundingBox();
     expect(bounds!.x).toBeGreaterThanOrEqual(0);
     expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+  }
+});
+
+test("laptop lens accepts mouse drags and remains visible after reloading", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "Touch gestures are covered separately");
+  const runtimeErrors: string[] = [];
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+
+  for (const width of [1280, 1366, 1440]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto("/en");
+    const lens = page.locator(".hero-lens-3d");
+    await expect(lens).toHaveAttribute("data-ready", "true");
+    const control = lens.getByRole("button", { name: /Interactive 3D lens/ });
+    const box = (await control.boundingBox())!;
+    expect(box.width).toBeGreaterThanOrEqual(320);
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    await expect(lens).toHaveAttribute("data-interacting", "true");
+    await page.mouse.move(box.x + box.width - 15, box.y + box.height / 3, {
+      steps: 12,
+    });
+    await expect(lens.locator("canvas")).toBeVisible();
+    await page.mouse.up();
+    await expect(lens).toHaveAttribute("data-interacting", "false");
+    await page.reload();
+    await expect(lens).toHaveAttribute("data-ready", "true");
+    await expect(lens.locator("canvas")).toBeVisible();
+  }
+
+  expect(runtimeErrors).toEqual([]);
+});
+
+test("3D lens renders at device resolution and its controls remain reachable", async ({
+  page,
+}) => {
+  const runtimeErrors: string[] = [];
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+  await page.goto("/en");
+  await waitForHydration(page);
+  const lens = page.locator(".hero-lens-3d");
+  await expect(lens).toHaveAttribute("data-ready", "true");
+  const control = lens.getByRole("button", { name: /Interactive 3D lens/ });
+  await expect(control).toBeVisible();
+  await expect(lens.locator("canvas")).not.toHaveCSS(
+    "image-rendering",
+    "pixelated",
+  );
+  await expect
+    .poll(() =>
+      lens.evaluate((element) => {
+        const canvas = element.querySelector("canvas")!;
+        const bounds = element.getBoundingClientRect();
+        const expected = Math.min(
+          window.devicePixelRatio,
+          3,
+          1024 / bounds.width,
+        );
+        return Math.abs(canvas.width - Math.floor(bounds.width * expected));
+      }),
+    )
+    .toBeLessThanOrEqual(1);
+
+  // A transparent full-height copy grid must not cover the lens hit target.
+  await control.click();
+  await control.press("ArrowRight");
+  await expect(control).toBeFocused();
+  await control.press("Enter");
+  await control.press("Escape");
+  await expect(lens).toHaveAttribute("data-interacting", "false");
+  expect(runtimeErrors).toEqual([]);
+  await page
+    .getByRole("link", { name: /View the photography series/i })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/en\/portfolio/);
+});
+
+test("3D lens touch drags release cleanly and allow vertical page scrolling", async ({
+  page,
+  isMobile,
+}, testInfo) => {
+  test.skip(!isMobile, "This test uses the phone's real touch input pipeline");
+  const runtimeErrors: string[] = [];
+  page.on("pageerror", (error) => runtimeErrors.push(error.message));
+  await page.goto("/en");
+  await waitForHydration(page);
+  const lens = page.locator(".hero-lens-3d");
+  await expect(lens).toHaveAttribute("data-ready", "true");
+  const control = lens.getByRole("button", { name: /Interactive 3D lens/ });
+  const box = (await control.boundingBox())!;
+  const x = box.x + box.width / 2;
+  const y = box.y + box.height / 2;
+  const cdp = await page.context().newCDPSession(page);
+  const touchPoint = (x: number, y: number) => ({
+    x,
+    y,
+    id: 1,
+    radiusX: 4,
+    radiusY: 4,
+  });
+
+  try {
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [touchPoint(x, y)],
+    });
+    await expect(lens).toHaveAttribute("data-interacting", "true");
+    for (const dx of [12, 30, 55, 75]) {
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [touchPoint(x + dx, y - 3)],
+      });
+    }
+    await expect(lens).toHaveAttribute("data-interacting", "true");
+    expect(await page.evaluate(() => window.scrollY)).toBe(0);
+    await testInfo.attach("phone-lens-drag", {
+      body: await page.screenshot(),
+      contentType: "image/png",
+    });
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchEnd",
+      touchPoints: [],
+    });
+    await expect(lens).toHaveAttribute("data-interacting", "false");
+
+    await page.touchscreen.tap(x, y);
+    await expect(lens).toHaveAttribute("data-interacting", "false");
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [touchPoint(x, y)],
+    });
+    await expect(lens).toHaveAttribute("data-interacting", "true");
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchCancel",
+      touchPoints: [],
+    });
+    await expect(lens).toHaveAttribute("data-interacting", "false");
+
+    // A vertical gesture that starts on the lens still belongs to the page.
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchStart",
+      touchPoints: [touchPoint(x, y + 35)],
+    });
+    for (const dy of [15, 35, 65, 105]) {
+      await cdp.send("Input.dispatchTouchEvent", {
+        type: "touchMove",
+        touchPoints: [touchPoint(x, y + 35 - dy)],
+      });
+    }
+    await cdp.send("Input.dispatchTouchEvent", {
+      type: "touchEnd",
+      touchPoints: [],
+    });
+    await expect(lens).toHaveAttribute("data-interacting", "false");
+    await expect
+      .poll(() => page.evaluate(() => window.scrollY))
+      .toBeGreaterThan(20);
+    expect(runtimeErrors).toEqual([]);
+  } finally {
+    await cdp.detach();
   }
 });
 
@@ -961,6 +1130,7 @@ test("reduced motion renders core content", async ({ browser }) => {
     await page.setViewportSize({ width, height: 900 });
     await expect(page.locator(".hero-lens-fallback")).toBeVisible();
     await expect(page.locator("canvas")).toHaveCount(0);
+    await expect(page.locator(".hero-lens-control")).toHaveCount(0);
   }
   await context.close();
 });
