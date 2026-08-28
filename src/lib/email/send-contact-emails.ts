@@ -1,3 +1,4 @@
+import "server-only";
 import { Resend } from "resend";
 import type { ContactInput } from "@/features/contact/schema";
 
@@ -41,12 +42,18 @@ export async function sendContactEmails(input: ContactInput) {
   });
   if (business.error) throw new Error("Business notification failed");
 
-  const acknowledgement = await resend.emails.send({
-    from,
-    to: input.email,
-    subject: "Your enquiry has been received / Votre demande a été reçue",
-    html: `<p>Bonjour ${safe.name},</p><p>Votre demande a bien été reçue. Une réponse personnalisée vous sera envoyée après examen.</p><hr /><p>Hello ${safe.name},</p><p>Your enquiry has been received. A personal response will be sent after review.</p>`,
-  });
-  if (acknowledgement.error) throw new Error("Acknowledgement failed");
+  // The enquiry is delivered once the business notification succeeds. A
+  // receipt failure must not invite retries that duplicate that notification.
+  try {
+    const acknowledgement = await resend.emails.send({
+      from,
+      to: input.email,
+      subject: "Your enquiry has been received / Votre demande a été reçue",
+      html: `<p>Bonjour ${safe.name},</p><p>Votre demande a bien été reçue. Une réponse personnalisée vous sera envoyée après examen.</p><hr /><p>Hello ${safe.name},</p><p>Your enquiry has been received. A personal response will be sent after review.</p>`,
+    });
+    if (acknowledgement.error) console.warn("Contact acknowledgement failed");
+  } catch {
+    console.warn("Contact acknowledgement failed");
+  }
   return business.data;
 }

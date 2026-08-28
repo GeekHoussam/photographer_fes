@@ -4,10 +4,10 @@ A multilingual, photography-first portfolio for a photographer and videographer 
 
 ## Prerequisites
 
-- Node.js 22 or newer
+- Node.js 22.12 or newer
 - pnpm 10 or newer
-- A Sanity project and dataset
-- A verified Resend sending domain for production contact delivery
+- A Sanity project only when using the separate Studio (the public site currently uses typed local content)
+- A verified Resend domain and configured Upstash limiter for server contact delivery; neither is needed for the static mailto fallback
 
 ## Installation
 
@@ -17,15 +17,15 @@ cp .env.example .env.local
 pnpm dev
 ```
 
-Open `http://localhost:3000/fr` or `http://localhost:3000/en`.
+Open `http://localhost:3000/fr`, `/en`, or `/ar`.
 
 ## Environment variables
 
-Copy `.env.example` and replace every documented placeholder. Variables prefixed with `NEXT_PUBLIC_` are safe for the browser. `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, and contact mailbox settings are server-only and must never be exposed in client components.
+Copy `.env.example` and configure the integrations you use. Variables prefixed with `NEXT_PUBLIC_` are embedded in browser assets: the prefix does **not** make a value safe to publish. Never put tokens or credentials in them. `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, Upstash credentials, and contact delivery settings must remain server-only.
 
 Public WhatsApp and email actions are centralized in `src/config/site.ts`. `NEXT_PUBLIC_CONTACT_EMAIL` remains the static-hosting fallback used by the contact form.
 
-The contact route uses a development-only in-memory limiter. Configure the documented distributed rate-limiting variables and adapter before multi-instance production traffic.
+With `NEXT_PUBLIC_CONTACT_EMAIL` set, the form opens an email draft; the visitor must send it in their mail application. Leave it unset to use `/api/contact`. Production API delivery requires the canonical `NEXT_PUBLIC_SITE_URL`, both Upstash variables, a trusted `CONTACT_RATE_LIMIT_IP_HEADER`, and Resend settings. The hosting proxy must overwrite the chosen header with a single client IP and block direct origin access. Missing or failed limiter configuration returns 503 without sending mail. The in-memory limiter runs only in development/tests. See `docs/deployment.md` and `SECURITY_AUDIT.md` before enabling server delivery.
 
 ## Sanity setup and editing
 

@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 import { legacyRedirects } from "./src/config/redirects";
+import { createSecurityHeaders } from "./src/config/security-headers";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 const isGitHubPages = process.env.GITHUB_PAGES === "true";
@@ -42,6 +43,18 @@ const nextConfig: NextConfig = {
   ...(isGitHubPages
     ? {}
     : {
+        headers() {
+          return [
+            {
+              source: "/:path*",
+              headers: createSecurityHeaders(
+                process.env.NODE_ENV === "development",
+                process.env.NEXT_PUBLIC_SITE_URL?.startsWith("https://") ===
+                  true,
+              ),
+            },
+          ];
+        },
         redirects() {
           return legacyRedirects;
         },

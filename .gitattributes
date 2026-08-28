@@ -1,0 +1,2 @@
+# Preserve the existing CRLF lockfile without treating CR as trailing spaces.
+pnpm-lock.yaml whitespace=cr-at-eol
