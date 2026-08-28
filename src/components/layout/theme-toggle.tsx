@@ -32,7 +32,11 @@ export function ThemeToggle() {
 
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const followSystem = (event: MediaQueryListEvent) => {
-      if (window.localStorage.getItem(storageKey)) return;
+      try {
+        if (window.localStorage.getItem(storageKey)) return;
+      } catch {
+        // Storage can be blocked while the page remains usable.
+      }
       const next = event.matches ? "dark" : "light";
       applyTheme(next);
       setTheme(next);
@@ -50,7 +54,11 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={() => {
-        window.localStorage.setItem(storageKey, nextTheme);
+        try {
+          window.localStorage.setItem(storageKey, nextTheme);
+        } catch {
+          // Keep the current-page toggle usable without persistent storage.
+        }
         applyTheme(nextTheme);
         setTheme(nextTheme);
       }}

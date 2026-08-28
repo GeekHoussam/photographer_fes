@@ -1,5 +1,8 @@
 .next
 .agents
+.codex
+graphify-out
+AGENTS.md
 _photo-masters
 out
 public

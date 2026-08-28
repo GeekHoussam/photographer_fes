@@ -1,5 +1,40 @@
 # Architecture decision record
 
+## Current implementation — 2026-08-27
+
+This section supersedes the original plan below where they differ. Public
+French, English, and Arabic pages use typed content under `src/features`,
+including projects, services, and journal articles. Sanity schemas, queries,
+and mappers remain available for a future CMS integration; the public routes
+do not currently fetch them. There is no application database, authentication,
+admin route, or public file-upload endpoint.
+
+The Next.js App Router renders localized content and metadata on the server;
+interactive components handle navigation, filters, dialogs, video activation,
+theme, animation, and the progressive 3D lens. High-connectivity locale,
+content, and SEO helpers are cohesive shared modules, not mixed-purpose
+backend controllers. A source import audit found no runtime import cycles.
+
+Two deployment modes are supported: a Next.js server with `POST /api/contact`,
+and GitHub Pages static export with a public mailto fallback. Static hosting
+does not run Proxy, redirects, response-header configuration, or the contact
+API. No distributed limiter or email credentials are required for that mode.
+
+Server contact delivery now separates bounded request parsing and origin
+checks (`request-policy.ts`), validation (`schema.ts`), distributed quotas
+(`rate-limit.ts`), and email delivery. Production quotas use atomic Redis EVAL
+through the documented Upstash REST interface, five attempts per trusted
+client IP per 15 minutes. Only local development/tests use bounded process
+memory. The proxy trust boundary and integration credentials require hosting
+configuration; unconfigured production delivery fails closed.
+
+Security headers are centralized in `src/config/security-headers.ts` for the
+server deployment. Static hosts must apply equivalent response headers at
+their edge. The compatible CSP retains inline scripts/styles required by
+static hydration and existing animation; it is not a strict XSS policy.
+
+## Original design plan
+
 ## ADR-001: Headless, localized Next.js portfolio
 
 - **Status:** Accepted
