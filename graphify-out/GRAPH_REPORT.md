@@ -1,23 +1,23 @@
-# Graph Report - photographer_fes  (2026-08-28)
+# Graph Report - photographer_fes  (2026-09-14)
 
 ## Corpus Check
-- 169 files · ~3,439,915 words
+- 242 files · ~3,856,808 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1286 nodes · 1887 edges · 127 communities (94 shown, 33 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.85)
+- 1639 nodes · 2978 edges · 154 communities (118 shown, 36 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `9889df44`
+- Built from commit: `ecf30b9b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
-- services/[slug]/page.tsx
+- database.ts
 - structured-data.ts
-- project-card.tsx
+- Admin dashboard
 - devDependencies
 - dependencies
 - videos.ts
@@ -25,16 +25,16 @@
 - compilerOptions
 - index.ts
 - route.ts
-- isLocale
+- messages.ts
 - audit_photos.py
-- [locale]/layout.tsx
+- auth.ts
 - arabic-locale.spec.ts
 - Hard Rules
 - LAYER 2 — QUANTA IMPLEMENTATION
 - Threat model
 - next.config.ts
 - hero-media.tsx
-- Locale
+- Mohammed Laâchach photography portfolio
 - Hard rules
 - client.ts
 - queries.ts
@@ -47,14 +47,14 @@
 - Skill: FNF SDK
 - 5. Component & block directory (copy-paste; the source lands in the repo)
 - Hard rules
-- portfolio-filters.tsx
+- admin-dashboard.md
 - Skill: Auth Boundary
 - Photography portfolio redesign brief
 - Workflow
 - Skill: Runtime And Infra
 - Fit it into the existing website pipeline
 - Photographe Fès - Votre Photographe de Mariage à Fès
-- content.ts
+- journal-article-content.tsx
 - 4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)
 - 7 Principles
 - Photographe Fès - Réussir votre présence sur Réseaux Sociaux
@@ -68,7 +68,7 @@
 - tasteskill: Anti-Slop Frontend Skill
 - Meta tags & OG
 - Higgsfield website builder (CLI) — two product types, two flows
-- Mohammed Laâchach photography portfolio
+- api.ts
 - Workflow
 - Skill: FNF React
 - reference-boards — design the page as IMAGES before writing code (Phase 1)
@@ -93,11 +93,11 @@
 - 12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)
 - 5. CONTEXT-AWARE PROACTIVITY
 - 8. DARK MODE PROTOCOL
-- 7. DIAL DEFINITIONS (Technical Reference)
+- site.ts
 - graphify reference: add a URL and watch a folder
 - graphify reference: commit hook and native CLAUDE.md integration
 - graphify reference: incremental update and cluster-only
-- site.ts
+- Confirmed Vulnerabilities
 - review-rubric — Phase 5 mechanical gate
 - graphify reference: GitHub clone and cross-repo merge
 - graphify reference: transcribe video and audio
@@ -108,89 +108,116 @@
 - extraction-spec.md
 - content-todo.md
 - content-migration.md
-- Vercel deployment
+- message-forms.tsx
 - sanity-editor-guide.md
 - threejs-performance.md
 - lens-hero.test.tsx
 - Photographer Fes Security Audit
-- arabic-locale.test.ts
-- projects.ts
+- journal-articles.test.ts
+- admin/schema.ts
 - package.json
-- eslint
-- eslint-config-prettier
-- husky
+- [locale]/layout.tsx
+- Admin implementation verification
+- Locale
+- document-pages.tsx
 - lint-staged
-- @playwright/test
-- tailwindcss
-- @testing-library/react
-- @testing-library/user-event
-- @types/node
+- eslint-config-prettier
+- adminI18n
+- content.ts
+- portfolio-filters.tsx
+- clients-pages.tsx
 - @types/react
-- @types/three
+- documents.ts
 - typescript
+- include
+- Articles added
+- controls.tsx
+- OWASP Top 10 Checklist
+- Web audit
+- Common Threat Patterns for the Stack
+- Worker hardening
+- Trust Boundaries
+- React-Specific Checks
+- Attacker Model
+- message-pages.tsx
+- 1. THE THREE DIALS (Core Configuration)
+- @testing-library/jest-dom
+- tsx
+- husky
+- jsdom
+- PostgreSQL and Docker run manual
+- Option A: PostgreSQL in Docker, application on the host
+- prettier-plugin-tailwindcss
+- ProjectPreview
+- sharp
+- init-test-db.sh
+- tailwindcss
+- @playwright/test
+- @testing-library/react
+- @types/node
+- @types/pg
 - @vitejs/plugin-react
-- vitest
 
 ## God Nodes (most connected - your core abstractions)
-1. `isLocale()` - 44 edges
+1. `isLocale()` - 46 edges
 2. `getPageContent()` - 42 edges
-3. `createPageMetadata()` - 31 edges
-4. `Locale` - 25 edges
-5. `localizedUrl()` - 22 edges
-6. `Skill: FNF SDK` - 21 edges
-7. `compilerOptions` - 16 edges
-8. `tasteskill: Anti-Slop Frontend Skill` - 16 edges
-9. `Appendix B - Canonical Sources (read these before reinventing)` - 15 edges
-10. `Container()` - 14 edges
+3. `handleAdminRequest()` - 34 edges
+4. `assertAdmin()` - 31 edges
+5. `createPageMetadata()` - 31 edges
+6. `Locale` - 27 edges
+7. `getDatabase()` - 27 edges
+8. `adminI18n` - 27 edges
+9. `transaction` - 25 edges
+10. `localizedUrl()` - 22 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `generateMetadata()` --calls--> `isLocale()`  [EXTRACTED]
-  src/app/[locale]/layout.tsx → src/config/site.ts
-- `robots()` --calls--> `absoluteUrl()`  [EXTRACTED]
-  src/app/robots.ts → src/config/site.ts
-- `Page()` --calls--> `aboutPageJsonLd()`  [EXTRACTED]
-  src/app/[locale]/about/page.tsx → src/lib/seo/structured-data.ts
-- `ContactPage()` --calls--> `contactPageJsonLd()`  [EXTRACTED]
-  src/app/[locale]/contact/page.tsx → src/lib/seo/structured-data.ts
-- `generateMetadata()` --calls--> `isLocale()`  [EXTRACTED]
-  src/app/[locale]/journal/[slug]/page.tsx → src/config/site.ts
+- `main()` --calls--> `hashPassword()`  [EXTRACTED]
+  scripts/admin-user.ts → src/features/admin/server/password.ts
+- `newInvoice()` --calls--> `saveDocument()`  [EXTRACTED]
+  tests/unit/admin-services.test.ts → src/features/admin/server/documents.ts
+- `main()` --calls--> `closeDatabase()`  [EXTRACTED]
+  scripts/admin-migrate.ts → src/features/admin/server/database.ts
+- `main()` --calls--> `getDatabase()`  [EXTRACTED]
+  scripts/admin-migrate.ts → src/features/admin/server/database.ts
+- `main()` --calls--> `closeDatabase()`  [EXTRACTED]
+  scripts/admin-user.ts → src/features/admin/server/database.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (127 total, 33 thin omitted)
+## Communities (154 total, 36 thin omitted)
 
-### Community 0 - "services/[slug]/page.tsx"
-Cohesion: 0.14
-Nodes (19): ProjectPage(), generateMetadata(), ServicePage(), ButtonLink(), styles, Container(), ContainerProps, ResponsiveMedia() (+11 more)
+### Community 0 - "database.ts"
+Cohesion: 0.11
+Nodes (17): main(), [command, emailArg, nameArg], email, main(), readPassword(), closeDatabase(), Database, DatabaseValue (+9 more)
 
 ### Community 1 - "structured-data.ts"
-Cohesion: 0.16
-Nodes (33): absoluteUrl(), localizedUrl(), withTrailingSlash(), aboutPageJsonLd(), breadcrumbFor(), breadcrumbJsonLd(), businessEntity(), contactPageJsonLd() (+25 more)
+Cohesion: 0.05
+Nodes (101): generateMetadata(), Page(), ContactPage(), generateMetadata(), generateMetadata(), JournalPage(), generateMetadata(), JournalArticlePage() (+93 more)
 
-### Community 2 - "project-card.tsx"
-Cohesion: 0.31
-Nodes (7): aspectClasses, ProjectCard(), ProjectPreview(), handlePointerMove(), paintPointerPosition(), resetPreview(), ProjectSummary
+### Community 2 - "Admin dashboard"
+Cohesion: 0.20
+Nodes (10): Admin dashboard, Architecture and important files, Contact, replies and notifications, Database and safe record handling, Environment and rollout, Financial calculations, Local setup, Pages and API (+2 more)
 
 ### Community 3 - "devDependencies"
-Cohesion: 0.13
-Nodes (15): eslint-config-next, jsdom, devDependencies, eslint-config-next, jsdom, prettier, prettier-plugin-tailwindcss, @tailwindcss/postcss (+7 more)
+Cohesion: 0.12
+Nodes (17): eslint, eslint-config-next, devDependencies, eslint, eslint-config-next, prettier, @tailwindcss/postcss, @testing-library/user-event (+9 more)
 
 ### Community 4 - "dependencies"
 Cohesion: 0.04
-Nodes (47): focus-trap-react, @fontsource-variable/jost, @fontsource-variable/noto-sans-arabic, @hookform/resolvers, lucide-react, next, next-intl, next-sanity (+39 more)
+Nodes (49): focus-trap-react, @fontsource-variable/jost, @fontsource-variable/noto-sans-arabic, @hookform/resolvers, lucide-react, next, next-intl, next-sanity (+41 more)
 
 ### Community 5 - "videos.ts"
-Cohesion: 0.13
-Nodes (18): JournalVideo(), VideoCard(), VideoCardLabels, arabicTitleByVideoId, definitionBySlug, filterPortfolioVideos(), getVideoEmbedUrl(), getVideoThumbnailUrl() (+10 more)
+Cohesion: 0.14
+Nodes (17): JournalVideo(), VideoCard(), VideoCardLabels, arabicTitleByVideoId, definitionBySlug, getVideoEmbedUrl(), getVideoThumbnailUrl(), PortfolioVideo (+9 more)
 
 ### Community 6 - "scripts"
-Cohesion: 0.15
-Nodes (13): scripts, build, dev, format, format:check, lint, prepare, sanity (+5 more)
+Cohesion: 0.12
+Nodes (16): scripts, admin:migrate, admin:user, build, dev, format, format:check, lint (+8 more)
 
 ### Community 7 - "compilerOptions"
 Cohesion: 0.07
-Nodes (27): dom, dom.iterable, esnext, .next/dev/types/**/*.ts, next-env.d.ts, .next/types/**/*.ts, node_modules, **/*.ts (+19 more)
+Nodes (28): dom, dom.iterable, esnext, .next/dev/types/**/*.ts, compilerOptions, allowJs, esModuleInterop, incremental (+20 more)
 
 ### Community 8 - "index.ts"
 Cohesion: 0.10
@@ -198,43 +225,43 @@ Nodes (18): accessibleImage, category, client, faq, homepage, journalArticle, lo
 
 ### Community 9 - "route.ts"
 Cohesion: 0.09
-Nodes (23): json(), POST(), runtime, Button(), ContactForm(), ContactFormCopy, attempts, checkContactRateLimit() (+15 more)
+Nodes (25): json(), POST(), runtime, Button(), ContactForm(), ContactFormCopy, persistContactMessage(), setContactEmailStatus() (+17 more)
 
-### Community 10 - "isLocale"
-Cohesion: 0.16
-Nodes (28): generateMetadata(), Page(), ContactPage(), generateMetadata(), generateMetadata(), JournalPage(), generateMetadata(), Page() (+20 more)
+### Community 10 - "messages.ts"
+Cohesion: 0.25
+Nodes (12): AdminError, idSchema, ListQuery, querySchema, replySchema, AdminActor, getOverview(), documentSummary() (+4 more)
 
 ### Community 11 - "audit_photos.py"
 Cohesion: 0.28
 Nodes (12): Image, ImageFont, Path, difference_hash(), display_category(), hamming(), inspect(), label_font() (+4 more)
 
-### Community 12 - "[locale]/layout.tsx"
-Cohesion: 0.06
-Nodes (22): metadata, generateMetadata(), arabicFont, RootDocument(), siteFont, ContactDialogContext, ContactDialogContextValue, ContactDialogProvider() (+14 more)
+### Community 12 - "auth.ts"
+Cohesion: 0.16
+Nodes (14): loginSchema, passwordSchema, digest(), login(), loginQuota(), logout(), SESSION_COOKIE, SESSION_SECONDS (+6 more)
 
 ### Community 13 - "arabic-locale.spec.ts"
 Cohesion: 0.17
 Nodes (5): arabicRoutes, articleSlugs, projectSlugs, serviceSlugs, articles
 
 ### Community 14 - "Hard Rules"
-Cohesion: 0.04
-Nodes (44): 10. No Secrets in React Props, 11. Cookie Security, 12. CORS Only When Needed, 1. No Global Mutable State, 2. Cryptographic Randomness Only, 3. No Hardcoded Secrets, 4. Timing-Safe Secret Comparison, 5. Stream Large Payloads (+36 more)
+Cohesion: 0.15
+Nodes (13): 10. No Secrets in React Props, 11. Cookie Security, 12. CORS Only When Needed, 1. No Global Mutable State, 2. Cryptographic Randomness Only, 3. No Hardcoded Secrets, 4. Timing-Safe Secret Comparison, 5. Stream Large Payloads (+5 more)
 
 ### Community 15 - "LAYER 2 — QUANTA IMPLEMENTATION"
 Cohesion: 0.07
 Nodes (28): Anti-Patterns, App shell, Button Rules, Code layouts (preferred starting points), Component Priority, Core Imports, Current Spacing And Token Rules, Data & Charts (LOW — dashboards only) (+20 more)
 
 ### Community 16 - "Threat model"
-Cohesion: 0.07
-Nodes (29): 1. IDOR via Predictable Resource IDs, 2. Server Function Input Manipulation, 3. Test Data Contamination (Live D1), 4. Privilege Escalation via Client State, 5. SSRF via Server Function, 6. Webhook Replay / Forgery, Anonymous Internet User, API Routes (`app/src/routes/api/**`) (+21 more)
+Cohesion: 0.17
+Nodes (12): API Routes (`app/src/routes/api/**`), Asset Classification, Detection, Entry Point Inventory, File Upload Surfaces, Output, Page Routes (`app/src/routes/**`), Pitfalls (+4 more)
 
 ### Community 17 - "next.config.ts"
 Cohesion: 0.31
 Nodes (5): nextConfig, withNextIntl, LegacyRedirect, legacyRedirects, createSecurityHeaders()
 
-### Community 19 - "Locale"
+### Community 19 - "Mohammed Laâchach photography portfolio"
 Cohesion: 0.20
-Nodes (9): gridLayouts, Lightbox(), CatalogueItem, circularOffset(), RotatingCatalogue(), ScrollTransitionFrame, ScrollTransitionFrames(), Locale (+1 more)
+Nodes (10): Content editing and image requirements, Environment variables, Installation, Mohammed Laâchach photography portfolio, Prerequisites, Private admin dashboard, Production build and Vercel deployment, Sanity setup and editing (+2 more)
 
 ### Community 21 - "Hard rules"
 Cohesion: 0.08
@@ -260,9 +287,9 @@ Nodes (20): 1. Generate bespoke AI assets — this is our biggest edge, 2. Signa
 Cohesion: 0.11
 Nodes (17): 0a. Higgsfield packages and template modules, 0b. Supercomputer Design mode inspector, 1. SSR-safe rendering, 2. Server-only code stays server-only, 3. Higgsfield (fnf) calls are BACKEND-ONLY — and auth is MANDATORY, 3a. An app is end-to-end — real backend + real DB, never a mock, 4. Cloudflare bindings via `cloudflare:workers`, 5. Opted-in storage is LIVE — one deploy, one database (+9 more)
 
-### Community 43 - "portfolio-filters.tsx"
-Cohesion: 0.22
-Nodes (9): PortfolioFilters(), projectCardClasses, categoryLabel(), categoryOrder, isPortfolioCategory(), labels, isVideoCategory(), videoCategoryLabel() (+1 more)
+### Community 43 - "admin-dashboard.md"
+Cohesion: 0.31
+Nodes (3): Contact mode and production release gate, Security headers and static export, Vercel deployment
 
 ### Community 44 - "Skill: Auth Boundary"
 Cohesion: 0.13
@@ -288,9 +315,9 @@ Nodes (12): A4 pre-delivery QA, Architecture A — continuous forward flight (de
 Cohesion: 0.15
 Nodes (12): A quoi sert une Vidéo pour un Couple à fès ?, Au-delà de l'Image Fixe : Votre Vidéaste Mariage Maroc, Capturer l'Essence des Lieux de Réception Prestigieux, Contactez Votre Photographe de Mariage à Fès, L'Expertise Locale : Lumière, Lieux et Logistique, L’Élégance Intemporelle : L'Importance d'un Photographe de Mariage à Fès, La Magie de la Médina pour Votre Séance Photo Couple, NOM Films : L'Excellence Cinématographique à Fès (+4 more)
 
-### Community 50 - "content.ts"
-Cohesion: 0.17
-Nodes (11): JournalArticleContent(), RichText(), localize(), mapSlug(), JournalBodyBlock, JournalLocaleContent, JournalRichText, JournalRichTextSegment (+3 more)
+### Community 50 - "journal-article-content.tsx"
+Cohesion: 0.23
+Nodes (9): JournalArticleContent(), RichText(), importedJournalArticles, JournalArticle, JournalBodyBlock, JournalRichText, blockText(), plain() (+1 more)
 
 ### Community 51 - "4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)"
 Cohesion: 0.17
@@ -334,7 +361,7 @@ Nodes (10): 10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know), Anim
 
 ### Community 61 - "tasteskill: Anti-Slop Frontend Skill"
 Cohesion: 0.20
-Nodes (10): 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration), 2.A When to reach for a real design system (use official packages), 2.B When the brief is an aesthetic, not a system (+2 more)
+Nodes (10): 13. OUT OF SCOPE, 14. FINAL PRE-FLIGHT CHECK, 2.A When to reach for a real design system (use official packages), 2.B When the brief is an aesthetic, not a system, 2. BRIEF → DESIGN SYSTEM MAP, 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10) (+2 more)
 
 ### Community 62 - "Meta tags & OG"
 Cohesion: 0.20
@@ -344,9 +371,9 @@ Nodes (10): Canonical URL Pattern, Deriving Values from Intake, Description Rule
 Cohesion: 0.20
 Nodes (9): Always set a subdomain on create, Cover + metadata — ALWAYS part of building, never publish-only, Higgsfield website builder (CLI) — two product types, two flows, Pick the path, then follow ONE flow end-to-end, Prerequisites, Reference index (what's in this bundle), Talking to the user — no technical/plumbing language, The two types — and the REQUIRED `--type` on create (+1 more)
 
-### Community 64 - "Mohammed Laâchach photography portfolio"
-Cohesion: 0.20
-Nodes (9): Content editing and image requirements, Environment variables, Installation, Mohammed Laâchach photography portfolio, Prerequisites, Production build and Vercel deployment, Sanity setup and editing, Testing and quality checks (+1 more)
+### Community 64 - "api.ts"
+Cohesion: 0.14
+Nodes (36): dynamic, handler(), runtime, cookieOptions, handleAdminRequest(), json(), revision, assertAdmin() (+28 more)
 
 ### Community 65 - "Workflow"
 Cohesion: 0.22
@@ -370,7 +397,7 @@ Nodes (8): graphify reference: extra exports and benchmark, Step 6b - Wiki (only
 
 ### Community 70 - "Architecture decision record"
 Cohesion: 0.18
-Nodes (10): ADR-001: Headless, localized Next.js portfolio, Architecture decision record, Consequences, Context, Current implementation — 2026-08-27, Decision, Dependencies and reasons, Folder structure (+2 more)
+Nodes (10): ADR-001: Headless, localized Next.js portfolio, Architecture decision record, Consequences, Context, Current implementation — 2026-08-29, Decision, Dependencies and reasons, Folder structure (+2 more)
 
 ### Community 71 - "9. AI TELLS (Forbidden Patterns)"
 Cohesion: 0.25
@@ -444,9 +471,9 @@ Nodes (5): 5.A Sticky-Stack - Canonical Skeleton, 5.B Horizontal-Pan - Canonical
 Cohesion: 0.40
 Nodes (5): 8.A Token Strategy (pick one, stick to it), 8.B Do Not Prescribe Specific Colors Here, 8.C Default Mode, 8.D Test in Both Modes Before Finishing, 8. DARK MODE PROTOCOL
 
-### Community 89 - "7. DIAL DEFINITIONS (Technical Reference)"
-Cohesion: 0.50
-Nodes (4): 7. DIAL DEFINITIONS (Technical Reference), DESIGN_VARIANCE (Level 1-10), MOTION_INTENSITY (Level 1-10), VISUAL_DENSITY (Level 1-10)
+### Community 89 - "site.ts"
+Cohesion: 0.15
+Nodes (10): CatalogueItem, circularOffset(), RotatingCatalogue(), configuredBasePath, configuredUrl, defaultLocale, normalizeBasePath(), normalizeSiteUrl() (+2 more)
 
 ### Community 90 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -460,53 +487,149 @@ Nodes (3): For git commit hook, For native CLAUDE.md integration, graphify refer
 Cohesion: 0.50
 Nodes (3): For --cluster-only, For --update (incremental re-extraction), graphify reference: incremental update and cluster-only
 
-### Community 93 - "site.ts"
-Cohesion: 0.10
-Nodes (21): generateMetadata(), JournalArticlePage(), dynamic, robots(), ContactMethods(), configuredBasePath, configuredUrl, contactDetails (+13 more)
+### Community 93 - "Confirmed Vulnerabilities"
+Cohesion: 0.40
+Nodes (5): Confirmed Vulnerabilities, Dependency findings, S1 — Bypassable and process-local contact quota, S2 — Unbounded contact request parsing, S3 — Missing server response hardening
 
-### Community 104 - "Vercel deployment"
-Cohesion: 0.50
-Nodes (3): Contact mode and production release gate, Security headers and static export, Vercel deployment
+### Community 104 - "message-forms.tsx"
+Cohesion: 0.24
+Nodes (12): decimal, ClientForm(), LoginForm(), SettingsForm(), FormActions(), FormFeedback(), useSave(), save() (+4 more)
 
 ### Community 107 - "lens-hero.test.tsx"
 Cohesion: 0.14
 Nodes (12): createLensInput(), createLensMotion(), idleInput, LensInput, LensParts, updateLensFrame(), LensAssembly(), LensCanvas() (+4 more)
 
 ### Community 108 - "Photographer Fes Security Audit"
-Cohesion: 0.10
-Nodes (19): Architecture Problems, Architecture Summary, Audit Change Log, Bugs Found, Changes Applied, Confirmed Vulnerabilities, Dependency Audit, Dependency findings (+11 more)
+Cohesion: 0.14
+Nodes (14): Architecture Problems, Architecture Summary, Audit Change Log, Bugs Found, Changes Applied, Dependency Audit, Executive Summary, Overall Risk (+6 more)
 
-### Community 109 - "arabic-locale.test.ts"
-Cohesion: 0.16
-Nodes (14): alternates(), dynamic, sitemap(), locales, PageContent, PageCopy, ProcessStep, staticPageContent (+6 more)
+### Community 109 - "journal-articles.test.ts"
+Cohesion: 0.40
+Nodes (5): journalSlugs, JournalVideo, entryOfType(), graphEntries(), JsonObject
 
-### Community 110 - "projects.ts"
-Cohesion: 0.20
-Nodes (8): photos, events, food, hospitality, photo(), signaturePortrait, weddings, portfolioPhotos
+### Community 110 - "admin/schema.ts"
+Cohesion: 0.09
+Nodes (31): calculateDocument(), checked(), decimalFromMinor(), formatMoney(), MAX_MINOR, scaled(), ClientInput, clientSchema (+23 more)
 
 ### Community 111 - "package.json"
 Cohesion: 0.29
 Nodes (6): engines, node, name, packageManager, private, version
 
+### Community 112 - "[locale]/layout.tsx"
+Cohesion: 0.06
+Nodes (21): metadata, generateMetadata(), arabicFont, RootDocument(), siteFont, ContactDialogContext, ContactDialogContextValue, ContactDialogProvider() (+13 more)
+
+### Community 113 - "Admin implementation verification"
+Cohesion: 0.40
+Nodes (5): Admin implementation verification, Automated checks, Browser and HTTP checks, PostgreSQL and Docker replacement, Review and remaining deployment checks
+
+### Community 114 - "Locale"
+Cohesion: 0.14
+Nodes (15): photos, HeroOrbitGallery(), OrbitItem, HomeHero(), ScrollTransitionFrame, ScrollTransitionFrames(), Locale, events (+7 more)
+
+### Community 115 - "document-pages.tsx"
+Cohesion: 0.11
+Nodes (19): EditEstimatePage(), EditInvoicePage(), EstimateDetailPage(), EstimatesPage(), InvoiceDetailPage(), InvoicesPage(), NewEstimatePage(), NewInvoicePage() (+11 more)
+
+### Community 118 - "adminI18n"
+Cohesion: 0.24
+Nodes (10): AdminLayout(), dynamic, generateMetadata(), runtime, AdminLoading(), LoginPage(), AdminNotFound(), currentActor (+2 more)
+
+### Community 119 - "content.ts"
+Cohesion: 0.17
+Nodes (11): gridLayouts, Lightbox(), aspectClasses, ProjectCard(), localize(), mapSlug(), JournalLocaleContent, LocalizedFaq (+3 more)
+
+### Community 120 - "portfolio-filters.tsx"
+Cohesion: 0.21
+Nodes (10): PortfolioFilters(), projectCardClasses, categoryLabel(), categoryOrder, isPortfolioCategory(), labels, filterPortfolioVideos(), isVideoCategory() (+2 more)
+
+### Community 121 - "clients-pages.tsx"
+Cohesion: 0.26
+Nodes (10): requireAdmin(), ClientDetailPage(), ClientsPage(), EditClientPage(), NewClientPage(), DocumentDetail(), DocumentEditor(), DocumentsPage() (+2 more)
+
+### Community 123 - "documents.ts"
+Cohesion: 0.32
+Nodes (14): getClient(), convertEstimate(), getDocument(), insertDocument(), mapDocument(), readDocument(), revisionSchema, saveDocument() (+6 more)
+
+### Community 125 - "include"
+Cohesion: 0.17
+Nodes (11): .next/dev, ./tsconfig.json, exclude, extends, include, .next-*, next-env.d.ts, .next/types/**/*.ts (+3 more)
+
+### Community 126 - "Articles added"
+Cohesion: 0.14
+Nodes (13): Architecture, Articles added, Content decisions and source issues, Files created, Files modified, Journal integration report, Photographe Fès pour Portrait Féminin et Expérience Caftan, Photographe Fès pour Restaurants : Le Secret pour Attirer la Clientèle (+5 more)
+
+### Community 127 - "controls.tsx"
+Cohesion: 0.23
+Nodes (10): ProtectedAdminLayout(), AdminFrame(), sections, adminRequest(), ErrorNotice(), LanguageSelector(), MarkMessageRead(), MutationButton() (+2 more)
+
+### Community 128 - "OWASP Top 10 Checklist"
+Cohesion: 0.18
+Nodes (11): A01: Broken Access Control, A02: Cryptographic Failures, A03: Injection, A04: Insecure Design, A05: Security Misconfiguration, A06: Vulnerable Components, A07: Authentication Failures, A08: Data Integrity Failures (+3 more)
+
+### Community 129 - "Web audit"
+Cohesion: 0.22
+Nodes (9): Dangerous Zero/Null/Empty Defaults, Fail-Open Patterns, Insecure Defaults Check, Output Format, Pitfalls, Precedent Rules, The 5 Rationalizations to Reject, Web audit (+1 more)
+
+### Community 130 - "Common Threat Patterns for the Stack"
+Cohesion: 0.29
+Nodes (7): 1. IDOR via Predictable Resource IDs, 2. Server Function Input Manipulation, 3. Test Data Contamination (Live D1), 4. Privilege Escalation via Client State, 5. SSRF via Server Function, 6. Webhook Replay / Forgery, Common Threat Patterns for the Stack
+
+### Community 131 - "Worker hardening"
+Cohesion: 0.33
+Nodes (5): Anti-Patterns to Flag, Pitfalls, Security, When to Load, Worker hardening
+
+### Community 132 - "Trust Boundaries"
+Cohesion: 0.33
+Nodes (6): Auth Routes → Public Routes (access control boundary), Browser → Worker (untrusted → trusted), Trust Boundaries, Worker → D1/R2/KV (trusted → trusted), Worker → External API (trusted → semi-trusted), Worker → fnf.internal (trusted → trusted)
+
+### Community 133 - "React-Specific Checks"
+Cohesion: 0.33
+Nodes (6): Client-Side State, `dangerouslySetInnerHTML`, `eval()` / `new Function()`, `href` with User Input, `<iframe>` with User Input, React-Specific Checks
+
+### Community 134 - "Attacker Model"
+Cohesion: 0.50
+Nodes (4): Anonymous Internet User, Attacker Model, Authenticated User, What Attackers CANNOT Do
+
+### Community 135 - "message-pages.tsx"
+Cohesion: 0.25
+Nodes (8): MessageDetailPage(), MessagesPage(), NotificationsPage(), SettingsPage(), DetailProps, readQuery(), SearchProps, replyEmailConfigured()
+
+### Community 136 - "1. THE THREE DIALS (Core Configuration)"
+Cohesion: 0.50
+Nodes (4): 1.A Dial Inference (design read → dial values), 1.B Use-Case Presets, 1.C How the Dials Drive Output, 1. THE THREE DIALS (Core Configuration)
+
+### Community 144 - "PostgreSQL and Docker run manual"
+Cohesion: 0.22
+Nodes (9): Backup and restore, Daily Docker commands, Inspect PostgreSQL in a browser, Option B: run the complete local project in Docker, PostgreSQL and Docker run manual, Production checklist, Requirements, Tests and validation (+1 more)
+
+### Community 145 - "Option A: PostgreSQL in Docker, application on the host"
+Cohesion: 0.33
+Nodes (6): 1. Configure Docker, 2. Start PostgreSQL, 3. Configure the application, 4. Apply the schema and create the administrator, 5. Run the project, Option A: PostgreSQL in Docker, application on the host
+
+### Community 147 - "ProjectPreview"
+Cohesion: 0.83
+Nodes (4): ProjectPreview(), handlePointerMove(), paintPointerPosition(), resetPreview()
+
 ## Knowledge Gaps
-- **735 isolated node(s):** `lintStagedConfig`, `withNextIntl`, `nextConfig`, `name`, `version` (+730 more)
+- **818 isolated node(s):** `lintStagedConfig`, `init-test-db.sh script`, `withNextIntl`, `nextConfig`, `name` (+813 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **33 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **36 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `tasteskill: Anti-Slop Frontend Skill` connect `tasteskill: Anti-Slop Frontend Skill` to `Appendix B - Canonical Sources (read these before reinventing)`, `9. AI TELLS (Forbidden Patterns)`, `11. REDESIGN PROTOCOL`, `3. DEFAULT ARCHITECTURE & CONVENTIONS`, `6. PERFORMANCE & ACCESSIBILITY GUARDRAILS`, `4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)`, `0. BRIEF INFERENCE (Read the Room Before Anything Else)`, `12. THE BLOCK LIBRARY (Contract - Implementations Land Here Iteratively)`, `5. CONTEXT-AWARE PROACTIVITY`, `8. DARK MODE PROTOCOL`, `7. DIAL DEFINITIONS (Technical Reference)`, `10. REFERENCE VOCABULARY (Pattern Names the Agent Should Know)`?**
+- **Why does `Locale` connect `Locale` to `structured-data.ts`, `videos.ts`, `route.ts`, `auth.ts`, `[locale]/layout.tsx`, `journal-article-content.tsx`, `content.ts`, `portfolio-filters.tsx`, `site.ts`, `controls.tsx`?**
+  _High betweenness centrality (0.020) - this node is a cross-community bridge._
+- **Why does `isLocale()` connect `structured-data.ts` to `[locale]/layout.tsx`, `site.ts`, `adminI18n`, `content.ts`?**
+  _High betweenness centrality (0.015) - this node is a cross-community bridge._
+- **Why does `adminI18n` connect `adminI18n` to `structured-data.ts`, `document-pages.tsx`, `clients-pages.tsx`, `message-pages.tsx`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._
-- **Why does `isLocale()` connect `isLocale` to `services/[slug]/page.tsx`, `[locale]/layout.tsx`, `request.ts`, `content.ts`, `site.ts`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `Locale` connect `Locale` to `services/[slug]/page.tsx`, `structured-data.ts`, `project-card.tsx`, `videos.ts`, `route.ts`, `isLocale`, `portfolio-filters.tsx`, `[locale]/layout.tsx`, `arabic-locale.test.ts`, `content.ts`, `site.ts`?**
-  _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **What connects `lintStagedConfig`, `withNextIntl`, `nextConfig` to the rest of the system?**
-  _735 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `services/[slug]/page.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.14304993252361672 - nodes in this community are weakly interconnected._
+- **What connects `lintStagedConfig`, `init-test-db.sh script`, `withNextIntl` to the rest of the system?**
+  _818 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `database.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.11375661375661375 - nodes in this community are weakly interconnected._
+- **Should `structured-data.ts` be split into smaller, more focused modules?**
+  _Cohesion score 0.052653529350432694 - nodes in this community are weakly interconnected._
 - **Should `devDependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.13333333333333333 - nodes in this community are weakly interconnected._
-- **Should `dependencies` be split into smaller, more focused modules?**
-  _Cohesion score 0.0425531914893617 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._

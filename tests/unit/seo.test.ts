@@ -7,6 +7,7 @@ import {
   withTrailingSlash,
 } from "@/config/site";
 import { getPageContent } from "@/features/content/pages";
+import { journalArticles } from "@/features/journal/articles";
 import { portfolioProjects } from "@/features/portfolio/projects";
 import { services } from "@/features/services/services";
 import { createPageMetadata } from "@/lib/seo/metadata";
@@ -189,7 +190,7 @@ describe("sitemap", () => {
     expect(entries.some((entry) => entry.url.endsWith("/journal"))).toBe(true);
     expect(
       entries.filter((entry) => entry.url.includes("/journal/")).length,
-    ).toBe(9);
+    ).toBe(journalArticles.length * 3);
     expect(entries.some((entry) => entry.url.endsWith("/privacy"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/legal"))).toBe(false);
     expect(entries.some((entry) => entry.url.endsWith("/thank-you"))).toBe(

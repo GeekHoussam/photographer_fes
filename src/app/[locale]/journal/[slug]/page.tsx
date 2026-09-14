@@ -17,6 +17,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { createPageMetadata } from "@/lib/seo/metadata";
 import { journalArticleJsonLd } from "@/lib/seo/structured-data";
+import type { JournalLocaleContent } from "@/types/content";
 
 export function generateStaticParams() {
   return journalArticles.map((article) => ({ slug: article.slug }));
@@ -31,7 +32,7 @@ export async function generateMetadata({
   if (!isLocale(locale)) return {};
   const article = getJournalArticle(slug);
   if (!article) return {};
-  const content = article.content[locale];
+  const content: JournalLocaleContent = article.content[locale];
   const cover = article.images[0];
 
   return createPageMetadata({
@@ -59,7 +60,7 @@ export default async function JournalArticlePage({
   const article = journalArticles[articleIndex];
   if (!article) notFound();
 
-  const content = article.content[locale];
+  const content: JournalLocaleContent = article.content[locale];
   const previous =
     journalArticles[
       (articleIndex - 1 + journalArticles.length) % journalArticles.length
@@ -190,6 +191,18 @@ export default async function JournalArticlePage({
           </div>
         </Container>
       </section>
+
+      {content.afterFaqBody?.length ? (
+        <section className="theme-light section-space">
+          <Container>
+            <JournalArticleContent
+              article={article}
+              locale={locale}
+              blocks={content.afterFaqBody}
+            />
+          </Container>
+        </section>
+      ) : null}
 
       <section className="bg-sand text-ink relative overflow-hidden py-20 sm:py-28">
         <Container className="grid grid-cols-12 gap-y-10 lg:gap-x-12">

@@ -7,7 +7,7 @@ A multilingual, photography-first portfolio for a photographer and videographer 
 - Node.js 22.12 or newer
 - pnpm 10 or newer
 - A Sanity project only when using the separate Studio (the public site currently uses typed local content)
-- A verified Resend domain and configured Upstash limiter for server contact delivery; neither is needed for the static mailto fallback
+- A migrated admin database and configured Upstash limiter for server contact submission; a verified Resend domain for email replies/notifications. None is needed for the static mailto fallback
 
 ## Installation
 
@@ -25,7 +25,7 @@ Copy `.env.example` and configure the integrations you use. Variables prefixed w
 
 Public WhatsApp and email actions are centralized in `src/config/site.ts`. `NEXT_PUBLIC_CONTACT_EMAIL` remains the static-hosting fallback used by the contact form.
 
-With `NEXT_PUBLIC_CONTACT_EMAIL` set, the form opens an email draft; the visitor must send it in their mail application. Leave it unset to use `/api/contact`. Production API delivery requires the canonical `NEXT_PUBLIC_SITE_URL`, both Upstash variables, a trusted `CONTACT_RATE_LIMIT_IP_HEADER`, and Resend settings. The hosting proxy must overwrite the chosen header with a single client IP and block direct origin access. Missing or failed limiter configuration returns 503 without sending mail. The in-memory limiter runs only in development/tests. See `docs/deployment.md` and `SECURITY_AUDIT.md` before enabling server delivery.
+In GitHub Pages mode, `NEXT_PUBLIC_CONTACT_EMAIL` opens an email draft; the visitor must send it in their mail application. Server deployments always use `/api/contact` and require the migrated admin database. Production submissions require the canonical `NEXT_PUBLIC_SITE_URL`, both Upstash variables, and a trusted `CONTACT_RATE_LIMIT_IP_HEADER`. Resend is optional for enquiry notification emails and required for admin replies. The hosting proxy must overwrite the chosen header with a single client IP and block direct origin access. Missing or failed limiter configuration returns 503 without sending mail. The in-memory limiter runs only in development/tests. See `docs/deployment.md` and `SECURITY_AUDIT.md` before enabling server delivery.
 
 ## Sanity setup and editing
 
@@ -68,7 +68,16 @@ Track every unresolved item in `content-todo.md`. Migration planning is in `docs
 ## Troubleshooting
 
 - **Sanity content does not appear:** verify project ID, dataset, CORS origins, and published document state.
-- **Contact returns 503:** configure the Resend key, verified sender, and recipient variables.
+- **Contact returns 503:** check the admin database/migrations, canonical origin and production rate limiter. Email notification failure does not discard a saved enquiry.
 - **Fonts fail in a restricted build:** allow access to Google font assets during build or replace them with licensed local font files through `next/font/local`.
 - **WebGL is unavailable:** the hero intentionally keeps its static fallback and all navigation remains available.
 - **Large galleries feel slow:** check source dimensions, poster images, responsive `sizes`, and avoid preloading below-the-fold media.
+
+## Private admin dashboard
+
+Follow the [PostgreSQL and Docker run manual](docs/postgresql-docker.md) for
+database startup, migration, account provisioning, tests and operations. See
+[Admin setup and architecture](docs/admin-dashboard.md) for client, estimate,
+invoice, inbox, reply and EN/FR/AR behavior. A Node server is required; GitHub
+Pages continues to serve only the public portfolio. No default administrator is
+seeded.

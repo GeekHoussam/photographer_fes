@@ -1,7 +1,11 @@
 import Image from "next/image";
 import type { Locale } from "@/config/site";
 import { JournalVideo } from "@/components/journal/journal-video";
-import type { JournalArticle, JournalRichText } from "@/types/content";
+import type {
+  JournalArticle,
+  JournalBodyBlock,
+  JournalRichText,
+} from "@/types/content";
 
 export function RichText({ content }: { content: JournalRichText }) {
   return content.map((segment, index) => {
@@ -16,15 +20,15 @@ export function RichText({ content }: { content: JournalRichText }) {
 export function JournalArticleContent({
   article,
   locale,
+  blocks = article.content[locale].body,
 }: {
   article: JournalArticle;
   locale: Locale;
+  blocks?: ReadonlyArray<JournalBodyBlock>;
 }) {
-  const content = article.content[locale];
-
   return (
     <div className="journal-prose">
-      {content.body.map((block, index) => {
+      {blocks.map((block, index) => {
         if (block.type === "heading") {
           return block.level === 2 ? (
             <h2 key={`${block.text}-${index}`}>{block.text}</h2>
@@ -50,6 +54,35 @@ export function JournalArticleContent({
                 </li>
               ))}
             </ul>
+          );
+        }
+
+        if (block.type === "table") {
+          return (
+            <div key={`table-${index}`} className="journal-table">
+              <table>
+                <thead>
+                  <tr>
+                    {block.headers.map((header, column) => (
+                      <th key={column} scope="col">
+                        <RichText content={header} />
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {block.rows.map((row, rowIndex) => (
+                    <tr key={rowIndex}>
+                      {row.map((cell, column) => (
+                        <td key={column}>
+                          <RichText content={cell} />
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           );
         }
 

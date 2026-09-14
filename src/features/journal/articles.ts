@@ -1,4 +1,5 @@
 import { siteConfig } from "@/config/site";
+import { importedJournalArticles } from "@/features/journal/imported-articles";
 import type { JournalArticle, JournalRichTextSegment } from "@/types/content";
 
 const strong = (text: string): JournalRichTextSegment => ({
@@ -1772,6 +1773,7 @@ export const journalArticles = [
       },
     },
   },
+  ...importedJournalArticles,
 ] as const satisfies ReadonlyArray<JournalArticle>;
 
 export type JournalSlug = (typeof journalArticles)[number]["slug"];

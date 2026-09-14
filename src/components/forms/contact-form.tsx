@@ -175,7 +175,10 @@ export function ContactForm({
 }) {
   const locale = useLocale() as Locale;
   const copy = contactFormCopy[locale];
-  const contactEmail = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+  const contactEmail =
+    process.env.NEXT_PUBLIC_STATIC_EXPORT === "true"
+      ? process.env.NEXT_PUBLIC_CONTACT_EMAIL
+      : undefined;
   const {
     register,
     handleSubmit,

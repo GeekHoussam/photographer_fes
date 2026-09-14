@@ -1,13 +1,15 @@
 # Architecture decision record
 
-## Current implementation — 2026-08-27
+## Current implementation — 2026-08-29
 
 This section supersedes the original plan below where they differ. Public
 French, English, and Arabic pages use typed content under `src/features`,
 including projects, services, and journal articles. Sanity schemas, queries,
 and mappers remain available for a future CMS integration; the public routes
-do not currently fetch them. There is no application database, authentication,
-admin route, or public file-upload endpoint.
+do not currently fetch them. The admin extension now adds a PostgreSQL
+application database, private session authentication and `/admin` routes; see
+`docs/admin-dashboard.md`. Local PostgreSQL runs through `compose.yaml`. There
+is no public file-upload endpoint.
 
 The Next.js App Router renders localized content and metadata on the server;
 interactive components handle navigation, filters, dialogs, video activation,

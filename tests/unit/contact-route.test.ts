@@ -3,8 +3,16 @@ import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/contact/route";
 import { checkContactRateLimit } from "@/features/contact/rate-limit";
 import { sendContactEmails } from "@/lib/email/send-contact-emails";
+import {
+  persistContactMessage,
+  setContactEmailStatus,
+} from "@/features/admin/server/messages";
 
 vi.mock("server-only", () => ({}));
+vi.mock("@/features/admin/server/messages", () => ({
+  persistContactMessage: vi.fn(),
+  setContactEmailStatus: vi.fn(),
+}));
 
 vi.mock("@/features/contact/rate-limit", () => ({
   checkContactRateLimit: vi.fn(),
@@ -39,6 +47,13 @@ function request(body: string = JSON.stringify(valid), headers = {}) {
 beforeEach(() => {
   vi.clearAllMocks();
   vi.stubEnv("NEXT_PUBLIC_SITE_URL", "https://portfolio.example");
+  vi.stubEnv("RESEND_API_KEY", "test-key");
+  vi.stubEnv("CONTACT_FROM_EMAIL", "studio@example.com");
+  vi.stubEnv("CONTACT_TO_EMAIL", "studio@example.com");
+  vi.mocked(persistContactMessage).mockResolvedValue(
+    "00000000-0000-4000-8000-000000000001",
+  );
+  vi.mocked(setContactEmailStatus).mockResolvedValue(undefined);
   vi.mocked(checkContactRateLimit).mockResolvedValue(true);
   vi.mocked(sendContactEmails).mockResolvedValue({ id: "test-delivery" });
 });
@@ -51,6 +66,11 @@ describe("contact endpoint", () => {
     expect(await response.json()).toEqual({ ok: true });
     expect(response.headers.get("cache-control")).toBe("no-store");
     expect(sendContactEmails).toHaveBeenCalledWith(valid);
+    expect(persistContactMessage).toHaveBeenCalledWith(valid);
+    expect(setContactEmailStatus).toHaveBeenCalledWith(
+      "00000000-0000-4000-8000-000000000001",
+      "SENT",
+    );
   });
 
   it.each([
@@ -155,12 +175,36 @@ describe("contact endpoint", () => {
     expect(sendContactEmails).not.toHaveBeenCalled();
   });
 
-  it("does not expose delivery errors", async () => {
+  it("retains an accepted enquiry when optional email delivery fails", async () => {
     vi.mocked(sendContactEmails).mockRejectedValue(
       new Error("private provider detail"),
     );
     const response = await POST(request());
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ ok: true });
+    expect(setContactEmailStatus).toHaveBeenCalledWith(
+      "00000000-0000-4000-8000-000000000001",
+      "FAILED",
+    );
+  });
+
+  it("never accepts an enquiry when persistence fails", async () => {
+    vi.mocked(persistContactMessage).mockRejectedValue(
+      new Error("private db detail"),
+    );
+    const response = await POST(request());
     expect(response.status).toBe(503);
-    expect(await response.json()).toEqual({ ok: false, error: "delivery" });
+    expect(await response.json()).toEqual({ ok: false, error: "unavailable" });
+    expect(sendContactEmails).not.toHaveBeenCalled();
+  });
+
+  it("persists without pretending to send an unconfigured email", async () => {
+    vi.stubEnv("RESEND_API_KEY", "");
+    expect((await POST(request())).status).toBe(200);
+    expect(sendContactEmails).not.toHaveBeenCalled();
+    expect(setContactEmailStatus).toHaveBeenCalledWith(
+      "00000000-0000-4000-8000-000000000001",
+      "UNCONFIGURED",
+    );
   });
 });

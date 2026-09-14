@@ -28,13 +28,11 @@ const articles = [
   },
 ] as const;
 
-test("Journal indexes list the same three localized articles", async ({
-  page,
-}) => {
+test("Journal indexes list all nine localized articles", async ({ page }) => {
   for (const locale of ["fr", "en", "ar"] as const) {
     await page.goto(`/${locale}/journal`);
     await waitForHydration(page);
-    await expect(page.locator("[data-journal-card]")).toHaveCount(3);
+    await expect(page.locator("[data-journal-card]")).toHaveCount(9);
     await expect(
       page.locator("[data-journal-card]").getByText(/^\d{2}\s*\/\s*\d{2}$/),
     ).toHaveCount(0);

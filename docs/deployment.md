@@ -20,13 +20,21 @@ For static hosting, keep `NEXT_PUBLIC_CONTACT_EMAIL` set to the approved public
 mailbox. This opens a draft; the visitor must send it. No API, Resend, or Redis
 is used. The GitHub Pages workflow sets this fallback explicitly.
 
-For server delivery, leave `NEXT_PUBLIC_CONTACT_EMAIL` unset and configure:
+For server delivery, the form always calls `/api/contact`, even when a public
+contact email is configured. Configure:
+
+- `ADMIN_DATABASE_URL` and optional `ADMIN_DATABASE_POOL_MAX`. Run
+  `pnpm admin:migrate` before accepting enquiries. On Vercel, use durable
+  PostgreSQL with verified TLS and size the application pools across all
+  instances. See the [PostgreSQL/Docker manual](postgresql-docker.md) and
+  [admin setup](admin-dashboard.md).
 
 - `NEXT_PUBLIC_SITE_URL`: the exact public origin, optionally with a base path.
   The browser's Origin must match its origin; arbitrary preview domains are
   not implicitly trusted. Configure preview environments separately.
 - `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`: a verified sender
-  and the approved business recipient; all server-only.
+  and the approved business recipient; all server-only. These are optional for
+  notifications of persisted enquiries; the first two are required for replies.
 - `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN`: a writable Upstash
   Redis REST endpoint over HTTPS and a token permitted to run EVAL, INCR, and
   PEXPIRE. The URL must end in `.upstash.io` without a path, query, or credentials.
@@ -42,8 +50,9 @@ and ten seconds, and returns 429 after five attempts in 15 minutes. Keys use
 IP hashes with expiry; treat them as pseudonymous data, not anonymous data.
 The limiter is not bot detection: configure edge body/time limits, abuse
 monitoring, and provider spend alerts. Multi-IP spam still requires edge
-controls. A receipt email failure after successful business delivery is
-logged without personal data and no longer reports a failed enquiry.
+controls. Database persistence determines enquiry acceptance. Failed or missing
+notification email is visible in the inbox without losing the enquiry. A
+storage failure returns 503. A notification failure does not invite duplicates.
 
 Before switching to server contact, test quota sharing across two instances,
 expiry, spoofed-header resistance, backend outage handling, and actual mail

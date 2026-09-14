@@ -10,6 +10,10 @@ import {
   validateContactRequest,
 } from "@/features/contact/request-policy";
 import { sendContactEmails } from "@/lib/email/send-contact-emails";
+import {
+  persistContactMessage,
+  setContactEmailStatus,
+} from "@/features/admin/server/messages";
 
 export const runtime = "nodejs";
 
@@ -58,10 +62,35 @@ export async function POST(request: Request) {
     );
   }
 
+  let messageId: string;
   try {
-    await sendContactEmails(parsed.data);
-    return json({ ok: true });
+    messageId = await persistContactMessage(parsed.data);
   } catch {
-    return json({ ok: false, error: "delivery" }, 503);
+    return json({ ok: false, error: "unavailable" }, 503);
   }
+
+  let emailStatus: "SENT" | "FAILED" | "UNCONFIGURED" = "UNCONFIGURED";
+  if (
+    process.env.RESEND_API_KEY &&
+    process.env.CONTACT_FROM_EMAIL &&
+    process.env.CONTACT_TO_EMAIL
+  ) {
+    try {
+      await sendContactEmails(parsed.data);
+      emailStatus = "SENT";
+    } catch {
+      emailStatus = "FAILED";
+      console.warn(
+        "Contact email notification failed; enquiry retained in inbox",
+      );
+    }
+  }
+  try {
+    await setContactEmailStatus(messageId, emailStatus);
+  } catch {
+    console.warn("Contact email status update failed");
+  }
+  // A committed enquiry is accepted even when its optional email notification
+  // fails. Retrying would create duplicate enquiries without improving delivery.
+  return json({ ok: true });
 }

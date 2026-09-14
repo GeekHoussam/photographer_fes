@@ -14,6 +14,17 @@ if (isGitHubPages && !process.env.NEXT_PUBLIC_BASE_PATH) {
 }
 
 const nextConfig: NextConfig = {
+  distDir: process.env.NEXT_BUILD_DIR || ".next",
+  typescript: {
+    tsconfigPath: isGitHubPages ? "tsconfig.static.json" : "tsconfig.json",
+  },
+  // Server-only route entry points are deliberately absent from static exports.
+  pageExtensions: isGitHubPages
+    ? ["tsx", "ts", "jsx", "js"]
+    : ["tsx", "ts", "jsx", "js", "server.tsx", "server.ts"],
+  env: {
+    NEXT_PUBLIC_STATIC_EXPORT: isGitHubPages ? "true" : "false",
+  },
   output: isGitHubPages ? "export" : undefined,
   basePath,
   assetPrefix: basePath,

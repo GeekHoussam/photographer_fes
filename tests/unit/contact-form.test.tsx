@@ -33,6 +33,22 @@ async function fillForm() {
 }
 
 describe("contact form delivery state", () => {
+  it("uses server persistence even when a public email address is configured", async () => {
+    vi.stubEnv("NEXT_PUBLIC_CONTACT_EMAIL", "studio@example.test");
+    vi.stubEnv("NEXT_PUBLIC_STATIC_EXPORT", "false");
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    render(<ContactForm />);
+    const user = await fillForm();
+    await user.click(screen.getByRole("button", { name: "Send enquiry" }));
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Your enquiry has been sent",
+    );
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/contact",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
   it.each(["offline", "server-error"])(
     "shows a retryable message for %s",
     async (failure) => {

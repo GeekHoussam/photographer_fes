@@ -7,6 +7,7 @@
 /coverage
 /playwright-report
 /test-results
+/backups/
 
 # next.js
 /.next/
@@ -22,6 +23,7 @@
 # local environment
 .env*
 !.env.example
+!.env.docker.example
 
 # vercel
 .vercel
@@ -38,3 +40,10 @@ Thumbs.db
 debug.log
 .idea
 .vscode
+
+# private admin storage
+/.next-*/
+/.data/
+*.db
+*.db-shm
+*.db-wal

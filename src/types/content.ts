@@ -27,13 +27,19 @@ export type JournalBodyBlock =
   | { type: "heading"; level: 2 | 3; text: string }
   | { type: "paragraph"; content: JournalRichText }
   | { type: "list"; items: ReadonlyArray<JournalRichText> }
-  | { type: "image"; imageIndex: 1 | 2 }
+  | { type: "image"; imageIndex: number }
+  | {
+      type: "table";
+      headers: ReadonlyArray<JournalRichText>;
+      rows: ReadonlyArray<ReadonlyArray<JournalRichText>>;
+    }
   | { type: "videos"; videoIndexes: ReadonlyArray<number> };
 
 export type JournalVideo = {
   videoId: string;
   youtubeUrl: string;
   aspect: "landscape" | "portrait";
+  autoplay?: boolean;
   label: LocalizedText;
 };
 
@@ -43,6 +49,7 @@ export type JournalLocaleContent = {
   metaTitle: string;
   metaDescription: string;
   body: ReadonlyArray<JournalBodyBlock>;
+  afterFaqBody?: ReadonlyArray<JournalBodyBlock>;
   faqIntroduction: string;
   faqs: ReadonlyArray<{ question: string; answer: JournalRichText }>;
   contactTitle: string;
@@ -56,7 +63,7 @@ export type JournalArticle = {
   author: string;
   publishedAt?: string;
   modifiedAt?: string;
-  images: readonly [PhotoAsset, PhotoAsset, PhotoAsset];
+  images: readonly [PhotoAsset, ...PhotoAsset[]];
   videos: ReadonlyArray<JournalVideo>;
   content: Record<Locale, JournalLocaleContent>;
 };

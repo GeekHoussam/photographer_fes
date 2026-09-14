@@ -2280,6 +2280,34 @@ html[dir="rtl"] .portfolio-project-preview-progress span {
   margin-bottom: clamp(4rem, 8vw, 7rem);
 }
 
+.journal-table {
+  max-width: 46rem;
+  margin: 2rem auto;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.85;
+  color: color-mix(in srgb, currentColor 72%, transparent);
+}
+
+.journal-table table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.journal-table th,
+.journal-table td {
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  text-align: start;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.journal-table th {
+  color: currentColor;
+  font-weight: 700;
+}
+
 .journal-inline-media[data-image-orientation="portrait"] {
   max-width: 42rem;
   margin-inline: auto;

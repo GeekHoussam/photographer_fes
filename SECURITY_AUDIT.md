@@ -1,5 +1,9 @@
 # Photographer Fes Security Audit
 
+> Admin extension, 2026-08-29: the earlier no-database/no-authentication threat
+> model below is historical. See [admin security and setup](docs/admin-dashboard.md)
+> and [verification](docs/admin-verification.md) for the added private backend.
+
 Audit dates: **2026-08-27–28**. Repository base: `0743668`.
 
 ## Executive Summary

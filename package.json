@@ -10,11 +10,14 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest",
     "test:run": "vitest run",
+    "test:postgres": "TEST_DATABASE_URL=${TEST_DATABASE_URL:-postgresql://photographer_fes:replace-with-a-long-local-password@127.0.0.1:5432/photographer_fes_test} vitest run tests/unit/admin-services.test.ts",
     "test:e2e": "playwright test",
     "sanity": "sanity",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "prepare": "husky"
+    "prepare": "husky",
+    "admin:migrate": "node --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/admin-migrate.ts",
+    "admin:user": "node --env-file-if-exists=.env.local --conditions=react-server --import tsx scripts/admin-user.ts"
   },
   "engines": {
     "node": ">=22.12.0"
@@ -36,6 +39,7 @@
     "next": "^16.3.3",
     "next-intl": "^4.13.2",
     "next-sanity": "^13.3.3",
+    "pg": "8.23.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.81.0",
@@ -52,6 +56,7 @@
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^26.1.1",
+    "@types/pg": "8.23.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.185.1",
@@ -64,7 +69,9 @@
     "lint-staged": "^17.0.8",
     "prettier": "^3.9.5",
     "prettier-plugin-tailwindcss": "^0.8.0",
+    "sharp": "0.35.4",
     "tailwindcss": "^4.3.2",
+    "tsx": "^4.23.12",
     "typescript": "^5.9.3",
     "vitest": "^4.1.10"
   }
