@@ -665,9 +665,9 @@ export const journalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=HmHS5l-KxUw",
         aspect: "landscape",
         label: {
-          fr: "Couverture vidéo d’un événement professionnel à Fès — première vidéo",
-          en: "Professional event coverage in Fez — first video",
-          ar: "تغطية فيديو لفعالية مهنية في فاس — الفيديو الأول",
+          fr: "Couverture vidéo d’un événement professionnel au Maroc",
+          en: "Professional event coverage in Morocco",
+          ar: "تغطية فيديو لفعالية مهنية في المغرب",
         },
       },
       {
@@ -675,9 +675,9 @@ export const journalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=2qof4UTBzZk",
         aspect: "landscape",
         label: {
-          fr: "Couverture vidéo d’un événement professionnel à Fès — deuxième vidéo",
-          en: "Professional event coverage in Fez — second video",
-          ar: "تغطية فيديو لفعالية مهنية في فاس — الفيديو الثاني",
+          fr: "Couverture vidéo d’un événement professionnel au Maroc",
+          en: "Professional event coverage in Morocco",
+          ar: "تغطية فيديو لفعالية مهنية في المغرب",
         },
       },
     ],
@@ -1147,9 +1147,9 @@ export const journalArticles = [
         youtubeUrl: "https://www.youtube.com/shorts/CkAa7Lae5LU",
         aspect: "portrait",
         label: {
-          fr: "Format vidéo vertical pour les réseaux sociaux — première vidéo",
-          en: "Vertical social media format — first video",
-          ar: "فيديو عمودي لشبكات التواصل الاجتماعي — الفيديو الأول",
+          fr: "Format vidéo vertical pour les réseaux sociaux",
+          en: "Vertical social media format",
+          ar: "فيديو عمودي لشبكات التواصل الاجتماعي",
         },
       },
       {
@@ -1157,9 +1157,9 @@ export const journalArticles = [
         youtubeUrl: "https://www.youtube.com/shorts/a4PxHBb83PA",
         aspect: "portrait",
         label: {
-          fr: "Format vidéo vertical pour les réseaux sociaux — deuxième vidéo",
-          en: "Vertical social media format — second video",
-          ar: "فيديو عمودي لشبكات التواصل الاجتماعي — الفيديو الثاني",
+          fr: "Format vidéo vertical pour les réseaux sociaux",
+          en: "Vertical social media format",
+          ar: "فيديو عمودي لشبكات التواصل الاجتماعي",
         },
       },
     ],

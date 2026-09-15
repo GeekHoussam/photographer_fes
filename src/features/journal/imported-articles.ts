@@ -941,9 +941,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/shorts/IY16AB5OVp8",
         aspect: "portrait",
         label: {
-          fr: "Portrait et expérience caftan à Fès — vidéo 1",
-          en: "Portrait and caftan experience in Fez — video 1",
-          ar: "البورتريه وتجربة القفطان في فاس — فيديو 1",
+          fr: "Portrait et expérience caftan au Maroc",
+          en: "Portrait and caftan experience in Morocco",
+          ar: "البورتريه وتجربة القفطان في المغرب",
         },
       },
       {
@@ -951,9 +951,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/shorts/28uVq9QU8UE",
         aspect: "portrait",
         label: {
-          fr: "Portrait et expérience caftan à Fès — vidéo 2",
-          en: "Portrait and caftan experience in Fez — video 2",
-          ar: "البورتريه وتجربة القفطان في فاس — فيديو 2",
+          fr: "Portrait et expérience caftan au Maroc",
+          en: "Portrait and caftan experience in Morocco",
+          ar: "البورتريه وتجربة القفطان في المغرب",
         },
       },
     ],
@@ -1661,9 +1661,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=m13WS5HmRSw",
         aspect: "landscape",
         label: {
-          fr: "Film institutionnel à Fès — vidéo 1",
-          en: "Corporate film in Fez — video 1",
-          ar: "فيلم مؤسسي في فاس — فيديو 1",
+          fr: "Film institutionnel au Maroc",
+          en: "Corporate film in Morocco",
+          ar: "إنتاج فيلم مؤسسي في المغرب",
         },
       },
       {
@@ -1671,9 +1671,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=eo6C0Xbxm0g",
         aspect: "landscape",
         label: {
-          fr: "Film institutionnel à Fès — vidéo 2",
-          en: "Corporate film in Fez — video 2",
-          ar: "فيلم مؤسسي في فاس — فيديو 2",
+          fr: "Film institutionnel au Maroc",
+          en: "Corporate film in Morocco",
+          ar: "إنتاج فيلم مؤسسي في المغرب",
         },
       },
       {
@@ -1681,9 +1681,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=wFmxkMxjINs",
         aspect: "landscape",
         label: {
-          fr: "Film institutionnel à Fès — vidéo 3",
-          en: "Corporate film in Fez — video 3",
-          ar: "فيلم مؤسسي في فاس — فيديو 3",
+          fr: "Film institutionnel au Maroc",
+          en: "Corporate film in Morocco",
+          ar: "إنتاج فيلم مؤسسي في المغرب",
         },
       },
     ],
@@ -2467,9 +2467,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=EyG3xDuvVD0",
         aspect: "landscape",
         label: {
-          fr: "Événement et team building à Fès — vidéo 1",
-          en: "Event and team building in Fez — video 1",
-          ar: "فعالية وبناء الفريق في فاس — فيديو 1",
+          fr: "Événement et team building au Maroc",
+          en: "Event and team building in Morocco",
+          ar: "فعالية وبناء الفريق في المغرب",
         },
       },
       {
@@ -2477,9 +2477,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=Z3fSg0czUd8",
         aspect: "landscape",
         label: {
-          fr: "Événement et team building à Fès — vidéo 2",
-          en: "Event and team building in Fez — video 2",
-          ar: "فعالية وبناء الفريق في فاس — فيديو 2",
+          fr: "Événement et team building au Maroc",
+          en: "Event and team building in Morocco",
+          ar: "فعالية وبناء الفريق في المغرب",
         },
       },
       {
@@ -2487,9 +2487,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/watch?v=yW2tBt25E6Q",
         aspect: "landscape",
         label: {
-          fr: "Événement et team building à Fès — vidéo 3",
-          en: "Event and team building in Fez — video 3",
-          ar: "فعالية وبناء الفريق في فاس — فيديو 3",
+          fr: "Événement et team building au Maroc",
+          en: "Event and team building in Morocco",
+          ar: "فعالية وبناء الفريق في المغرب",
         },
       },
     ],
@@ -4229,9 +4229,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/shorts/a4PxHBb83PA",
         aspect: "portrait",
         label: {
-          fr: "Photographie et vidéo culinaires à Fès — vidéo 1",
-          en: "Food photography and video in Fez — video 1",
-          ar: "تصوير الطعام والفيديو في فاس — فيديو 1",
+          fr: "Photographie et vidéo culinaires au Maroc",
+          en: "Food photography and video in Morocco",
+          ar: "تصوير الطعام والفيديو في المغرب",
         },
       },
       {
@@ -4239,9 +4239,9 @@ export const importedJournalArticles = [
         youtubeUrl: "https://www.youtube.com/shorts/2HNDtgh8cQE",
         aspect: "portrait",
         label: {
-          fr: "Photographie et vidéo culinaires à Fès — vidéo 2",
-          en: "Food photography and video in Fez — video 2",
-          ar: "تصوير الطعام والفيديو في فاس — فيديو 2",
+          fr: "Photographie et vidéo culinaires au Maroc",
+          en: "Food photography and video in Morocco",
+          ar: "تصوير الطعام والفيديو في المغرب",
         },
       },
     ],

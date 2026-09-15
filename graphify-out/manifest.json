@@ -42,9 +42,9 @@
     "semantic_hash": ""
   },
   "next.config.ts": {
-    "mtime": 1789422161.7112772,
-    "seen": 1789507007.900351,
-    "ast_hash": "8ce55c21601285c1b11fcf84ac6cb60e",
+    "mtime": 1789508592.5839953,
+    "seen": 1789508604.217675,
+    "ast_hash": "602fdc132045ae3203e7cec2e1e751f4",
     "semantic_hash": ""
   },
   "package.json": {
@@ -138,8 +138,8 @@
     "semantic_hash": "906d9c40850db6012325d95b827a2fe1"
   },
   "src/app/[locale]/journal/[slug]/page.tsx": {
-    "mtime": 1789506864.0417883,
-    "seen": 1789507007.900757,
+    "mtime": 1789507512.2178588,
+    "seen": 1789508604.218119,
     "ast_hash": "d3d618cb4e912b78bd0f07a0c100e4d4",
     "semantic_hash": ""
   },
@@ -276,14 +276,14 @@
     "semantic_hash": ""
   },
   "src/components/journal/journal-article-content.tsx": {
-    "mtime": 1789506864.041393,
-    "seen": 1789507007.901421,
+    "mtime": 1789507512.2180984,
+    "seen": 1789508604.2197702,
     "ast_hash": "8687e3e8aac20b839f2141f52ff39b88",
     "semantic_hash": ""
   },
   "src/components/journal/journal-video.tsx": {
-    "mtime": 1789506864.041109,
-    "seen": 1789507007.9014232,
+    "mtime": 1789507512.218251,
+    "seen": 1789508604.219771,
     "ast_hash": "3a7c06497b21f606832d4db980e1d99d",
     "semantic_hash": ""
   },
@@ -456,9 +456,9 @@
     "semantic_hash": "306cc14e4173b7928f65867862137f69"
   },
   "src/features/journal/articles.ts": {
-    "mtime": 1789422161.7325022,
-    "seen": 1789507007.902601,
-    "ast_hash": "4a2bdaeaabfdf74dd204db6d0c5e1be2",
+    "mtime": 1789509138.741943,
+    "seen": 1789509150.114939,
+    "ast_hash": "09bdc13ad045e331dfddf81837536919",
     "semantic_hash": ""
   },
   "src/features/portfolio/categories.ts": {
@@ -558,8 +558,8 @@
     "semantic_hash": ""
   },
   "src/types/content.ts": {
-    "mtime": 1789506864.0404603,
-    "seen": 1789507007.903237,
+    "mtime": 1789507512.2190313,
+    "seen": 1789508604.2221088,
     "ast_hash": "82d485cd1e87de434980725f136a1100",
     "semantic_hash": ""
   },
@@ -576,8 +576,8 @@
     "semantic_hash": ""
   },
   "tests/e2e/journal.spec.ts": {
-    "mtime": 1789506916.4947762,
-    "seen": 1789507007.903299,
+    "mtime": 1789507512.2193747,
+    "seen": 1789508604.222168,
     "ast_hash": "6423303226488da4eb45e932ea969b62",
     "semantic_hash": ""
   },
@@ -1776,9 +1776,9 @@
     "semantic_hash": ""
   },
   "compose.yaml": {
-    "mtime": 1789422161.6958072,
-    "seen": 1789507007.905008,
-    "ast_hash": "f295a3142f923cec410fab8a039a2890",
+    "mtime": 1789507512.2085395,
+    "seen": 1789508604.224124,
+    "ast_hash": "3565ffd7af860e3eb9599bbb4cfda317",
     "semantic_hash": ""
   },
   "docs/postgresql-docker.md": {
@@ -1788,20 +1788,20 @@
     "semantic_hash": ""
   },
   "src/features/journal/imported-articles.ts": {
-    "mtime": 1789506899.610188,
-    "seen": 1789507007.902603,
-    "ast_hash": "e89de8b2191bc48b18b5fbe1167633fb",
+    "mtime": 1789509138.7436283,
+    "seen": 1789509150.11494,
+    "ast_hash": "91eea0db7fd91d773c74fc93fc769f03",
     "semantic_hash": ""
   },
   "tests/e2e/journal-import.spec.ts": {
-    "mtime": 1789506883.1598349,
-    "seen": 1789507007.9032981,
+    "mtime": 1789507512.219211,
+    "seen": 1789508604.222166,
     "ast_hash": "d65ca1fbc22c546e3ec774c7006187bf",
     "semantic_hash": ""
   },
   "tests/unit/journal-import.test.ts": {
-    "mtime": 1789507260.939451,
-    "seen": 1789507275.270675,
+    "mtime": 1789507512.219545,
+    "seen": 1789508604.222485,
     "ast_hash": "ec949dafc80875794540ecdb188f9cec",
     "semantic_hash": ""
   },
@@ -1986,14 +1986,14 @@
     "semantic_hash": ""
   },
   "docs/journal-integration.md": {
-    "mtime": 1789507260.9400017,
-    "seen": 1789507275.2723572,
+    "mtime": 1789507512.2088006,
+    "seen": 1789508604.224295,
     "ast_hash": "68510bfea5925be41852f965db54116d",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20260915_211313_make_journal_videos_play_like_portfolio_videos_and.md": {
-    "mtime": 1789506793.0332677,
-    "seen": 1789507007.905165,
+    "mtime": 1789507512.2174416,
+    "seen": 1789508604.224392,
     "ast_hash": "99f86fee8d36b7fb4b9443d49538414f",
     "semantic_hash": ""
   }

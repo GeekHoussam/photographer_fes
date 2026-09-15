@@ -14,6 +14,8 @@ if (isGitHubPages && !process.env.NEXT_PUBLIC_BASE_PATH) {
 }
 
 const nextConfig: NextConfig = {
+  // Docker binds Next to 0.0.0.0; permit browser access through loopback too.
+  allowedDevOrigins: ["localhost", "127.0.0.1"],
   distDir: process.env.NEXT_BUILD_DIR || ".next",
   typescript: {
     tsconfigPath: isGitHubPages ? "tsconfig.static.json" : "tsconfig.json",
