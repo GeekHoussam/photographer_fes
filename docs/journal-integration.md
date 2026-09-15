@@ -112,7 +112,7 @@ Six unique articles imported in source order, after the existing three. All arti
 
 Reused the typed `JournalArticle` collection, current Journal index, dynamic detail route, `PageHero`, `JournalArticleContent`, `JournalVideo`, contact CTA, shared navigation/footer, and existing metadata, BlogPosting/FAQ/breadcrumb JSON-LD, sitemap and locale helpers. Existing articles retain their content, URLs and order.
 
-The content model now accepts a nonempty image collection, numeric image indexes, rich-text tables and an optional section after FAQs. This retains the team-building article’s source section order. The existing renderer handles those additions using the same typography, widths, borders and responsive image frames. New videos keep the click-to-load privacy embed and explicitly disable autoplay; existing video behavior remains intact.
+The content model accepts a nonempty image collection, numeric image indexes, rich-text tables and an optional section after FAQs. This retains the team-building article’s source section order. The existing renderer handles those additions using the same typography, widths, borders and responsive image frames. Journal videos use the portfolio’s one-click playback behavior through the privacy-friendly embed.
 
 All 30 local source images were converted to WebP using the existing maximum 2400-pixel convention, with EXIF orientation applied, no upscaling, and localized descriptive alt text. No remote image domains, dependencies or image placeholders were added.
 
@@ -121,7 +121,7 @@ All 30 local source images were converted to WebP using the existing maximum 240
 - The `3 - photographe-fes-film-institutionnel 2` directory is byte-identical to `3 - photographe-fes-film-institutionnel`, including Markdown, images and PDF. It is represented by the same article to avoid duplicate content and URLs.
 - The numbered folders contain six editorial articles. The unnumbered SITEWEB PHOTOS folders and two ZIP archives contain general photo libraries, with no additional article documents; they were inspected but not bulk-imported.
 - The portrait article is about women and the caftan experience. Its source folder also includes three male portraits; all supplied images are retained with accurate alt text, and a woman in a caftan is used as the cover.
-- No publication dates, categories, captions or per-image/video placement instructions were supplied. Dates remain unset. Images are inserted at section boundaries; PDF videos appear after the main body and before FAQs. The portrait and food Shorts retain the existing portrait-video treatment.
+- No publication dates, categories, captions or per-image/video placement instructions were supplied. Dates remain unset. Images are inserted at section boundaries. The first video is presented before the article body for immediate viewing; every remaining PDF video stays at the original video block before the FAQs. The portrait and food Shorts retain the existing portrait-video treatment.
 - The original quick-summary label is mapped to the template’s summary. Markdown separators and backticks are formatting only; the keyword heading is retained as a bold contact-section paragraph. Every French word, heading, list item, table cell, FAQ, conclusion and keyword is preserved in reading order after whitespace normalization.
 - English and Arabic equivalents were added to match the existing locale model. Supplied business claims, prices, timelines, locations and usage-right statements were preserved rather than independently rewritten or fact-checked.
 - Food video `a4PxHBb83PA` is intentionally also used by the existing social-media article: both source documents reference it.
@@ -166,9 +166,9 @@ All 30 local source images were converted to WebP using the existing maximum 240
 ## Files modified
 
 - `src/features/journal/articles.ts` — append the imported entries to the existing collection.
-- `src/types/content.ts` — allow extra images, tables, optional post-FAQ body, and explicit video autoplay configuration.
-- `src/components/journal/journal-article-content.tsx` — render tables and optional supplied body blocks.
-- `src/components/journal/journal-video.tsx` — honor explicit autoplay configuration.
+- `src/types/content.ts` — allow extra images, tables and an optional post-FAQ body.
+- `src/components/journal/journal-article-content.tsx` — render tables and optional supplied body blocks, with the first article video featured before the body.
+- `src/components/journal/journal-video.tsx` — match the portfolio’s one-click autoplay behavior.
 - `src/app/[locale]/journal/[slug]/page.tsx` — render the optional section after FAQs.
 - `src/styles/globals.css` — table styling scoped to Journal content.
 - `tests/unit/journal-articles.test.ts` — validate the expanded collection and fix the Fez spelling check so “cafés” is not treated as the city name.
@@ -180,13 +180,13 @@ All 30 local source images were converted to WebP using the existing maximum 240
 
 - Lint: `npm run lint` passed with zero warnings.
 - TypeScript: `npm run typecheck` passed; both builds also passed TypeScript validation.
-- Unit tests: `npm run test:run` — 112 passed, 33 database-dependent tests skipped.
+- Unit tests: `npm run test:run` — 113 passed, 33 database-dependent tests skipped.
 - Browser tests: production Playwright Journal suites — 66 passed, across desktop and Pixel 7 mobile, with French, English and Arabic coverage. Two focused Arabic screenshot checks also passed.
 - Production build: passed using `.next-journal-verified`, including all 27 localized article detail routes.
 - GitHub Pages build: passed using `.next-journal-static`; all 18 new localized exported pages, canonical URLs and local image paths were separately checked.
 - Source fidelity: independent normalized SHA-256 checks prove the full French text is retained in source reading order. All inventoried source file hashes remain unchanged.
 - Media: all 30 derived images decoded with correct dimensions; browser checks confirmed successful loading and alt text. All 10 supplied video references resolved through YouTube oEmbed on 2026-09-14.
-- Video verification boundary: browser tests verify click-to-load iframe creation and correct privacy embed URLs with autoplay disabled; the third-party iframe response is intercepted in those tests. YouTube metadata availability was checked separately; full playback and future availability are controlled by YouTube.
+- Video verification boundary: browser tests verify click-to-load iframe creation and the same one-click autoplay behavior used by portfolio videos through privacy-friendly embed URLs; the third-party iframe response is intercepted in those tests. YouTube metadata availability was checked separately; future availability is controlled by YouTube.
 - Layout: every new localized page checked for horizontal overflow on desktop/mobile; Arabic hero and table screenshots visually reviewed. Existing Journal layout/theme and language-switching regression tests passed.
 - Formatting: touched files passed Prettier; `git diff --check` passed.
 - Graph: `graphify update .` completed with no LLM/API cost. It reported the pre-existing missing optional SQL parser, so SQL relationships are not covered; the Journal TypeScript code was updated.

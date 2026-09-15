@@ -17,18 +17,51 @@ export function RichText({ content }: { content: JournalRichText }) {
   });
 }
 
+export function featureFirstJournalVideo(
+  blocks: ReadonlyArray<JournalBodyBlock>,
+): ReadonlyArray<JournalBodyBlock> {
+  const sourceBlockIndex = blocks.findIndex(
+    (block) => block.type === "videos" && block.videoIndexes.length > 0,
+  );
+  if (sourceBlockIndex === -1) return blocks;
+
+  const sourceBlock = blocks[sourceBlockIndex];
+  if (sourceBlock.type !== "videos") return blocks;
+
+  const [featuredVideoIndex, ...remainingVideoIndexes] =
+    sourceBlock.videoIndexes;
+  if (featuredVideoIndex === undefined) return blocks;
+
+  const remainingBlocks = blocks.flatMap((block, index) => {
+    if (index !== sourceBlockIndex) return [block];
+    if (remainingVideoIndexes.length === 0) return [];
+    return [{ ...sourceBlock, videoIndexes: remainingVideoIndexes }];
+  });
+
+  return [
+    { type: "videos", videoIndexes: [featuredVideoIndex] },
+    ...remainingBlocks,
+  ];
+}
+
 export function JournalArticleContent({
   article,
   locale,
   blocks = article.content[locale].body,
+  featureFirstVideo = false,
 }: {
   article: JournalArticle;
   locale: Locale;
   blocks?: ReadonlyArray<JournalBodyBlock>;
+  featureFirstVideo?: boolean;
 }) {
+  const renderedBlocks = featureFirstVideo
+    ? featureFirstJournalVideo(blocks)
+    : blocks;
+
   return (
     <div className="journal-prose">
-      {blocks.map((block, index) => {
+      {renderedBlocks.map((block, index) => {
         if (block.type === "heading") {
           return block.level === 2 ? (
             <h2 key={`${block.text}-${index}`}>{block.text}</h2>
@@ -112,6 +145,9 @@ export function JournalArticleContent({
         return (
           <div
             key={`videos-${index}`}
+            data-journal-featured-video={
+              featureFirstVideo && index === 0 ? "true" : undefined
+            }
             className={`journal-video-grid ${
               block.videoIndexes.length > 1 ? "journal-video-grid-multiple" : ""
             }`}

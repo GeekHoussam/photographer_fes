@@ -157,7 +157,11 @@ export default async function JournalArticlePage({
 
       <section className="theme-light section-space" aria-label={copy.content}>
         <Container>
-          <JournalArticleContent article={article} locale={locale} />
+          <JournalArticleContent
+            article={article}
+            locale={locale}
+            featureFirstVideo
+          />
         </Container>
       </section>
 

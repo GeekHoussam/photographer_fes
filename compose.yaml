@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Copy .env.docker.example to .env.docker and set POSTGRES_PASSWORD}
       POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256 --data-checksums
     ports:
-      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./docker/postgres/init-test-db.sh:/docker-entrypoint-initdb.d/10-test-db.sh:ro

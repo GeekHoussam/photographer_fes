@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
+import { featureFirstJournalVideo } from "@/components/journal/journal-article-content";
+import { journalArticles } from "@/features/journal/articles";
 import { importedJournalArticles } from "@/features/journal/imported-articles";
 import type {
   JournalArticle,
@@ -110,12 +112,41 @@ describe("Imported Journal source integrity", () => {
         );
         expect(JSON.stringify(content)).not.toMatch(/Ã©|Ã¨|â€™|\uFFFD/);
       }
-      expect(article.videos.every((video) => video.autoplay === false)).toBe(
-        true,
-      );
       expect(new Set(article.images.map((image) => image.src)).size).toBe(
         article.images.length,
       );
+    }
+  });
+
+  it("features the first video and preserves every remaining video at its original position", () => {
+    for (const article of journalArticles) {
+      for (const locale of ["fr", "en", "ar"] as const) {
+        const original = article.content[locale].body;
+        const rendered = featureFirstJournalVideo(original);
+        if (article.videos.length === 0) {
+          expect(rendered).toBe(original);
+          continue;
+        }
+
+        expect(rendered[0]).toEqual({ type: "videos", videoIndexes: [0] });
+        expect(
+          rendered
+            .filter((block) => block.type === "videos")
+            .flatMap((block) => block.videoIndexes),
+        ).toEqual(article.videos.map((_, index) => index));
+
+        const originalVideoBlockIndex = original.findIndex(
+          (block) => block.type === "videos",
+        );
+        const remainingVideoBlockIndex = rendered.findIndex(
+          (block, index) => index > 0 && block.type === "videos",
+        );
+        if (article.videos.length > 1) {
+          expect(remainingVideoBlockIndex).toBe(originalVideoBlockIndex + 1);
+        } else {
+          expect(remainingVideoBlockIndex).toBe(-1);
+        }
+      }
     }
   });
 });

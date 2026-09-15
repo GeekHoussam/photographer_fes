@@ -113,12 +113,12 @@
   "111": "package.json",
   "112": "[locale]/layout.tsx",
   "113": "Admin implementation verification",
-  "114": "projects.ts",
+  "114": "Locale",
   "115": "document-pages.tsx",
   "116": "lint-staged",
   "117": "eslint-config-prettier",
   "118": "adminI18n",
-  "119": "services/[slug]/page.tsx",
+  "119": "journal/[slug]/page.tsx",
   "120": "arabic-locale.test.ts",
   "121": "clients-pages.tsx",
   "122": "@types/react",
@@ -155,5 +155,5 @@
   "153": "@types/node",
   "154": "@types/pg",
   "155": "@vitejs/plugin-react",
-  "156": "@testing-library/jest-dom"
+  "156": "prettier"
 }

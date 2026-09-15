@@ -68,7 +68,7 @@ export function JournalVideo({
         {isActive ? (
           <iframe
             className="absolute inset-0 h-full w-full border-0"
-            src={`${getVideoEmbedUrl(video.videoId)}?autoplay=${video.autoplay === false ? 0 : 1}&rel=0`}
+            src={`${getVideoEmbedUrl(video.videoId)}?autoplay=1&rel=0`}
             title={title}
             loading="lazy"
             allow="autoplay; encrypted-media; picture-in-picture"

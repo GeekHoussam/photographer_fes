@@ -1,11 +1,11 @@
 # Graph Report - photographer_fes  (2026-09-15)
 
 ## Corpus Check
-- 243 files · ~3,857,474 words
+- 243 files · ~3,857,459 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1645 nodes · 2988 edges · 157 communities (120 shown, 37 thin omitted)
+- 1645 nodes · 2986 edges · 157 communities (120 shown, 37 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
@@ -118,12 +118,12 @@
 - package.json
 - [locale]/layout.tsx
 - Admin implementation verification
-- projects.ts
+- Locale
 - document-pages.tsx
 - lint-staged
 - eslint-config-prettier
 - adminI18n
-- services/[slug]/page.tsx
+- journal/[slug]/page.tsx
 - arabic-locale.test.ts
 - clients-pages.tsx
 - @types/react
@@ -159,7 +159,7 @@
 - @types/node
 - @types/pg
 - @vitejs/plugin-react
-- @testing-library/jest-dom
+- prettier
 
 ## God Nodes (most connected - your core abstractions)
 1. `isLocale()` - 46 edges
@@ -195,8 +195,8 @@ Cohesion: 0.12
 Nodes (17): main(), [command, emailArg, nameArg], email, main(), readPassword(), closeDatabase(), Database, DatabaseValue (+9 more)
 
 ### Community 1 - "isLocale"
-Cohesion: 0.15
-Nodes (30): generateMetadata(), Page(), ContactPage(), generateMetadata(), generateMetadata(), JournalPage(), generateMetadata(), Page() (+22 more)
+Cohesion: 0.16
+Nodes (28): generateMetadata(), Page(), ContactPage(), generateMetadata(), generateMetadata(), JournalPage(), generateMetadata(), generateMetadata() (+20 more)
 
 ### Community 2 - "Admin dashboard"
 Cohesion: 0.20
@@ -204,7 +204,7 @@ Nodes (10): Admin dashboard, Architecture and important files, Contact, replies 
 
 ### Community 3 - "devDependencies"
 Cohesion: 0.12
-Nodes (17): eslint, eslint-config-next, devDependencies, eslint, eslint-config-next, prettier, @tailwindcss/postcss, @testing-library/user-event (+9 more)
+Nodes (17): eslint, eslint-config-next, devDependencies, eslint, eslint-config-next, @tailwindcss/postcss, @testing-library/jest-dom, @testing-library/user-event (+9 more)
 
 ### Community 4 - "dependencies"
 Cohesion: 0.04
@@ -212,7 +212,7 @@ Nodes (49): focus-trap-react, @fontsource-variable/jost, @fontsource-variable/no
 
 ### Community 5 - "videos.ts"
 Cohesion: 0.09
-Nodes (29): JournalVideo(), PortfolioFilters(), projectCardClasses, ProjectCard(), VideoCard(), VideoCardLabels, categoryLabel(), categoryOrder (+21 more)
+Nodes (28): JournalVideo(), PortfolioFilters(), projectCardClasses, ProjectCard(), VideoCard(), VideoCardLabels, categoryLabel(), categoryOrder (+20 more)
 
 ### Community 6 - "scripts"
 Cohesion: 0.12
@@ -320,7 +320,7 @@ Nodes (12): A quoi sert une Vidéo pour un Couple à fès ?, Au-delà de l'Image
 
 ### Community 50 - "content.ts"
 Cohesion: 0.10
-Nodes (27): generateMetadata(), featureFirstJournalVideo(), JournalArticleContent(), RichText(), gridLayouts, Lightbox(), aspectClasses, Locale (+19 more)
+Nodes (23): featureFirstJournalVideo(), JournalArticleContent(), RichText(), getJournalArticle(), JournalSlug, journalSlugs, importedJournalArticles, mediaBySlug (+15 more)
 
 ### Community 51 - "4. DESIGN ENGINEERING DIRECTIVES (Bias Correction)"
 Cohesion: 0.17
@@ -475,8 +475,8 @@ Cohesion: 0.40
 Nodes (5): 8.A Token Strategy (pick one, stick to it), 8.B Do Not Prescribe Specific Colors Here, 8.C Default Mode, 8.D Test in Both Modes Before Finishing, 8. DARK MODE PROTOCOL
 
 ### Community 89 - "site.ts"
-Cohesion: 0.12
-Nodes (14): metadata, ContactMethods(), brandTitles, configuredBasePath, configuredUrl, contactDetails, normalizeBasePath(), normalizeSiteUrl() (+6 more)
+Cohesion: 0.15
+Nodes (11): ContactMethods(), configuredBasePath, configuredUrl, contactDetails, normalizeBasePath(), normalizeSiteUrl(), publicBaseUrl, resolvePublicBaseUrl() (+3 more)
 
 ### Community 90 - "graphify reference: add a URL and watch a folder"
 Cohesion: 0.50
@@ -507,8 +507,8 @@ Cohesion: 0.14
 Nodes (14): Architecture Problems, Architecture Summary, Audit Change Log, Bugs Found, Changes Applied, Dependency Audit, Executive Summary, Overall Risk (+6 more)
 
 ### Community 109 - "structured-data.ts"
-Cohesion: 0.12
-Nodes (38): JournalArticlePage(), ProjectPage(), dynamic, robots(), alternates(), dynamic, sitemap(), absoluteUrl() (+30 more)
+Cohesion: 0.17
+Nodes (30): JournalArticlePage(), dynamic, robots(), absoluteUrl(), localizedUrl(), aboutPageJsonLd(), breadcrumbFor(), breadcrumbJsonLd() (+22 more)
 
 ### Community 110 - "admin/schema.ts"
 Cohesion: 0.10
@@ -526,25 +526,25 @@ Nodes (22): generateMetadata(), arabicFont, RootDocument(), siteFont, ContactDia
 Cohesion: 0.40
 Nodes (5): Admin implementation verification, Automated checks, Browser and HTTP checks, PostgreSQL and Docker replacement, Review and remaining deployment checks
 
-### Community 114 - "projects.ts"
-Cohesion: 0.13
-Nodes (16): HeroOrbitGallery(), OrbitItem, HomeHero(), CatalogueItem, circularOffset(), RotatingCatalogue(), ScrollTransitionFrame, ScrollTransitionFrames() (+8 more)
+### Community 114 - "Locale"
+Cohesion: 0.09
+Nodes (25): Page(), aspectClasses, HeroOrbitGallery(), OrbitItem, HomeHero(), HomePage(), CatalogueItem, circularOffset() (+17 more)
 
 ### Community 115 - "document-pages.tsx"
-Cohesion: 0.18
-Nodes (8): EditEstimatePage(), EditInvoicePage(), EstimateDetailPage(), EstimatesPage(), InvoiceDetailPage(), InvoicesPage(), NewEstimatePage(), NewInvoicePage()
+Cohesion: 0.16
+Nodes (9): PrintButton(), EditEstimatePage(), EditInvoicePage(), EstimateDetailPage(), EstimatesPage(), InvoiceDetailPage(), InvoicesPage(), NewEstimatePage() (+1 more)
 
 ### Community 118 - "adminI18n"
 Cohesion: 0.24
 Nodes (10): AdminLayout(), dynamic, generateMetadata(), runtime, AdminLoading(), LoginPage(), AdminNotFound(), currentActor (+2 more)
 
-### Community 119 - "services/[slug]/page.tsx"
+### Community 119 - "journal/[slug]/page.tsx"
 Cohesion: 0.21
-Nodes (12): ServicePage(), ButtonLink(), styles, Container(), ContainerProps, ResponsiveMedia(), PageHero(), JsonLd() (+4 more)
+Nodes (11): ProjectPage(), ButtonLink(), styles, Container(), ContainerProps, ResponsiveMedia(), gridLayouts, Lightbox() (+3 more)
 
 ### Community 120 - "arabic-locale.test.ts"
-Cohesion: 0.18
-Nodes (10): locales, PageContent, PageCopy, ProcessStep, staticPageContent, StaticPageKey, JsonLdDocument, entryOfType() (+2 more)
+Cohesion: 0.13
+Nodes (20): metadata, alternates(), dynamic, sitemap(), brandTitles, locales, siteConfig, staticPageContent (+12 more)
 
 ### Community 121 - "clients-pages.tsx"
 Cohesion: 0.17
@@ -563,8 +563,8 @@ Cohesion: 0.14
 Nodes (13): Architecture, Articles added, Content decisions and source issues, Files created, Files modified, Journal integration report, Photographe Fès pour Portrait Féminin et Expérience Caftan, Photographe Fès pour Restaurants : Le Secret pour Attirer la Clientèle (+5 more)
 
 ### Community 127 - "controls.tsx"
-Cohesion: 0.25
-Nodes (9): ProtectedAdminLayout(), AdminFrame(), sections, adminRequest(), LanguageSelector(), MarkMessageRead(), MutationButton(), PrintButton() (+1 more)
+Cohesion: 0.28
+Nodes (8): ProtectedAdminLayout(), AdminFrame(), sections, adminRequest(), LanguageSelector(), MarkMessageRead(), MutationButton(), { refresh }
 
 ### Community 128 - "OWASP Top 10 Checklist"
 Cohesion: 0.18
@@ -630,9 +630,9 @@ Nodes (4): ProjectPreview(), handlePointerMove(), paintPointerPosition(), resetP
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Locale` connect `content.ts` to `videos.ts`, `route.ts`, `auth.ts`, `structured-data.ts`, `[locale]/layout.tsx`, `projects.ts`, `services/[slug]/page.tsx`, `arabic-locale.test.ts`, `site.ts`, `controls.tsx`?**
+- **Why does `Locale` connect `Locale` to `videos.ts`, `route.ts`, `auth.ts`, `structured-data.ts`, `[locale]/layout.tsx`, `content.ts`, `journal/[slug]/page.tsx`, `site.ts`, `controls.tsx`?**
   _High betweenness centrality (0.018) - this node is a cross-community bridge._
-- **Why does `isLocale()` connect `isLocale` to `structured-data.ts`, `[locale]/layout.tsx`, `content.ts`, `adminI18n`, `services/[slug]/page.tsx`, `site.ts`?**
+- **Why does `isLocale()` connect `isLocale` to `structured-data.ts`, `[locale]/layout.tsx`, `Locale`, `adminI18n`, `journal/[slug]/page.tsx`, `site.ts`?**
   _High betweenness centrality (0.015) - this node is a cross-community bridge._
 - **Why does `adminI18n` connect `adminI18n` to `isLocale`, `document-pages.tsx`, `clients-pages.tsx`, `message-pages.tsx`?**
   _High betweenness centrality (0.008) - this node is a cross-community bridge._

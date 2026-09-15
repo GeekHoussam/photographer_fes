@@ -940,7 +940,6 @@ export const importedJournalArticles = [
         videoId: "IY16AB5OVp8",
         youtubeUrl: "https://www.youtube.com/shorts/IY16AB5OVp8",
         aspect: "portrait",
-        autoplay: false,
         label: {
           fr: "Portrait et expérience caftan à Fès — vidéo 1",
           en: "Portrait and caftan experience in Fez — video 1",
@@ -951,7 +950,6 @@ export const importedJournalArticles = [
         videoId: "28uVq9QU8UE",
         youtubeUrl: "https://www.youtube.com/shorts/28uVq9QU8UE",
         aspect: "portrait",
-        autoplay: false,
         label: {
           fr: "Portrait et expérience caftan à Fès — vidéo 2",
           en: "Portrait and caftan experience in Fez — video 2",
@@ -1662,7 +1660,6 @@ export const importedJournalArticles = [
         videoId: "m13WS5HmRSw",
         youtubeUrl: "https://www.youtube.com/watch?v=m13WS5HmRSw",
         aspect: "landscape",
-        autoplay: false,
         label: {
           fr: "Film institutionnel à Fès — vidéo 1",
           en: "Corporate film in Fez — video 1",
@@ -1673,7 +1670,6 @@ export const importedJournalArticles = [
         videoId: "eo6C0Xbxm0g",
         youtubeUrl: "https://www.youtube.com/watch?v=eo6C0Xbxm0g",
         aspect: "landscape",
-        autoplay: false,
         label: {
           fr: "Film institutionnel à Fès — vidéo 2",
           en: "Corporate film in Fez — video 2",
@@ -1684,7 +1680,6 @@ export const importedJournalArticles = [
         videoId: "wFmxkMxjINs",
         youtubeUrl: "https://www.youtube.com/watch?v=wFmxkMxjINs",
         aspect: "landscape",
-        autoplay: false,
         label: {
           fr: "Film institutionnel à Fès — vidéo 3",
           en: "Corporate film in Fez — video 3",
@@ -2471,7 +2466,6 @@ export const importedJournalArticles = [
         videoId: "EyG3xDuvVD0",
         youtubeUrl: "https://www.youtube.com/watch?v=EyG3xDuvVD0",
         aspect: "landscape",
-        autoplay: false,
         label: {
           fr: "Événement et team building à Fès — vidéo 1",
           en: "Event and team building in Fez — video 1",
@@ -2482,7 +2476,6 @@ export const importedJournalArticles = [
         videoId: "Z3fSg0czUd8",
         youtubeUrl: "https://www.youtube.com/watch?v=Z3fSg0czUd8",
         aspect: "landscape",
-        autoplay: false,
         label: {
           fr: "Événement et team building à Fès — vidéo 2",
           en: "Event and team building in Fez — video 2",
@@ -2493,7 +2486,6 @@ export const importedJournalArticles = [
         videoId: "yW2tBt25E6Q",
         youtubeUrl: "https://www.youtube.com/watch?v=yW2tBt25E6Q",
         aspect: "landscape",
-        autoplay: false,
         label: {
           fr: "Événement et team building à Fès — vidéo 3",
           en: "Event and team building in Fez — video 3",
@@ -4236,7 +4228,6 @@ export const importedJournalArticles = [
         videoId: "a4PxHBb83PA",
         youtubeUrl: "https://www.youtube.com/shorts/a4PxHBb83PA",
         aspect: "portrait",
-        autoplay: false,
         label: {
           fr: "Photographie et vidéo culinaires à Fès — vidéo 1",
           en: "Food photography and video in Fez — video 1",
@@ -4247,7 +4238,6 @@ export const importedJournalArticles = [
         videoId: "2HNDtgh8cQE",
         youtubeUrl: "https://www.youtube.com/shorts/2HNDtgh8cQE",
         aspect: "portrait",
-        autoplay: false,
         label: {
           fr: "Photographie et vidéo culinaires à Fès — vidéo 2",
           en: "Food photography and video in Fez — video 2",

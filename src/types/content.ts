@@ -39,7 +39,6 @@ export type JournalVideo = {
   videoId: string;
   youtubeUrl: string;
   aspect: "landscape" | "portrait";
-  autoplay?: boolean;
   label: LocalizedText;
 };
 

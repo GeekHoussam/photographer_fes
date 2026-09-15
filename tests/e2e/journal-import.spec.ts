@@ -126,6 +126,16 @@ for (const locale of ["fr", "en", "ar"] as const) {
       await expect(
         page.locator("iframe[data-journal-video-player]"),
       ).toHaveCount(0);
+      const featuredVideo = page.locator("[data-journal-featured-video]");
+      await expect(featuredVideo).toHaveCount(article.videos.length ? 1 : 0);
+      if (article.videos.length) {
+        await expect(
+          page.locator(".journal-prose").first().locator(":scope > *").first(),
+        ).toHaveAttribute("data-journal-featured-video", "true");
+        await expect(
+          featuredVideo.locator("[data-journal-video]"),
+        ).toHaveAttribute("data-journal-video", article.videos[0].videoId);
+      }
       // Verify the real generated iframe URL without relying on third-party player network requests.
       await page.route("https://www.youtube-nocookie.com/**", (route) =>
         route.fulfill({
@@ -142,7 +152,7 @@ for (const locale of ["fr", "en", "ar"] as const) {
         await figure.locator("button").click();
         await expect(figure.locator("iframe")).toHaveAttribute(
           "src",
-          `https://www.youtube-nocookie.com/embed/${video.videoId}?autoplay=0&rel=0`,
+          `https://www.youtube-nocookie.com/embed/${video.videoId}?autoplay=1&rel=0`,
         );
       }
       if (

@@ -79,6 +79,14 @@ for (const locale of ["fr", "en", "ar"] as const) {
       await expect(page.locator("[data-journal-video]")).toHaveCount(
         article.videoIds.length,
       );
+      const featuredVideo = page.locator("[data-journal-featured-video]");
+      await expect(featuredVideo).toHaveCount(1);
+      await expect(
+        page.locator(".journal-prose").first().locator(":scope > *").first(),
+      ).toHaveAttribute("data-journal-featured-video", "true");
+      await expect(
+        featuredVideo.locator("[data-journal-video]"),
+      ).toHaveAttribute("data-journal-video", article.videoIds[0]);
       await expect(
         page.locator("iframe[data-journal-video-player]"),
       ).toHaveCount(0);
